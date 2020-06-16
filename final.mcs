@@ -1,3 +1,176 @@
 [Header]
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
+[File000]
+Location=Y:\Downloads\bbmanu\salvohook_interrupt_MCC30_IRQ.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File001]
+Location=Y:\Downloads\bbmanu\salvohook_wdt_MCC30_clrwdt.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File002]
+Location=Y:\Downloads\bbmanu\salvomem.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File003]
+Location=Y:\Downloads\bbmanu\delay.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={DE18EB1A-B46B-486B-B96F-A811A635DFAC}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-as.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g
+TraceCmdString=
+DebugOptions=--defsym=__DEBUG=1
+[File004]
+Location=Y:\Downloads\bbmanu\libCAD.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File005]
+Location=Y:\Downloads\bbmanu\libCAN.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File006]
+Location=Y:\Downloads\bbmanu\libKEYB.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File007]
+Location=Y:\Downloads\bbmanu\libLCD.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File008]
+Location=Y:\Downloads\bbmanu\libLEDs.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File009]
+Location=Y:\Downloads\bbmanu\libTIMER.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File010]
+Location=Y:\Downloads\bbmanu\main.o
+Folder=Intermediary
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={069BD372-6CA0-40D4-BF2F-5DC806D05083}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-g -Wall
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File011]
+Location=Y:\Downloads\bbmanu\final.cof
+Folder=Output
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={433C3D55-811D-409D-A6BF-159CF9355B42}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-ld.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-Map="$(BINDIR_)$(TARGETBASE).map" --report-mem -o"$(BINDIR_)$(TARGETBASE).$(TARGETSUFFIX)"
+TraceCmdString=
+DebugOptions=--defsym=__MPLAB_DEBUG=1
+[File012]
+Location=Y:\Downloads\bbmanu\final.hex
+Folder=Output
+DeviceName=dsPIC30F4011
+LanguageToolSuiteID={479DDE59-4D56-455E-855E-FFF59A3DB57E}
+LanguageToolID={433C3D55-811D-409D-A6BF-159CF9355B42}
+LanguageToolLocation=C:\Programmi\Microchip\MPLAB C30\bin\pic30-ld.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30;Y:\Downloads\bbmanu\Librerias\newLibCAD;Y:\Downloads\bbmanu\Librerias\libSalvo;Y:\Downloads\bbmanu\Librerias\libEncastats;Y:\Downloads\bbmanu\Librerias\gld||$(LIBDIR)|Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30||$(LKRDIR)||
+SOLK=<src>|Librerias\libSalvo\salvohook_interrupt_MCC30_IRQ.c|Librerias\libSalvo\salvohook_wdt_MCC30_clrwdt.c|Librerias\libSalvo\salvomem.c|Librerias\libEncastats\delay.s|Librerias\libEncastats\libCAD.c|Librerias\libEncastats\libCAN.c|Librerias\libEncastats\libKEYB.c|Librerias\libEncastats\libLCD.c|Librerias\libEncastats\libLEDs.c|Librerias\libEncastats\libTIMER.c|main.c||<obj>||<lib>|Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a||<lkr>|Librerias\gld\p30F4011.gld||
+SuiteArgsString=
+ToolArgsString=-Map="$(BINDIR_)$(TARGETBASE).map" --report-mem -o"$(BINDIR_)$(TARGETBASE).$(TARGETSUFFIX)"
+TraceCmdString=
+DebugOptions=--defsym=__MPLAB_DEBUG=1
+[TOOL_LOC_STAMPS]
+tool_loc{DE18EB1A-B46B-486B-B96F-A811A635DFAC}=C:\Programmi\Microchip\MPLAB C30\bin\pic30-as.exe
+tool_loc{069BD372-6CA0-40D4-BF2F-5DC806D05083}=C:\Programmi\Microchip\MPLAB C30\bin\pic30-gcc.exe
+tool_loc{433C3D55-811D-409D-A6BF-159CF9355B42}=C:\Programmi\Microchip\MPLAB C30\bin\pic30-ld.exe
