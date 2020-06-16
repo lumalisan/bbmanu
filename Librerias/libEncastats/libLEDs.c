@@ -109,3 +109,4 @@ void printNumInLED(unsigned char number)
 		maskLed = maskLed << 1;
 	}
 }
+
