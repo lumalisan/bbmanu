@@ -85,6 +85,7 @@ void TaskB (void)
 			Delay15ms();
 
 		printNumInLED(count);
+        printf("DEBUG: %d\n", count);
 		OS_Yield();
 	}
 }

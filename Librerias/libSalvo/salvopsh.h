@@ -201,7 +201,7 @@ required for your system.
 /* Microchip MPLAB C30 Compiler */
 #elif (OSCOMPILER == OSMPLAB_C30)
 
-#include <MCC30\salvoportmcc30.h>
+#include "MCC30/salvoportmcc30.h"
 
 
 /* Microchip MPLAB C32 Compiler */

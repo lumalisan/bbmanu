@@ -31,8 +31,8 @@ Command:
   libLEDs.o \
   libTIMER.o \
   main.o \
-  W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a \
-  -L\\Mac\Dropbox\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30 \
+  Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a \
+  -LY:\Downloads\bbmanu\Librerias\libSalvo\MCC30 \
   -Tp30F4011.gld.00 \
   --defsym=__MPLAB_BUILD=1 \
   --defsym=__MPLAB_DEBUG=1 \
@@ -46,24 +46,40 @@ Command:
 
 Archive member included because of file (symbol)
 
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
                               main.o (OSCtxSw)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
                               main.o (OSInit)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
                               main.o (OSCreateTask)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
                               main.o (OSSched)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
-                              W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o) (OSInsPrioQ)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
-                              W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o) (OSDelPrioQ)
-W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
-                              W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o) (OSIdlingHook)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
+                              Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o) (OSInsPrioQ)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
+                              Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o) (OSDelPrioQ)
+Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
+                              Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o) (OSIdlingHook)
 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(crt0_standard.o)
                               (_resetPRI)
 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(data_init_standard.o)
                               c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(crt0_standard.o) (_data_init_standard)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(printf_cdnopuxX.XXo)
+                              main.o (_printf_cdnopuxX)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(_iob.XXo)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(printf_cdnopuxX.XXo) (_iob)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(printf_cdnopuxX.XXo) (_vfprintf_cdnopuxX)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(fputc.XXo)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo) (fputc)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(flsbuf.XXo)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(fputc.XXo) (_flsbuf)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(write.o)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(fputc.XXo) (write)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(c30_uart.o)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(write.o) (__C30_UART)
+c:/programmi/microchip/mplab c30/bin/bin/../../lib\libm-coff.a(divmoddi3.o)
+                              c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo) (__udivdi3)
 
 
 Selected CodeGuard Options:
@@ -90,12 +106,13 @@ Program Memory  [Origin = 0x100, Length = 0x7efe]
 
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
-.text                        0x100                0x9c            0xea  (234)
-.text                        0x19c              0x1044          0x1866  (6246)
-.dinit                      0x11e0                0x20            0x30  (48)
-.text                       0x1200                0x1e            0x2d  (45)
+.text                        0x100               0x9ac           0xe82  (3714)
+.const                       0xaac                 0xc            0x12  (18)
+.text                        0xab8               0xd76          0x1431  (5169)
+.dinit                      0x182e                0xe2           0x153  (339)
+.text                       0x1910               0x2fa           0x477  (1143)
 
-                     Total program memory used (bytes):         0x19ad  (6573) 13%
+                     Total program memory used (bytes):         0x288f  (10383) 21%
 
 
 Data Memory  [Origin = 0x800, Length = 0x800]
@@ -104,8 +121,13 @@ section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
 .nbss                        0x800                   0            0x98  (152)
 .ndata                       0x898                   0             0x6  (6)
+.data                        0x89e                   0            0xa0  (160)
+.dconst                      0x93e                   0            0x2a  (42)
+.data                        0x968                   0            0x26  (38)
+.bss                         0x98e                   0             0x6  (6)
+.data                        0x994                   0             0x2  (2)
 
-                        Total data memory used (bytes):           0x9e  (158) 7%
+                        Total data memory used (bytes):          0x196  (406) 19%
 
 
 Dynamic Memory Usage
@@ -113,9 +135,9 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x89e                               0x762  (1890)
+stack                        0x996                               0x66a  (1642)
 
-                        Maximum dynamic memory (bytes):          0x762  (1890)
+                        Maximum dynamic memory (bytes):          0x66a  (1642)
 
 
 External Symbols in Data Memory (by address):
@@ -135,6 +157,12 @@ External Symbols in Data Memory (by address):
                     0x0898                  _currentInteractionType
                     0x089a                  _ledsState
                     0x089c                  _count
+                    0x0968                  __Files
+                    0x096a                  __iob
+                    0x098e                  __sobuf
+                    0x0990                  __sibuf
+                    0x0992                  __outdone
+                    0x0994                  ___C30_UART
 
 External Symbols in Data Memory (by name):
 
@@ -150,6 +178,12 @@ External Symbols in Data Memory (by name):
                     0x087e                  _OSsigQoutP
                     0x0800                  _OStcbArea
                     0x088e                  _OStimerTicks
+                    0x0968                  __Files
+                    0x0994                  ___C30_UART
+                    0x096a                  __iob
+                    0x0992                  __outdone
+                    0x0990                  __sibuf
+                    0x098e                  __sobuf
                     0x089c                  _count
                     0x0898                  _currentInteractionType
                     0x089a                  _ledsState
@@ -158,171 +192,185 @@ External Symbols in Program Memory (by address):
 
                   0x000100                  __resetPRI
                   0x000122                  __psv_init
-                  0x000132                  __data_init_standard
                   0x000132                  __data_init
+                  0x000132                  __data_init_standard
                   0x000198                  __DefaultInterrupt
-                  0x00019c                  _LCDInit
-                  0x0001e2                  _LCDClear
-                  0x0001ee                  _LCDMoveHome
-                  0x0001fa                  _LCDMoveFirstLine
-                  0x000206                  _LCDMoveSecondLine
-                  0x000212                  _LCDPrint
-                  0x00022e                  _LCDMoveLeft
-                  0x00023a                  _LCDMoveRight
-                  0x000246                  _LCDScrollLeft
-                  0x000252                  _LCDScrollRight
-                  0x00025e                  _LCDHideCursor
-                  0x00026a                  _LCDTurnOnUnderline
-                  0x000276                  _LCDTurnOnBlinking
-                  0x000282                  _waitLCD
-                  0x0002c0                  _LCDWriteCmd
-                  0x0003b6                  _LCDWriteNibbleCmd
-                  0x000440                  _LCDWriteData
-                  0x00053a                  _CANinit
-                  0x000680                  _CANrxInt
-                  0x00068c                  _CANtxInt
-                  0x00069c                  _CANclearGlobalInt
-                  0x0006a4                  _CANclearRxInt
-                  0x0006ac                  _CANclearTxInt
-                  0x0006b4                  _CANsendMessage
-                  0x000722                  _CANtransmissionCompleted
-                  0x00073c                  _CANreadRxMessageSID
-                  0x00074a                  _CANreadRxMessageDLC
-                  0x000756                  _CANreadRxMessageDATA
-                  0x00081c                  _CANclearRxBuffer
-                  0x000824                  _CANreceptionCompleted
-                  0x000840                  _KeybInit
-                  0x000854                  _getKey
-                  0x000934                  _getKeyNotBlocking
-                  0x000a20                  _initLEDs
-                  0x000a32                  _onLED
-                  0x000aa8                  _offLED
-                  0x000b28                  _toggleLED
-                  0x000b62                  _printNumInLED
-                  0x000b9a                  _OSSched
-                  0x000cf0                  _OSInsPrioQ
-                  0x000d64                  _OSInsDelayQ
-                  0x000e02                  _CADInit
-                  0x000e82                  _CADStart
-                  0x000e9a                  _CADStop
-                  0x000eb2                  _CADRequestValue
-                  0x000eba                  _CADReadyValue
-                  0x000ec6                  _CADGetValue
-                  0x000ece                  _CADClearInt
-                  0x000ed6                  __T3Interrupt
-                  0x000eec                  _CADinitSimpleConfiguration
-                  0x000f12                  _OSDelPrioQ
-                  0x000f82                  _OSDelDelayQ
-                  0x000fe6                  _OSCreateTask
-                  0x00105e                  _OSInitPrioTask
-                  0x001092                  _Timer1Init
-                  0x0010d6                  _Timer1Start
-                  0x0010de                  _Timer1Stop
-                  0x0010ea                  _Timer1ReInitialize
-                  0x001102                  _TimerClearInt
-                  0x00110a                  _TaskA
-                  0x001130                  _TaskB
-                  0x00114a                  _main
-                  0x001164                  _Delay3Tcy
-                  0x001166                  _Delay10us
-                  0x00116e                  _Delay20us
-                  0x001176                  _Delay150us
-                  0x00117e                  _Delay5ms
-                  0x001186                  _Delay15ms
-                  0x00119a                  _OSInit
-                  0x0011be                  _OSDispatch
-                  0x0011cc                  _OSCtxSw
-                  0x0011da                  _OSReturn
-                  0x001200                  _OSDisableHook
-                  0x001208                  _OSEnableHook
-                  0x001210                  _OSClrWDTHook
-                  0x001218                  _OSIdlingHook
+                  0x000230                  ___udivmoddi3
+                  0x0002fe                  ___udivdi3
+                  0x00030c                  ___umoddi3
+                  0x000314                  ___divdi3
+                  0x00034e                  ___moddi3
+                  0x000420                  __printf_cdnopuxX
+                  0x00042e                  __vfprintf_cdnopuxX
+                  0x000ab8                  _LCDInit
+                  0x000afe                  _LCDClear
+                  0x000b0a                  _LCDMoveHome
+                  0x000b16                  _LCDMoveFirstLine
+                  0x000b22                  _LCDMoveSecondLine
+                  0x000b2e                  _LCDPrint
+                  0x000b4a                  _LCDMoveLeft
+                  0x000b56                  _LCDMoveRight
+                  0x000b62                  _LCDScrollLeft
+                  0x000b6e                  _LCDScrollRight
+                  0x000b7a                  _LCDHideCursor
+                  0x000b86                  _LCDTurnOnUnderline
+                  0x000b92                  _LCDTurnOnBlinking
+                  0x000b9e                  _waitLCD
+                  0x000bdc                  _LCDWriteCmd
+                  0x000cd2                  _LCDWriteNibbleCmd
+                  0x000d5c                  _LCDWriteData
+                  0x000e56                  _CANinit
+                  0x000f9c                  _CANrxInt
+                  0x000fa8                  _CANtxInt
+                  0x000fb8                  _CANclearGlobalInt
+                  0x000fc0                  _CANclearRxInt
+                  0x000fc8                  _CANclearTxInt
+                  0x000fd0                  _CANsendMessage
+                  0x00103e                  _CANtransmissionCompleted
+                  0x001058                  _CANreadRxMessageSID
+                  0x001066                  _CANreadRxMessageDLC
+                  0x001072                  _CANreadRxMessageDATA
+                  0x001138                  _CANclearRxBuffer
+                  0x001140                  _CANreceptionCompleted
+                  0x00115c                  _KeybInit
+                  0x001170                  _getKey
+                  0x001250                  _getKeyNotBlocking
+                  0x00133c                  _initLEDs
+                  0x00134e                  _onLED
+                  0x0013c4                  _offLED
+                  0x001444                  _toggleLED
+                  0x00147e                  _printNumInLED
+                  0x0014b6                  _OSSched
+                  0x00160c                  _OSInsPrioQ
+                  0x001680                  _OSInsDelayQ
+                  0x00171e                  _CADInit
+                  0x00179e                  _CADStart
+                  0x0017b6                  _CADStop
+                  0x0017ce                  _CADRequestValue
+                  0x0017d6                  _CADReadyValue
+                  0x0017e2                  _CADGetValue
+                  0x0017ea                  _CADClearInt
+                  0x0017f2                  __T3Interrupt
+                  0x001808                  _CADinitSimpleConfiguration
+                  0x001910                  _OSDelPrioQ
+                  0x001980                  _OSDelDelayQ
+                  0x0019e4                  _OSCreateTask
+                  0x001a5c                  _OSInitPrioTask
+                  0x001a90                  _Timer1Init
+                  0x001ad4                  _Timer1Start
+                  0x001adc                  _Timer1Stop
+                  0x001ae8                  _Timer1ReInitialize
+                  0x001b00                  _TimerClearInt
+                  0x001b08                  _TaskA
+                  0x001b2e                  _TaskB
+                  0x001b56                  _main
+                  0x001b70                  _Delay3Tcy
+                  0x001b72                  _Delay10us
+                  0x001b7a                  _Delay20us
+                  0x001b82                  _Delay150us
+                  0x001b8a                  _Delay5ms
+                  0x001b92                  _Delay15ms
+                  0x001ba6                  _OSInit
+                  0x001bca                  _OSDispatch
+                  0x001bd8                  _OSCtxSw
+                  0x001be6                  _OSReturn
+                  0x001bec                  _OSDisableHook
+                  0x001bf4                  _OSEnableHook
+                  0x001bfc                  _OSClrWDTHook
+                  0x001c04                  _OSIdlingHook
                   0xf8000a                  __FGS.sec
 
 External Symbols in Program Memory (by name):
 
-                  0x000ece                  _CADClearInt
-                  0x000ec6                  _CADGetValue
-                  0x000e02                  _CADInit
-                  0x000eba                  _CADReadyValue
-                  0x000eb2                  _CADRequestValue
-                  0x000e82                  _CADStart
-                  0x000e9a                  _CADStop
-                  0x000eec                  _CADinitSimpleConfiguration
-                  0x00069c                  _CANclearGlobalInt
-                  0x00081c                  _CANclearRxBuffer
-                  0x0006a4                  _CANclearRxInt
-                  0x0006ac                  _CANclearTxInt
-                  0x00053a                  _CANinit
-                  0x000756                  _CANreadRxMessageDATA
-                  0x00074a                  _CANreadRxMessageDLC
-                  0x00073c                  _CANreadRxMessageSID
-                  0x000824                  _CANreceptionCompleted
-                  0x000680                  _CANrxInt
-                  0x0006b4                  _CANsendMessage
-                  0x000722                  _CANtransmissionCompleted
-                  0x00068c                  _CANtxInt
-                  0x001166                  _Delay10us
-                  0x001176                  _Delay150us
-                  0x001186                  _Delay15ms
-                  0x00116e                  _Delay20us
-                  0x001164                  _Delay3Tcy
-                  0x00117e                  _Delay5ms
-                  0x000840                  _KeybInit
-                  0x0001e2                  _LCDClear
-                  0x00025e                  _LCDHideCursor
-                  0x00019c                  _LCDInit
-                  0x0001fa                  _LCDMoveFirstLine
-                  0x0001ee                  _LCDMoveHome
-                  0x00022e                  _LCDMoveLeft
-                  0x00023a                  _LCDMoveRight
-                  0x000206                  _LCDMoveSecondLine
-                  0x000212                  _LCDPrint
-                  0x000246                  _LCDScrollLeft
-                  0x000252                  _LCDScrollRight
-                  0x000276                  _LCDTurnOnBlinking
-                  0x00026a                  _LCDTurnOnUnderline
-                  0x0002c0                  _LCDWriteCmd
-                  0x000440                  _LCDWriteData
-                  0x0003b6                  _LCDWriteNibbleCmd
-                  0x001210                  _OSClrWDTHook
-                  0x000fe6                  _OSCreateTask
-                  0x0011cc                  _OSCtxSw
-                  0x000f82                  _OSDelDelayQ
-                  0x000f12                  _OSDelPrioQ
-                  0x001200                  _OSDisableHook
-                  0x0011be                  _OSDispatch
-                  0x001208                  _OSEnableHook
-                  0x001218                  _OSIdlingHook
-                  0x00119a                  _OSInit
-                  0x00105e                  _OSInitPrioTask
-                  0x000d64                  _OSInsDelayQ
-                  0x000cf0                  _OSInsPrioQ
-                  0x0011da                  _OSReturn
-                  0x000b9a                  _OSSched
-                  0x00110a                  _TaskA
-                  0x001130                  _TaskB
-                  0x001092                  _Timer1Init
-                  0x0010ea                  _Timer1ReInitialize
-                  0x0010d6                  _Timer1Start
-                  0x0010de                  _Timer1Stop
-                  0x001102                  _TimerClearInt
+                  0x0017ea                  _CADClearInt
+                  0x0017e2                  _CADGetValue
+                  0x00171e                  _CADInit
+                  0x0017d6                  _CADReadyValue
+                  0x0017ce                  _CADRequestValue
+                  0x00179e                  _CADStart
+                  0x0017b6                  _CADStop
+                  0x001808                  _CADinitSimpleConfiguration
+                  0x000fb8                  _CANclearGlobalInt
+                  0x001138                  _CANclearRxBuffer
+                  0x000fc0                  _CANclearRxInt
+                  0x000fc8                  _CANclearTxInt
+                  0x000e56                  _CANinit
+                  0x001072                  _CANreadRxMessageDATA
+                  0x001066                  _CANreadRxMessageDLC
+                  0x001058                  _CANreadRxMessageSID
+                  0x001140                  _CANreceptionCompleted
+                  0x000f9c                  _CANrxInt
+                  0x000fd0                  _CANsendMessage
+                  0x00103e                  _CANtransmissionCompleted
+                  0x000fa8                  _CANtxInt
+                  0x001b72                  _Delay10us
+                  0x001b82                  _Delay150us
+                  0x001b92                  _Delay15ms
+                  0x001b7a                  _Delay20us
+                  0x001b70                  _Delay3Tcy
+                  0x001b8a                  _Delay5ms
+                  0x00115c                  _KeybInit
+                  0x000afe                  _LCDClear
+                  0x000b7a                  _LCDHideCursor
+                  0x000ab8                  _LCDInit
+                  0x000b16                  _LCDMoveFirstLine
+                  0x000b0a                  _LCDMoveHome
+                  0x000b4a                  _LCDMoveLeft
+                  0x000b56                  _LCDMoveRight
+                  0x000b22                  _LCDMoveSecondLine
+                  0x000b2e                  _LCDPrint
+                  0x000b62                  _LCDScrollLeft
+                  0x000b6e                  _LCDScrollRight
+                  0x000b92                  _LCDTurnOnBlinking
+                  0x000b86                  _LCDTurnOnUnderline
+                  0x000bdc                  _LCDWriteCmd
+                  0x000d5c                  _LCDWriteData
+                  0x000cd2                  _LCDWriteNibbleCmd
+                  0x001bfc                  _OSClrWDTHook
+                  0x0019e4                  _OSCreateTask
+                  0x001bd8                  _OSCtxSw
+                  0x001980                  _OSDelDelayQ
+                  0x001910                  _OSDelPrioQ
+                  0x001bec                  _OSDisableHook
+                  0x001bca                  _OSDispatch
+                  0x001bf4                  _OSEnableHook
+                  0x001c04                  _OSIdlingHook
+                  0x001ba6                  _OSInit
+                  0x001a5c                  _OSInitPrioTask
+                  0x001680                  _OSInsDelayQ
+                  0x00160c                  _OSInsPrioQ
+                  0x001be6                  _OSReturn
+                  0x0014b6                  _OSSched
+                  0x001b08                  _TaskA
+                  0x001b2e                  _TaskB
+                  0x001a90                  _Timer1Init
+                  0x001ae8                  _Timer1ReInitialize
+                  0x001ad4                  _Timer1Start
+                  0x001adc                  _Timer1Stop
+                  0x001b00                  _TimerClearInt
                   0x000198                  __DefaultInterrupt
                   0xf8000a                  __FGS.sec
-                  0x000ed6                  __T3Interrupt
+                  0x0017f2                  __T3Interrupt
+                  0x000314                  ___divdi3
+                  0x00034e                  ___moddi3
+                  0x0002fe                  ___udivdi3
+                  0x000230                  ___udivmoddi3
+                  0x00030c                  ___umoddi3
                   0x000132                  __data_init
                   0x000132                  __data_init_standard
+                  0x000420                  __printf_cdnopuxX
                   0x000122                  __psv_init
                   0x000100                  __resetPRI
-                  0x000854                  _getKey
-                  0x000934                  _getKeyNotBlocking
-                  0x000a20                  _initLEDs
-                  0x00114a                  _main
-                  0x000aa8                  _offLED
-                  0x000a32                  _onLED
-                  0x000b62                  _printNumInLED
-                  0x000b28                  _toggleLED
-                  0x000282                  _waitLCD
+                  0x00042e                  __vfprintf_cdnopuxX
+                  0x001170                  _getKey
+                  0x001250                  _getKeyNotBlocking
+                  0x00133c                  _initLEDs
+                  0x001b56                  _main
+                  0x0013c4                  _offLED
+                  0x00134e                  _onLED
+                  0x00147e                  _printNumInLED
+                  0x001444                  _toggleLED
+                  0x000b9e                  _waitLCD
 
 Memory Configuration
 
@@ -360,7 +408,7 @@ LOAD libLCD.o
 LOAD libLEDs.o
 LOAD libTIMER.o
 LOAD main.o
-LOAD W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a
+LOAD Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a
 LOAD c:/programmi/microchip/mplab c30/bin/bin/../../lib/dsPIC30F\libp30F4011-coff.a
                     0x8005c0                  __FUID0 = 0x8005c0
                     0x8005c2                  __FUID1 = 0x8005c2
@@ -388,7 +436,7 @@ LOAD c:/programmi/microchip/mplab c30/bin/bin/../../lib/dsPIC30F\libp30F4011-cof
                   0x000002          0x2 SHORT 0x0 ((ABSOLUTE (__reset) >> 0x10) & 0x7f)
                   0x000003          0x2 SHORT 0x0
 
-.text             0x000100         0x9c
+.text             0x000100        0x9ac
  *(.init)
  .init            0x000100         0x32 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(crt0_standard.o)
                   0x000100                  _resetPRI
@@ -403,9 +451,27 @@ LOAD c:/programmi/microchip/mplab c30/bin/bin/../../lib/dsPIC30F\libp30F4011-cof
  .isr             0x000198          0x4 default_isr
                   0x000198                  _DefaultInterrupt
  *(.libc)
+ .libc            0x00019c         0x6e c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(write.o)
+                  0x00019c                  write
  *(.libm)
+ .libm            0x00020a        0x216 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libm-coff.a(divmoddi3.o)
+                  0x000230                  __udivmoddi3
+                  0x0002fe                  __udivdi3
+                  0x00030c                  __umoddi3
+                  0x000314                  __divdi3
+                  0x00034e                  __moddi3
  *(.libdsp)
  *(.lib*)
+ .libc._printf_cdnopuxX
+                  0x000420          0xe c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(printf_cdnopuxX.XXo)
+                  0x000420                  _printf_cdnopuxX
+ .libc._vfprintf_cdnopuxX
+                  0x00042e        0x56a c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo)
+                  0x00042e                  _vfprintf_cdnopuxX
+ .libc.fputc      0x000998         0x8e c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(fputc.XXo)
+                  0x000998                  fputc
+ .libc._flsbuf    0x000a26         0x86 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(flsbuf.XXo)
+                  0x000a26                  _flsbuf
 
 usercode
  *(usercode)
@@ -504,7 +570,7 @@ userdata
                   0x00001c          0x4 LONG 0x198 DEFINED (__IC2Interrupt)?ABSOLUTE (__IC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00001e          0x4 LONG 0x198 DEFINED (__OC2Interrupt)?ABSOLUTE (__OC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000020          0x4 LONG 0x198 DEFINED (__T2Interrupt)?ABSOLUTE (__T2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x000022          0x4 LONG 0xed6 DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x000022          0x4 LONG 0x17f2 DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000024          0x4 LONG 0x198 DEFINED (__SPI1Interrupt)?ABSOLUTE (__SPI1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000026          0x4 LONG 0x198 DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000028          0x4 LONG 0x198 DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -568,7 +634,7 @@ userdata
                   0x00009c          0x4 LONG 0x198 DEFINED (__AltIC2Interrupt)?ABSOLUTE (__AltIC2Interrupt):DEFINED (__IC2Interrupt)?ABSOLUTE (__IC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00009e          0x4 LONG 0x198 DEFINED (__AltOC2Interrupt)?ABSOLUTE (__AltOC2Interrupt):DEFINED (__OC2Interrupt)?ABSOLUTE (__OC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a0          0x4 LONG 0x198 DEFINED (__AltT2Interrupt)?ABSOLUTE (__AltT2Interrupt):DEFINED (__T2Interrupt)?ABSOLUTE (__T2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x0000a2          0x4 LONG 0xed6 DEFINED (__AltT3Interrupt)?ABSOLUTE (__AltT3Interrupt):DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x0000a2          0x4 LONG 0x17f2 DEFINED (__AltT3Interrupt)?ABSOLUTE (__AltT3Interrupt):DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a4          0x4 LONG 0x198 DEFINED (__AltSPI1Interrupt)?ABSOLUTE (__AltSPI1Interrupt):DEFINED (__SPI1Interrupt)?ABSOLUTE (__SPI1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a6          0x4 LONG 0x198 DEFINED (__AltU1RXInterrupt)?ABSOLUTE (__AltU1RXInterrupt):DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a8          0x4 LONG 0x198 DEFINED (__AltU1TXInterrupt)?ABSOLUTE (__AltU1TXInterrupt):DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -1331,7 +1397,7 @@ LOAD data_init
 LOAD default_isr
 
 __c30_signature
-                  0x000000         0x6c
+                  0x000000         0x9c
  __c30_signature
                   0x000000          0x6 salvohook_interrupt_MCC30_IRQ.o
  __c30_signature
@@ -1353,21 +1419,37 @@ __c30_signature
  __c30_signature
                   0x000036          0x6 main.o
  __c30_signature
-                  0x00003c          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
+                  0x00003c          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
  __c30_signature
-                  0x000042          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
+                  0x000042          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
  __c30_signature
-                  0x000048          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
+                  0x000048          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
  __c30_signature
-                  0x00004e          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
+                  0x00004e          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
  __c30_signature
-                  0x000054          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
+                  0x000054          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
  __c30_signature
-                  0x00005a          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
+                  0x00005a          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
  __c30_signature
                   0x000060          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(crt0_standard.o)
  __c30_signature
                   0x000066          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(data_init_standard.o)
+ __c30_signature
+                  0x00006c          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(printf_cdnopuxX.XXo)
+ __c30_signature
+                  0x000072          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(_iob.XXo)
+ __c30_signature
+                  0x000078          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo)
+ __c30_signature
+                  0x00007e          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(fputc.XXo)
+ __c30_signature
+                  0x000084          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(flsbuf.XXo)
+ __c30_signature
+                  0x00008a          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(write.o)
+ __c30_signature
+                  0x000090          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(c30_uart.o)
+ __c30_signature
+                  0x000096          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libm-coff.a(divmoddi3.o)
 
 .nbss               0x0800         0x98
  .nbss              0x0800         0x98 salvomem.o
@@ -1392,102 +1474,126 @@ __c30_signature
  .ndata             0x089c          0x2 main.o
                     0x089c                  count
 
-.text             0x00019c       0x1044
- .text            0x00019c        0x39e libLCD.o
-                  0x00019c                  LCDInit
-                  0x0001e2                  LCDClear
-                  0x0001ee                  LCDMoveHome
-                  0x0001fa                  LCDMoveFirstLine
-                  0x000206                  LCDMoveSecondLine
-                  0x000212                  LCDPrint
-                  0x00022e                  LCDMoveLeft
-                  0x00023a                  LCDMoveRight
-                  0x000246                  LCDScrollLeft
-                  0x000252                  LCDScrollRight
-                  0x00025e                  LCDHideCursor
-                  0x00026a                  LCDTurnOnUnderline
-                  0x000276                  LCDTurnOnBlinking
-                  0x000282                  waitLCD
-                  0x0002c0                  LCDWriteCmd
-                  0x0003b6                  LCDWriteNibbleCmd
-                  0x000440                  LCDWriteData
- .text            0x00053a        0x306 libCAN.o
-                  0x00053a                  CANinit
-                  0x000680                  CANrxInt
-                  0x00068c                  CANtxInt
-                  0x00069c                  CANclearGlobalInt
-                  0x0006a4                  CANclearRxInt
-                  0x0006ac                  CANclearTxInt
-                  0x0006b4                  CANsendMessage
-                  0x000722                  CANtransmissionCompleted
-                  0x00073c                  CANreadRxMessageSID
-                  0x00074a                  CANreadRxMessageDLC
-                  0x000756                  CANreadRxMessageDATA
-                  0x00081c                  CANclearRxBuffer
-                  0x000824                  CANreceptionCompleted
- .text            0x000840        0x1e0 libKEYB.o
-                  0x000840                  KeybInit
-                  0x000854                  getKey
-                  0x000934                  getKeyNotBlocking
- .text            0x000a20        0x17a libLEDs.o
-                  0x000a20                  initLEDs
-                  0x000a32                  onLED
-                  0x000aa8                  offLED
-                  0x000b28                  toggleLED
-                  0x000b62                  printNumInLED
- .text            0x000b9a        0x156 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
-                  0x000b9a                  OSSched
- .text            0x000cf0        0x112 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
-                  0x000cf0                  OSInsPrioQ
-                  0x000d64                  OSInsDelayQ
- .text            0x000e02        0x110 libCAD.o
-                  0x000e02                  CADInit
-                  0x000e82                  CADStart
-                  0x000e9a                  CADStop
-                  0x000eb2                  CADRequestValue
-                  0x000eba                  CADReadyValue
-                  0x000ec6                  CADGetValue
-                  0x000ece                  CADClearInt
-                  0x000ed6                  _T3Interrupt
-                  0x000eec                  CADinitSimpleConfiguration
- .text            0x000f12         0xd4 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
-                  0x000f12                  OSDelPrioQ
-                  0x000f82                  OSDelDelayQ
- .text            0x000fe6         0xac W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
-                  0x000fe6                  OSCreateTask
-                  0x00105e                  OSInitPrioTask
- .text            0x001092         0x78 libTIMER.o
-                  0x001092                  Timer1Init
-                  0x0010d6                  Timer1Start
-                  0x0010de                  Timer1Stop
-                  0x0010ea                  Timer1ReInitialize
-                  0x001102                  TimerClearInt
- .text            0x00110a         0x5a main.o
-                  0x00110a                  TaskA
-                  0x001130                  TaskB
-                  0x00114a                  main
- .text            0x001164         0x36 delay.o
-                  0x001164                  Delay3Tcy
-                  0x001166                  Delay10us
-                  0x00116e                  Delay20us
-                  0x001176                  Delay150us
-                  0x00117e                  Delay5ms
-                  0x001186                  Delay15ms
- .text            0x00119a         0x24 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
-                  0x00119a                  OSInit
- .text            0x0011be         0x22 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
-                  0x0011be                  OSDispatch
-                  0x0011cc                  OSCtxSw
-                  0x0011da                  OSReturn
+.data               0x089e         0xa0
+ .data              0x089e         0xa0 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo)
 
-.dinit            0x0011e0         0x20
- .dinit           0x0011e0         0x20 data_init
+.dconst             0x093e         0x2a
+ .dconst            0x093e         0x2a c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(doprnt_cdnopuxX.XXo)
 
-.text             0x001200         0x1e
- .text            0x001200         0x10 salvohook_interrupt_MCC30_IRQ.o
-                  0x001200                  OSDisableHook
-                  0x001208                  OSEnableHook
- .text            0x001210          0x8 salvohook_wdt_MCC30_clrwdt.o
-                  0x001210                  OSClrWDTHook
- .text            0x001218          0x6 W:\Universidad\Tercer Curso (2019-2020)\Sistemas Empotrados\Practicas\Final\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
-                  0x001218                  OSIdlingHook
+.data               0x0968         0x26
+ .data              0x0968         0x26 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(_iob.XXo)
+                    0x0968                  _Files
+                    0x096a                  _iob
+
+.bss                0x098e          0x6
+ .bss               0x098e          0x6 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libc-coff.a(_iob.XXo)
+                    0x098e                  _sobuf
+                    0x0990                  _sibuf
+                    0x0992                  _outdone
+
+.data               0x0994          0x2
+ .data              0x0994          0x2 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(c30_uart.o)
+                    0x0994                  __C30_UART
+
+.const              0x8aac          0xc load address 0x000aac  
+ .const             0x8aac          0xc main.o
+
+.text             0x000ab8        0xd76
+ .text            0x000ab8        0x39e libLCD.o
+                  0x000ab8                  LCDInit
+                  0x000afe                  LCDClear
+                  0x000b0a                  LCDMoveHome
+                  0x000b16                  LCDMoveFirstLine
+                  0x000b22                  LCDMoveSecondLine
+                  0x000b2e                  LCDPrint
+                  0x000b4a                  LCDMoveLeft
+                  0x000b56                  LCDMoveRight
+                  0x000b62                  LCDScrollLeft
+                  0x000b6e                  LCDScrollRight
+                  0x000b7a                  LCDHideCursor
+                  0x000b86                  LCDTurnOnUnderline
+                  0x000b92                  LCDTurnOnBlinking
+                  0x000b9e                  waitLCD
+                  0x000bdc                  LCDWriteCmd
+                  0x000cd2                  LCDWriteNibbleCmd
+                  0x000d5c                  LCDWriteData
+ .text            0x000e56        0x306 libCAN.o
+                  0x000e56                  CANinit
+                  0x000f9c                  CANrxInt
+                  0x000fa8                  CANtxInt
+                  0x000fb8                  CANclearGlobalInt
+                  0x000fc0                  CANclearRxInt
+                  0x000fc8                  CANclearTxInt
+                  0x000fd0                  CANsendMessage
+                  0x00103e                  CANtransmissionCompleted
+                  0x001058                  CANreadRxMessageSID
+                  0x001066                  CANreadRxMessageDLC
+                  0x001072                  CANreadRxMessageDATA
+                  0x001138                  CANclearRxBuffer
+                  0x001140                  CANreceptionCompleted
+ .text            0x00115c        0x1e0 libKEYB.o
+                  0x00115c                  KeybInit
+                  0x001170                  getKey
+                  0x001250                  getKeyNotBlocking
+ .text            0x00133c        0x17a libLEDs.o
+                  0x00133c                  initLEDs
+                  0x00134e                  onLED
+                  0x0013c4                  offLED
+                  0x001444                  toggleLED
+                  0x00147e                  printNumInLED
+ .text            0x0014b6        0x156 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
+                  0x0014b6                  OSSched
+ .text            0x00160c        0x112 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
+                  0x00160c                  OSInsPrioQ
+                  0x001680                  OSInsDelayQ
+ .text            0x00171e        0x110 libCAD.o
+                  0x00171e                  CADInit
+                  0x00179e                  CADStart
+                  0x0017b6                  CADStop
+                  0x0017ce                  CADRequestValue
+                  0x0017d6                  CADReadyValue
+                  0x0017e2                  CADGetValue
+                  0x0017ea                  CADClearInt
+                  0x0017f2                  _T3Interrupt
+                  0x001808                  CADinitSimpleConfiguration
+
+.dinit            0x00182e         0xe2
+ .dinit           0x00182e         0xe2 data_init
+
+.text             0x001910        0x2fa
+ .text            0x001910         0xd4 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
+                  0x001910                  OSDelPrioQ
+                  0x001980                  OSDelDelayQ
+ .text            0x0019e4         0xac Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
+                  0x0019e4                  OSCreateTask
+                  0x001a5c                  OSInitPrioTask
+ .text            0x001a90         0x78 libTIMER.o
+                  0x001a90                  Timer1Init
+                  0x001ad4                  Timer1Start
+                  0x001adc                  Timer1Stop
+                  0x001ae8                  Timer1ReInitialize
+                  0x001b00                  TimerClearInt
+ .text            0x001b08         0x68 main.o
+                  0x001b08                  TaskA
+                  0x001b2e                  TaskB
+                  0x001b56                  main
+ .text            0x001b70         0x36 delay.o
+                  0x001b70                  Delay3Tcy
+                  0x001b72                  Delay10us
+                  0x001b7a                  Delay20us
+                  0x001b82                  Delay150us
+                  0x001b8a                  Delay5ms
+                  0x001b92                  Delay15ms
+ .text            0x001ba6         0x24 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
+                  0x001ba6                  OSInit
+ .text            0x001bca         0x22 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
+                  0x001bca                  OSDispatch
+                  0x001bd8                  OSCtxSw
+                  0x001be6                  OSReturn
+ .text            0x001bec         0x10 salvohook_interrupt_MCC30_IRQ.o
+                  0x001bec                  OSDisableHook
+                  0x001bf4                  OSEnableHook
+ .text            0x001bfc          0x8 salvohook_wdt_MCC30_clrwdt.o
+                  0x001bfc                  OSClrWDTHook
+ .text            0x001c04          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
+                  0x001c04                  OSIdlingHook
