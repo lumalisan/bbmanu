@@ -65,6 +65,8 @@
       <packs>
         <pack name="dsPIC30F_DFP" vendor="Microchip" version="1.2.53"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
