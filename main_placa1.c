@@ -30,6 +30,16 @@
 #include "libCAD.h"
 #include "libLCD.h"
 
+#define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1
+#define TASK_TX_AP          OSTCBP(2)   //Task 2
+#define TASK_LCD_AP         OSTCBP(3)   //Task 3
+#define TASK_LEDS_AP        OSTCBP(4)   //Task 4
+
+//Task priorities
+#define PRIO_MUESTREAR      10
+#define PRIO_TX             10
+#define PRIO_LCD            10
+#define PRIO_LEDS           10
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -217,9 +227,10 @@ void TaskB(void) {
     }
 }
 
-// Lectura del teclado
-
-void TaskKeypad(void) {
+/**
+ * Muestrea la pulsación de botones
+ */
+void P_muestrear_botones(void) {
 
     volatile unsigned char key = getKey(); // O getKeyNotBlocking ?
 
@@ -252,6 +263,34 @@ void TaskKeypad(void) {
     }
     // 300 ms delay so the keys are not oversampled
     //for (i = 0; i < 60; i++) Delay5ms();
+}
+
+/**
+ * Envia: 
+ * - Los lúmenes de luz exterior
+ * - El número de personas en cada hab.
+ * - El nivel de luz deseado en cada hab. (manual)
+ */
+void AP_tx_datos(void){
+
+}
+
+/**
+ * Muestra en el LCD:
+ * - Los lúmenes del exterior
+ * - El número de personas en cada hab.
+ */
+void AP_act_LCD(void){
+
+}
+
+/**
+ * Muestra en los LEDs:
+ * - Los lúmenes del exterior
+ * - El número de personas en cada hab.
+ */
+void AP_act_LEDs(void){
+
 }
 
 /******************************************************************************/

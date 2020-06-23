@@ -26,6 +26,16 @@
 #include "libCAD.h"
 #include "libLCD.h"
 
+#define TASK_CTRL_P         OSTCBP(1)   //Task 1
+#define TASK_TX_AP          OSTCBP(2)   //Task 2
+#define TASK_RX_AP          OSTCBP(3)   //Task 3
+#define TASK_LCD_AP         OSTCBP(4)   //Task 4
+
+//Task priorities
+#define PRIO_CTRL           10
+#define PRIO_TX             10
+#define PRIO_RX             10
+#define PRIO_LCD            10
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -70,30 +80,40 @@ _FGS(CODE_PROT_OFF);
 
  */
 
-// TASKS DE EJEMPLO
-void TaskA(void) {
-    unsigned char i;
+/**
+ * Decide la intensidad de la luz en cada hab.
+ */
+void P_ctrl(void){
 
-    while (1) {
-        for (i = 0; i < 15; i++)
-            Delay15ms();
-
-        count = (count + 1) % 64;
-        OS_Yield(); // Indica al SO que quiere salir de la CPU
-    }
 }
 
-void TaskB(void) {
-    unsigned char i;
+/**
+ * Muestra en el LCD:
+ * - Los lúmenes del exterior
+ * - El número de personas en cada hab.
+ */
+void AP_act_LCD(void){
 
-    while (1) {
-        for (i = 0; i < 15; i++)
-            Delay15ms();
+}
 
-        printNumInLED(count);
-        //printf("DEBUG: %d\n", count);
-        OS_Yield();
-    }
+/**
+ * Recibe: 
+ * - Los lúmenes de luz exterior
+ * - El número de personas en cada hab.
+ * - El nivel de luz deseado en cada hab. (manual)
+ */
+void AP_rx_datos(void){
+
+}
+
+/**
+ * Envia: 
+ * - Los lúmenes de luz exterior
+ * - El número de personas en cada hab.
+ * - El nivel de luz deseado en cada hab. (manual)
+ */
+void AP_tx_datos(void){
+
 }
 
 /******************************************************************************/
