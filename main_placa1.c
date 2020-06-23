@@ -19,6 +19,8 @@
  * - Crear tareas para comunicación via bus CAN
  */
 
+#include <libpic30.h>
+
 #include <p30f4011.h>
 #include <stdio.h>
 #include <salvo.h>
@@ -29,6 +31,7 @@
 #include "libLEDs.h"
 #include "libCAD.h"
 #include "libLCD.h"
+#include "libCAN.h"
 
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1
 #define TASK_TX_AP          OSTCBP(2)   //Task 2
@@ -72,28 +75,6 @@ unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones
 /* Procedures declaration                                                     */
 /******************************************************************************/
 
-// Actualiza la pantalla con los números de personas en las habitaciones y
-// la cantidad de lúmenes actuales.
-
-int actualizaLCD(unsigned int cantHab1, unsigned int cantHab2,
-        unsigned int cantHab3, unsigned int lumens) {
-
-    // Max. longitud línea: 16 chars.
-    char linea1, linea2 [16];
-
-    sprintf(linea1, "H.1:%d 2:%d 3:%d", cantHab1, cantHab2, cantHab3);
-    sprintf(linea2, "Lumens: %d", lumens);
-
-    LCDMoveFirstLine();
-    LCDPrint(linea1);
-    LCDMoveSecondLine();
-    LCDPrint(linea2);
-
-    IFS0bits.ADIF = 0; // Reset interrupt
-
-    return 0;
-}
-
 /*  NO BORRAR TODAVÍA: PERMITE ACTUALIZAR LEDS SEGÚN PARÁMETROS
 int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
     
@@ -136,55 +117,6 @@ int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
 }
  * */
 
-int actualizaLeds() {
-    // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
-    // Hab.     LED
-    //  0      0   1
-    //  1      2   3
-    //  2      4   5
-
-    // Habitación 1
-    switch (luz1) {
-        case 0: offLED(0);
-            offLED(1);
-            break;
-        case 1: onLED(0);
-            offLED(1);
-            break;
-        case 2: onLED(0);
-            onLED(1);
-            break;
-        default: break;
-    }
-    // Habitación 2
-    switch (luz2) {
-        case 0: offLED(2);
-            offLED(3);
-            break;
-        case 1: onLED(2);
-            offLED(3);
-            break;
-        case 2: onLED(2);
-            onLED(3);
-            break;
-        default: break;
-    }
-    // Habitación 3
-    switch (luz3) {
-        case 0: offLED(4);
-            offLED(5);
-            break;
-        case 1: onLED(4);
-            offLED(5);
-            break;
-        case 2: onLED(4);
-            onLED(5);
-            break;
-        default: break;
-    }
-
-    return 0;
-}
 
 /******************************************************************************/
 /* TASKS declaration and implementation                                       */
@@ -222,7 +154,7 @@ void TaskB(void) {
             Delay15ms();
 
         printNumInLED(count);
-        //printf("DEBUG: %d\n", count);
+        
         OS_Yield();
     }
 }
@@ -272,6 +204,70 @@ void P_muestrear_botones(void) {
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void){
+    
+    // Cada unsigned char tiene tamaño de 1 byte
+    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
+    // En total hay que enviar 2+(3*2)+(3*2) = 14 bytes
+    // Se van a dividir en tres mensajes de 2, 6 y 6 bytes
+    // Mensaje 1: Lumenes
+    // Mensaje 2: hab1, hab2 y hab3
+    // Mensaje 3: luz1, luz2 y luz3
+    
+    /*
+     SISTEMA DE IDENTIFICADORES
+     * 
+     * SID = 0x0001 (1)   --> El mensaje es de 2 bytes y contiene Lumenes
+     * SID = 0x0010 (16)  --> El mensaje es de 6 bytes y contiene los hab1..3
+     * SID = 0x0100 (256) --> El mensaje es de 6 bytes y contiene los luz1..3
+     * 
+     */
+    
+    // ***CUIDADO***
+    // Puede que haga falta un delay después de clearTxInt, pero el profe no
+    // quiere esperas activas. Si no funciona la transmisión, podría ser esta
+    // la razón
+    
+    
+    unsigned int data_buffer[3];
+    unsigned int ID = 0;
+    unsigned char tamDatos = 0;
+    
+    // Envío Lumenes
+    if (CANtxInt) {         // Si se puede enviar
+        CANclearTxInt();    // Clear del interrupt de transmisión CAN
+        
+        ID = 0x0001;    
+        tamDatos = 2;
+        
+        CANsendMessage(ID, lumenes, tamDatos);
+    }
+    
+    // Envío "hab"s
+    if (CANtxInt) {
+        CANclearTxInt();
+        
+        ID = 0x0010;
+        tamDatos = 6;
+        
+        data_buffer[0] = hab1;
+        data_buffer[1] = hab2;
+        data_buffer[2] = hab3;
+        
+        CANsendMessage(ID, data_buffer, tamDatos);
+    }
+    
+    // Envío "luz"s
+    if (CANtxInt) {
+        CANclearTxInt();
+        
+        ID = 0x0100;
+        
+        data_buffer[0] = luz1;
+        data_buffer[1] = luz2;
+        data_buffer[2] = luz3;
+        
+        CANsendMessage(ID, data_buffer, tamDatos);
+    }
 
 }
 
@@ -280,7 +276,21 @@ void AP_tx_datos(void){
  * - Los lúmenes del exterior
  * - El número de personas en cada hab.
  */
-void AP_act_LCD(void){
+void AP_act_LCD(unsigned int cantHab1, unsigned int cantHab2,
+        unsigned int cantHab3, unsigned int lumens){
+
+    // Max. longitud línea: 16 chars.
+    char linea1, linea2 [16];
+
+    sprintf(linea1, "H.1:%d 2:%d 3:%d", cantHab1, cantHab2, cantHab3);
+    sprintf(linea2, "Lumens: %d", lumens);
+
+    LCDMoveFirstLine();
+    LCDPrint(linea1);
+    LCDMoveSecondLine();
+    LCDPrint(linea2);
+
+    IFS0bits.ADIF = 0; // Reset interrupt
 
 }
 
@@ -290,6 +300,51 @@ void AP_act_LCD(void){
  * - El número de personas en cada hab.
  */
 void AP_act_LEDs(void){
+    // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
+    // Hab.     LED
+    //  0      0   1
+    //  1      2   3
+    //  2      4   5
+
+    // Habitación 1
+    switch (luz1) {
+        case 0: offLED(0);
+            offLED(1);
+            break;
+        case 1: onLED(0);
+            offLED(1);
+            break;
+        case 2: onLED(0);
+            onLED(1);
+            break;
+        default: break;
+    }
+    // Habitación 2
+    switch (luz2) {
+        case 0: offLED(2);
+            offLED(3);
+            break;
+        case 1: onLED(2);
+            offLED(3);
+            break;
+        case 2: onLED(2);
+            onLED(3);
+            break;
+        default: break;
+    }
+    // Habitación 3
+    switch (luz3) {
+        case 0: offLED(4);
+            offLED(5);
+            break;
+        case 1: onLED(4);
+            offLED(5);
+            break;
+        case 2: onLED(4);
+            onLED(5);
+            break;
+        default: break;
+    }
 
 }
 
@@ -316,16 +371,23 @@ void _ISR _ADCInterrupt(void) {
 /******************************************************************************/
 
 int main(void) {
-
+    
     // ===================
     // Init peripherals
     // ===================
     initLEDs();
-    CADInit(CAD_INTERACTION_BY_INTERRUPT);
+    CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
     CADStart(CAD_INTERACTION_BY_INTERRUPT);
 
     LCDInit();
     KeybInit();
+    
+    // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
+    
+    printf("--------------------Nueva ejecucion-------------------\n");
+    printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
+    printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
+    
 
     // =========================
     // Create Salvo structures
