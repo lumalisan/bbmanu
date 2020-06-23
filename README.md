@@ -1,2 +1,3 @@
-# bbmanu
-En esta practicuuuum cuando haces un dab el buzzer recibe las vibraciones y sale de VIM OwO UwU AwA 70-1
+# Sistema domótico de luces inteligentes
+Proyecto para Sistemas Encastrados UIB. 
+Se desarrollará un sistema de control de luces inteligentes para una casa simulado en una placa dsPIC.
