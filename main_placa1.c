@@ -207,7 +207,8 @@ void AP_tx_datos(void){
     
     // Cada unsigned char tiene tamaño de 1 byte
     // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
-    // En total hay que enviar 2+(3*2)+(3*2) = 14 bytes
+    // Se puede pasar de int a char y luego otra vez a int sin perder info
+    // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
     // Se van a dividir en tres mensajes de 2, 6 y 6 bytes
     // Mensaje 1: Lumenes
     // Mensaje 2: hab1, hab2 y hab3
@@ -217,8 +218,8 @@ void AP_tx_datos(void){
      SISTEMA DE IDENTIFICADORES
      * 
      * SID = 0x0001 (1)   --> El mensaje es de 2 bytes y contiene Lumenes
-     * SID = 0x0010 (16)  --> El mensaje es de 6 bytes y contiene los hab1..3
-     * SID = 0x0100 (256) --> El mensaje es de 6 bytes y contiene los luz1..3
+     * SID = 0x0010 (16)  --> El mensaje es de 3 bytes y contiene los hab1..3
+     * SID = 0x0100 (256) --> El mensaje es de 3 bytes y contiene los luz1..3
      * 
      */
     
@@ -228,46 +229,26 @@ void AP_tx_datos(void){
     // la razón
     
     
-    unsigned int data_buffer[3];
-    unsigned int ID = 0;
-    unsigned char tamDatos = 0;
+    unsigned char data_buffer[7];
+    unsigned int ID = 0x0001;
+    unsigned char tamDatos = sizeof(data_buffer);
     
-    // Envío Lumenes
+    // Envío informaciones
     if (CANtxInt) {         // Si se puede enviar
         CANclearTxInt();    // Clear del interrupt de transmisión CAN
         
-        ID = 0x0001;    
-        tamDatos = 2;
-        
-        CANsendMessage(ID, lumenes, tamDatos);
-    }
-    
-    // Envío "hab"s
-    if (CANtxInt) {
-        CANclearTxInt();
-        
-        ID = 0x0010;
-        tamDatos = 6;
-        
-        data_buffer[0] = hab1;
-        data_buffer[1] = hab2;
-        data_buffer[2] = hab3;
+        ID = 0x0001;
+        data_buffer[0] = (unsigned char) lumenes;
+        data_buffer[1] = (unsigned char) hab1;
+        data_buffer[2] = (unsigned char) hab2;
+        data_buffer[3] = (unsigned char) hab3;
+        data_buffer[4] = (unsigned char) luz1;
+        data_buffer[5] = (unsigned char) luz2;
+        data_buffer[6] = (unsigned char) luz3;
         
         CANsendMessage(ID, data_buffer, tamDatos);
     }
     
-    // Envío "luz"s
-    if (CANtxInt) {
-        CANclearTxInt();
-        
-        ID = 0x0100;
-        
-        data_buffer[0] = luz1;
-        data_buffer[1] = luz2;
-        data_buffer[2] = luz3;
-        
-        CANsendMessage(ID, data_buffer, tamDatos);
-    }
 
 }
 
@@ -384,9 +365,17 @@ int main(void) {
     
     // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
     
+    lumenes = 123;
+    
     printf("--------------------Nueva ejecucion-------------------\n");
     printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
     printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
+    
+    unsigned char test_char = (unsigned char) lumenes;
+    unsigned int test_conv = (unsigned int) test_char;
+    printf("DEBUG: lumenes en unsigned char: %c\n", test_char);
+    printf("DEBUG: lumenes en unsigned char (int): %d\n", test_char);
+    printf("DEBUG: lumenes reconvertido: %d\n", test_conv);
     
 
     // =========================
