@@ -15,8 +15,6 @@
  * - Implementar UART
  * - Crear tareas concurrentes
  * - Implementar sistema de flags y MBox
- * - Crear main para la placa 2
- * - Crear tareas para comunicación via bus CAN
  */
 
 #include <libpic30.h>
@@ -32,6 +30,7 @@
 #include "libCAD.h"
 #include "libLCD.h"
 #include "libCAN.h"
+#include "libTIMER.h"
 
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1
 #define TASK_TX_AP          OSTCBP(2)   //Task 2
@@ -139,7 +138,7 @@ void TaskA(void) {
 
     while (1) {
         for (i = 0; i < 15; i++)
-            Delay15ms();
+            // Delay15ms();
 
         count = (count + 1) % 64;
         OS_Yield(); // Indica al SO que quiere salir de la CPU
@@ -151,9 +150,9 @@ void TaskB(void) {
 
     while (1) {
         for (i = 0; i < 15; i++)
-            Delay15ms();
+            // Delay15ms();
 
-        printNumInLED(count);
+        //printNumInLED(count);
         
         OS_Yield();
     }
@@ -163,36 +162,46 @@ void TaskB(void) {
  * Muestrea la pulsación de botones
  */
 void P_muestrear_botones(void) {
+    
+    while(1) {
+            
+        printf("DEBUG - muestreo botones\n");
 
-    volatile unsigned char key = getKey(); // O getKeyNotBlocking ?
+        volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
 
-    switch (key) {
-        case 0: hab1++; // Añadir persona H1
-            break;
-        case 1: hab2++; // Añadir persona H2
-            break;
-        case 2: hab3++; // Añadir persona H3
-            break;
-        case 3: if (hab1 > 0) hab1--; // Quitar persona H1
-            break;
-        case 4: if (hab2 > 0) hab2--; // Quitar persona H2
-            break;
-        case 5: if (hab3 > 0) hab3--; // Quitar persona H3
-            break;
-        case 6: luz1++; // Subir luz H1
-            break;
-        case 7: luz2++; // Subir luz H2
-            break;
-        case 8: luz3++; // Subir luz H3
-            break;
-        case 9: if (luz1 > 0) luz1--; // Bajar luz H1
-            break;
-        case 10: if (luz2 > 0) luz2--; // Bajar luz H2
-            break;
-        case 11: if (luz3 > 0) luz3--; // Bajar luz H3
-            break;
-        default: break;
+        switch (key) {
+            case 0: hab1++; // Añadir persona H1
+                break;
+            case 1: hab2++; // Añadir persona H2
+                break;
+            case 2: hab3++; // Añadir persona H3
+                break;
+            case 3: if (hab1 > 0) hab1--; // Quitar persona H1
+                break;
+            case 4: if (hab2 > 0) hab2--; // Quitar persona H2
+                break;
+            case 5: if (hab3 > 0) hab3--; // Quitar persona H3
+                break;
+            case 6: luz1++; // Subir luz H1
+                break;
+            case 7: luz2++; // Subir luz H2
+                break;
+            case 8: luz3++; // Subir luz H3
+                break;
+            case 9: if (luz1 > 0) luz1--; // Bajar luz H1
+                break;
+            case 10: if (luz2 > 0) luz2--; // Bajar luz H2
+                break;
+            case 11: if (luz3 > 0) luz3--; // Bajar luz H3
+                break;
+            default: break;
+        }
+
+        printf("DEBUG - Acabo el muestreo botones\n");
+        OS_Delay(1);
+        
     }
+    
     // 300 ms delay so the keys are not oversampled
     //for (i = 0; i < 60; i++) Delay5ms();
 }
@@ -348,6 +357,55 @@ void _ISR _ADCInterrupt(void) {
 }
 
 /******************************************************************************/
+/* Timer ISR - Muestreo botones                                               */
+/******************************************************************************/
+
+void _ISR _T1Interrupt(void) {
+
+    TimerClearInt();
+    OSTimer();
+
+}
+
+/******************************************************************************/
+/* CAN ISR - Recepción datos (nivel de luz para cada habitación               */
+/******************************************************************************/
+void _ISR _C1Interrupt(void) {
+    unsigned int rxMsgSID;
+	unsigned char rxMsgData[8];
+	unsigned char rxMsgDLC;
+
+	// Clear CAN global interrupt
+	CANclearGlobalInt();
+
+	if (CANrxInt())
+	{
+		// Clear RX interrupt
+		CANclearRxInt ();
+
+		// Read SID, DLC and DATA
+		rxMsgSID = CANreadRxMessageSID();
+		rxMsgDLC = CANreadRxMessageDLC();
+		CANreadRxMessageDATA (rxMsgData);
+
+		// Clear RX buffer
+		CANclearRxBuffer();
+        
+        if (rxMsgSID == 0x0001) {
+            
+            lumenes = (unsigned int) rxMsgData[0];
+            hab1 = (unsigned int) rxMsgData[1];
+            hab2 = (unsigned int) rxMsgData[2];
+            hab3 = (unsigned int) rxMsgData[3];
+            luz1 = (unsigned int) rxMsgData[4];
+            luz2 = (unsigned int) rxMsgData[5];
+            luz3 = (unsigned int) rxMsgData[6];
+            
+        }
+	}
+}
+
+/******************************************************************************/
 /* Main                                                                       */
 /******************************************************************************/
 
@@ -362,6 +420,9 @@ int main(void) {
 
     LCDInit();
     KeybInit();
+    
+    Timer1Init(TIMER_PERIOD_FOR_10ms, TIMER_PSCALER_FOR_10ms, 5);
+    Timer1Start();
     
     // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
     
@@ -387,8 +448,9 @@ int main(void) {
     // Create tasks (name, tcb, priority) and push them to ELIGIBLE STATE
     // From 1 up to OSTASKS tcbs available
     // Priorities from 0 (highest) down to 15 (lowest)
-    OSCreateTask(TaskA, OSTCBP(1), 10);
-    OSCreateTask(TaskB, OSTCBP(2), 10);
+    OSCreateTask(TaskA, OSTCBP(2), 10);
+    OSCreateTask(TaskB, OSTCBP(3), 10);
+    OSCreateTask(P_muestrear_botones, OSTCBP(1), 10);
 
     // =============================================
     // Enter multitasking environment

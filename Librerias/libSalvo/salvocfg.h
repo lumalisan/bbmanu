@@ -22,7 +22,6 @@ Header file for tutorial programs.
 
 #define OSENABLE_EVENTS				TRUE
 
-
 //==================================================
 // Definitions automatically made by salvo headers
 //==================================================
