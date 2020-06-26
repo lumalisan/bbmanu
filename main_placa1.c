@@ -46,7 +46,9 @@
 //Herramientas de concurrencia
 #define EFLAG_BOTONES       OSECBP(1)   // Flag para muestreo botones -> CAN
 
-#define DESPIERTA_CAN       0x01        // Valor del flag para despertar ISR CAN
+#define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
+#define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
+
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -247,6 +249,7 @@ void AP_tx_datos(void){
         // Espera a que la tarea de botones señale que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN);   // Limpia el flag y ejecuta la rutina
+        OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD);   // Dice al LCD de actualizarse
 
         unsigned char data_buffer[7];
         unsigned int ID = 0x0001;
@@ -279,18 +282,27 @@ void AP_tx_datos(void){
 void AP_act_LCD(unsigned int cantHab1, unsigned int cantHab2,
         unsigned int cantHab3, unsigned int lumens){
 
-    // Max. longitud línea: 16 chars.
-    char linea1, linea2 [16];
+    while(1) {
+        
+        // Espera a que la tarea de CAN señale que hay que actualizar
+        OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
+        OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD);   // Limpia el flag y ejecuta la rutina
+        
+        // Max. longitud línea: 16 chars.
+        char linea1, linea2 [16];
 
-    sprintf(linea1, "H.1:%d 2:%d 3:%d", cantHab1, cantHab2, cantHab3);
-    sprintf(linea2, "Lumens: %d", lumens);
+        sprintf(linea1, "H.1:%d 2:%d 3:%d", cantHab1, cantHab2, cantHab3);
+        sprintf(linea2, "Lumens: %d", lumens);
 
-    LCDMoveFirstLine();
-    LCDPrint(linea1);
-    LCDMoveSecondLine();
-    LCDPrint(linea2);
+        LCDMoveFirstLine();
+        LCDPrint(linea1);
+        LCDMoveSecondLine();
+        LCDPrint(linea2);
 
-    IFS0bits.ADIF = 0; // Reset interrupt
+        IFS0bits.ADIF = 0; // Reset interrupt
+    }
+    
+        
 
 }
 
