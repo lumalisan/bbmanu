@@ -74,9 +74,10 @@ _FGS(CODE_PROT_OFF);
 /* Global Variable and macros declaration                                     */
 /******************************************************************************/
 
-unsigned int lumenes = 0;
-unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
-unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
+volatile unsigned int lumenes = 0;
+volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
+volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
+volatile int luz1_man = 0, luz2_man = 0, luz3_man = 0;
 
 /******************************************************************************/
 /* Procedures declaration                                                     */
@@ -166,17 +167,17 @@ void P_muestrear_botones(void) {
                 break;
             case 5: if (hab3 > 0) hab3--; // Quitar persona H3
                 break;
-            case 6: if (luz1 < 3) luz1++; // Subir luz H1
+            case 6: if (luz1_man < 3) luz1_man++; // Subir luz H1
                 break;
-            case 7: if (luz2 < 3) luz2++; // Subir luz H2
+            case 7: if (luz2_man < 3) luz2_man++; // Subir luz H2
                 break;
-            case 8: if (luz3 < 3) luz3++; // Subir luz H3
+            case 8: if (luz3_man < 3) luz3_man++; // Subir luz H3
                 break;
-            case 9: if (luz1 > 0) luz1--; // Bajar luz H1
+            case 9: if (luz1_man > -3) luz1_man--; // Bajar luz H1
                 break;
-            case 10: if (luz2 > 0) luz2--; // Bajar luz H2
+            case 10: if (luz2_man > -3) luz2_man--; // Bajar luz H2
                 break;
-            case 11: if (luz3 > 0) luz3--; // Bajar luz H3
+            case 11: if (luz3_man > -3) luz3_man--; // Bajar luz H3
                 break;
             default: modificados = 0;
                 break; // Si no se ha tocado nada
@@ -202,7 +203,8 @@ void P_muestrear_botones(void) {
  */
 void AP_tx_datos(void) {
 
-    // Cada unsigned char tiene tamaño de 1 byte
+    // Cada unsigned char tiene tamaño de 1 byte (0 - 255)
+    // Cada char tiene tamaño de 1 byte (-128, 127)
     // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
     // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
@@ -211,7 +213,7 @@ void AP_tx_datos(void) {
      SISTEMA DE IDENTIFICADORES
      * 
      * SID = 0x0001 (1)   --> El mensaje es de 7 bytes y contiene todo
-     * 
+     * SID = 0x0002 (2)   --> Mensaje recibido desde la placa 2
      *
      */
 
@@ -227,22 +229,27 @@ void AP_tx_datos(void) {
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Limpia el flag y ejecuta la rutina
         OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
 
-        unsigned char data_buffer[7];
+        unsigned char data_buffer[8];
         unsigned int ID = 0x0001;
         unsigned char tamDatos = sizeof (data_buffer);
+        
+        // Dividimos los lúmenes (2 bytes) en dos uns. chars
+        unsigned char *lum_chars = (unsigned char *) &lumenes;
+        unsigned char lum_h = lum_chars[0];
+        unsigned char lum_l = lum_chars[1];
 
         // Envío informaciones
         if (CANtxInt) { // Si se puede enviar
             CANclearTxInt(); // Clear del interrupt de transmisión CAN
 
-            ID = 0x0001;
-            data_buffer[0] = (unsigned char) lumenes;
-            data_buffer[1] = (unsigned char) hab1;
-            data_buffer[2] = (unsigned char) hab2;
-            data_buffer[3] = (unsigned char) hab3;
-            data_buffer[4] = (unsigned char) luz1;
-            data_buffer[5] = (unsigned char) luz2;
-            data_buffer[6] = (unsigned char) luz3;
+            data_buffer[0] = lum_h;
+            data_buffer[1] = lum_l;
+            data_buffer[2] = (unsigned char) hab1;
+            data_buffer[3] = (unsigned char) hab2;
+            data_buffer[4] = (unsigned char) hab3;
+            data_buffer[5] = (char) luz1_man;
+            data_buffer[6] = (char) luz2_man;
+            data_buffer[7] = (char) luz3_man;
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
@@ -387,6 +394,7 @@ void _ISR _T1Interrupt(void) {
 
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
+    
 
     static unsigned char mensaje_mbox_LEDs = 1;
 
@@ -409,15 +417,11 @@ void _ISR _C1Interrupt(void) {
         // Clear RX buffer
         CANclearRxBuffer();
 
-        if (rxMsgSID == 0x0001) {
+        if (rxMsgSID == 0x0002) {
 
-            lumenes = (unsigned int) rxMsgData[0];
-            hab1 = (unsigned int) rxMsgData[1];
-            hab2 = (unsigned int) rxMsgData[2];
-            hab3 = (unsigned int) rxMsgData[3];
-            luz1 = (unsigned int) rxMsgData[4];
-            luz2 = (unsigned int) rxMsgData[5];
-            luz3 = (unsigned int) rxMsgData[6];
+            luz1 = (unsigned int) rxMsgData[0];
+            luz2 = (unsigned int) rxMsgData[1];
+            luz3 = (unsigned int) rxMsgData[2];
 
         }
     }
@@ -452,18 +456,29 @@ int main(void) {
 
     // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
 
-    lumenes = 123;
+    lumenes = 2560;
+    unsigned char *lum_chars = (unsigned char *) &lumenes;
+    unsigned char lum_h = lum_chars[0];
+    unsigned char lum_l = lum_chars[1];
+    
+    unsigned int lums_reconv = (unsigned int) lum_l << 8;
+    unsigned int aux = (unsigned int) lum_h;
+    lums_reconv += aux;
+    
+    
 
     printf("--------------------Nueva ejecucion-------------------\n");
     //printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
     //printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
 
-    //unsigned char test_char = (unsigned char) lumenes;
-    //unsigned int test_conv = (unsigned int) test_char;
-    //printf("DEBUG: lumenes en unsigned char: %c\n", test_char);
-    //printf("DEBUG: lumenes en unsigned char (int): %d\n", test_char);
-    //printf("DEBUG: lumenes reconvertido: %d\n", test_conv);
+    printf("DEBUG: lumenes en unsigned char: %c | %c\n", lum_h, lum_l);
+    printf("DEBUG: lumenes reconvertido: %d\n", lums_reconv);
 
+    int test = -2;
+    char test_c = (char) test;
+    
+    printf("DEBUG - test signed char: %c\n", test_c);
+    printf("DEBUG - test signed char reconv: %d\n", (int) test_c);
 
     // =========================
     // Create Salvo structures
