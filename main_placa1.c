@@ -32,10 +32,11 @@
 #include "libCAN.h"
 #include "libTIMER.h"
 
-#define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1
-#define TASK_TX_AP          OSTCBP(2)   //Task 2
-#define TASK_LCD_AP         OSTCBP(3)   //Task 3
-#define TASK_LEDS_AP        OSTCBP(4)   //Task 4
+#define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
+#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmisión CAN
+#define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
+#define TASK_LEDS_AP        OSTCBP(4)   //Task 4, Act. LEDs
+#define TASK_RX_AP          OSTCBP(5)   //Task 5, Recepción CAN
 
 //Task priorities
 #define PRIO_MUESTREAR      10
@@ -44,10 +45,12 @@
 #define PRIO_LEDS           10
 
 //Herramientas de concurrencia
-#define EFLAG_BOTONES       OSECBP(1)   // Flag para muestreo botones -> CAN
+#define EFLAG_BOTONES       OSECBP(1)   // Flag para muestreo botones
 
 #define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
 #define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
+
+#define MSG_CAN             OSECBP(5)   // Mailbox para mensajes CAN
 
 
 /******************************************************************************/
@@ -317,47 +320,55 @@ void AP_act_LEDs(void){
     //  0      0   1
     //  1      2   3
     //  2      4   5
+    
+    OStypeMsgP msg_recibido;
 
-    // Habitación 1
-    switch (luz1) {
-        case 0: offLED(0);
-            offLED(1);
-            break;
-        case 1: onLED(0);
-            offLED(1);
-            break;
-        case 2: onLED(0);
-            onLED(1);
-            break;
-        default: break;
+    while(1) {
+        
+        // Espera al mensaje en el mailbox para actualizar los LEDs
+        OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
+        
+        // Habitación 1
+        switch (luz1) {
+            case 0: offLED(0);
+                offLED(1);
+                break;
+            case 1: onLED(0);
+                offLED(1);
+                break;
+            case 2: onLED(0);
+                onLED(1);
+                break;
+            default: break;
+        }
+        // Habitación 2
+        switch (luz2) {
+            case 0: offLED(2);
+                offLED(3);
+                break;
+            case 1: onLED(2);
+                offLED(3);
+                break;
+            case 2: onLED(2);
+                onLED(3);
+                break;
+            default: break;
+        }
+        // Habitación 3
+        switch (luz3) {
+            case 0: offLED(4);
+                offLED(5);
+                break;
+            case 1: onLED(4);
+                offLED(5);
+                break;
+            case 2: onLED(4);
+                onLED(5);
+                break;
+            default: break;
+        }
     }
-    // Habitación 2
-    switch (luz2) {
-        case 0: offLED(2);
-            offLED(3);
-            break;
-        case 1: onLED(2);
-            offLED(3);
-            break;
-        case 2: onLED(2);
-            onLED(3);
-            break;
-        default: break;
-    }
-    // Habitación 3
-    switch (luz3) {
-        case 0: offLED(4);
-            offLED(5);
-            break;
-        case 1: onLED(4);
-            offLED(5);
-            break;
-        case 2: onLED(4);
-            onLED(5);
-            break;
-        default: break;
-    }
-
+    
 }
 
 /******************************************************************************/
@@ -375,6 +386,8 @@ void _ISR _ADCInterrupt(void) {
     // CADRequestValue();    // Pedimos el siguiente valor
 
     IFS0bits.ADIF = 0; // Reset del interrupt
+    
+    OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);   // Dice al CAN de enviar datos nuevos
 
 }
 
@@ -393,6 +406,9 @@ void _ISR _T1Interrupt(void) {
 /* CAN ISR - Recepción datos (nivel de luz para cada habitación               */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
+    
+    static unsigned char mensaje_mbox_LEDs = 1;
+        
     unsigned int rxMsgSID;
 	unsigned char rxMsgData[8];
 	unsigned char rxMsgDLC;
@@ -425,6 +441,10 @@ void _ISR _C1Interrupt(void) {
             
         }
 	}
+    
+    // Envía mensaje en mailbox para que se actualicen los LEDs
+    OSSignalMsg(MSG_CAN, (OStypeMsgP) &mensaje_mbox_LEDs);
+    
 }
 
 /******************************************************************************/
@@ -473,6 +493,12 @@ int main(void) {
     OSCreateTask(TaskA, OSTCBP(2), 10);
     OSCreateTask(TaskB, OSTCBP(3), 10);
     OSCreateTask(P_muestrear_botones, OSTCBP(1), 10);
+    
+    // Creamos herramientas de concurrencia
+    OSCreateMsg(MSG_CAN, (OStypeMsgP) 0);
+    // Honestamente, no sé porque OSEFCBP(1), podría ser otro
+    //            OSTCBP(1)      eso mismo  val. inicial
+    OSCreateEFlag(EFLAG_BOTONES, OSEFCBP(1), 0x00);
 
     // =============================================
     // Enter multitasking environment
