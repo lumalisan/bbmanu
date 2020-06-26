@@ -43,6 +43,11 @@
 #define PRIO_LCD            10
 #define PRIO_LEDS           10
 
+//Herramientas de concurrencia
+#define EFLAG_BOTONES       OSECBP(1)   // Flag para muestreo botones -> CAN
+
+#define DESPIERTA_CAN       0x01        // Valor del flag para despertar ISR CAN
+
 /******************************************************************************/
 /* Configuration words                                                        */
 /******************************************************************************/
@@ -168,6 +173,8 @@ void P_muestrear_botones(void) {
         printf("DEBUG - muestreo botones\n");
 
         volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
+        
+        unsigned char modificados = 1;  // Para saber si ha habido cambios o no
 
         switch (key) {
             case 0: hab1++; // Añadir persona H1
@@ -194,8 +201,11 @@ void P_muestrear_botones(void) {
                 break;
             case 11: if (luz3 > 0) luz3--; // Bajar luz H3
                 break;
-            default: break;
+            default: modificados = 0; break; // Si no se ha tocado nada
         }
+        
+        if (modificados == 1)   // Envía actualización CAN solo si se ha tocado algún botón
+            OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
         printf("DEBUG - Acabo el muestreo botones\n");
         OS_Delay(1);
@@ -218,46 +228,46 @@ void AP_tx_datos(void){
     // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
     // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
-    // Se van a dividir en tres mensajes de 2, 6 y 6 bytes
-    // Mensaje 1: Lumenes
-    // Mensaje 2: hab1, hab2 y hab3
-    // Mensaje 3: luz1, luz2 y luz3
     
     /*
      SISTEMA DE IDENTIFICADORES
      * 
-     * SID = 0x0001 (1)   --> El mensaje es de 2 bytes y contiene Lumenes
-     * SID = 0x0010 (16)  --> El mensaje es de 3 bytes y contiene los hab1..3
-     * SID = 0x0100 (256) --> El mensaje es de 3 bytes y contiene los luz1..3
+     * SID = 0x0001 (1)   --> El mensaje es de 7 bytes y contiene todo
      * 
-     */
+     *
+    */
     
     // ***CUIDADO***
     // Puede que haga falta un delay después de clearTxInt, pero el profe no
     // quiere esperas activas. Si no funciona la transmisión, podría ser esta
     // la razón
     
-    
-    unsigned char data_buffer[7];
-    unsigned int ID = 0x0001;
-    unsigned char tamDatos = sizeof(data_buffer);
-    
-    // Envío informaciones
-    if (CANtxInt) {         // Si se puede enviar
-        CANclearTxInt();    // Clear del interrupt de transmisión CAN
+    while(1) {
         
-        ID = 0x0001;
-        data_buffer[0] = (unsigned char) lumenes;
-        data_buffer[1] = (unsigned char) hab1;
-        data_buffer[2] = (unsigned char) hab2;
-        data_buffer[3] = (unsigned char) hab3;
-        data_buffer[4] = (unsigned char) luz1;
-        data_buffer[5] = (unsigned char) luz2;
-        data_buffer[6] = (unsigned char) luz3;
-        
-        CANsendMessage(ID, data_buffer, tamDatos);
+        // Espera a que la tarea de botones señale que hay nuevos datos para enviar
+        OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
+        OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN);   // Limpia el flag y ejecuta la rutina
+
+        unsigned char data_buffer[7];
+        unsigned int ID = 0x0001;
+        unsigned char tamDatos = sizeof(data_buffer);
+
+        // Envío informaciones
+        if (CANtxInt) {         // Si se puede enviar
+            CANclearTxInt();    // Clear del interrupt de transmisión CAN
+
+            ID = 0x0001;
+            data_buffer[0] = (unsigned char) lumenes;
+            data_buffer[1] = (unsigned char) hab1;
+            data_buffer[2] = (unsigned char) hab2;
+            data_buffer[3] = (unsigned char) hab3;
+            data_buffer[4] = (unsigned char) luz1;
+            data_buffer[5] = (unsigned char) luz2;
+            data_buffer[6] = (unsigned char) luz3;
+
+            CANsendMessage(ID, data_buffer, tamDatos);
+        }
     }
-    
 
 }
 
