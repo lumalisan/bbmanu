@@ -156,6 +156,8 @@ void P_ctrl(void){
         // Ahora se calcula teniendo en cuenta los comandos manuales
         // impartidos a través de los botones en la placa 1
         
+        // CUIDADO: NO TENGO MANERA DE TESTEAR ESTO, PUEDE QUE RESTE/SUME A CADA ACTIVACIîN!!
+        
         luz1 = luz1 + luz1_man;
         luz2 = luz2 + luz2_man;
         luz3 = luz3 + luz3_man;
@@ -163,10 +165,9 @@ void P_ctrl(void){
         // Si se ha producido algún cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
+            OSSignalBinSem(BINSEM_CTRL_LCD); // Señala al LCD que puede actualizarse
         }
-        
-        OSSignalBinSem(BINSEM_CTRL_LCD); // Señala al LCD que puede actualizarse
-        
+                
         OS_Delay(3);
     }
     
