@@ -49,7 +49,7 @@
 #define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
 #define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
 
-#define MSG_CAN             OSECBP(5)   // Mailbox para mensajes CAN
+#define MSG_CAN             OSECBP(4)   // Mailbox para mensajes CAN
 
 
 /******************************************************************************/

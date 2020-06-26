@@ -28,9 +28,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "libLEDs.h"
-#include "libCAD.h"
 #include "libLCD.h"
+#include "libTIMER.h"
 
 #define TASK_CTRL_P         OSTCBP(1)   //Task 1
 #define TASK_TX_AP          OSTCBP(2)   //Task 2
@@ -40,6 +39,15 @@
 #define PRIO_CTRL           10
 #define PRIO_TX             10
 #define PRIO_LCD            10
+
+//Herramientas de concurrencia
+#define EFLAG_P_CTRL        OSECBP(1)   // Flag para control de luz
+
+#define DESPIERTA_TX        0b00000001  // Valor del flag para despertar envío CAN
+
+// NO SÉ SI SE PUEDEN TENER DOS HERRAMIENTAS CON EL MISMO OSECBP!
+#define MSG_RX_LCD          OSECBP(3)   // Mailbox para actualizar LCD
+#define BINSEM_CTRL_LCD     OSECBP(3)   // Semáforo para actualizar LCD
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -98,6 +106,10 @@ void P_ctrl(void){
     
     while(1) {
         
+        unsigned int luz1_previa = luz1;
+        unsigned int luz2_previa = luz2;
+        unsigned int luz3_previa = luz3;
+        
         // Determinación automática de la intensidad de las luces
         
         if (lumenes <= 341) {    // Según la luz exterior
@@ -148,6 +160,13 @@ void P_ctrl(void){
         luz2 = luz2 + luz2_man;
         luz3 = luz3 + luz3_man;
         
+        // Si se ha producido algún cambio, dile al CAN de enviar la info actualizada
+        if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa) {
+            OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
+        }
+        
+        OSSignalBinSem(BINSEM_CTRL_LCD); // Señala al LCD que puede actualizarse
+        
         OS_Delay(3);
     }
     
@@ -162,12 +181,16 @@ void AP_act_LCD(void){
     // Calcula la intensidad actual de lúmenes y la enseña
     // lums1..3
     
+    OStypeMsgP msg_recibido;
+    
     while (1) {
 
         // Espera a que la tarea de CAN señale que hay que actualizar
-        //OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
-        //OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Limpia el flag y ejecuta la rutina
-
+        OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
+        
+        // Espera a que se hayan calculado los valores de luz
+        OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
+        
         // Max. longitud línea: 16 chars.
         char linea1, linea2 [16];
         
@@ -215,13 +238,14 @@ void AP_tx_datos(void){
     // Puede que haga falta un delay después de clearTxInt, pero el profe no
     // quiere esperas activas. Si no funciona la transmisión, podría ser esta
     // la razón
+    
+    static unsigned char mensaje_mbox_LCD = 1;
 
     while (1) {
 
-        // Espera a que la tarea de botones señale que hay nuevos datos para enviar
-        //OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
-        //OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Limpia el flag y ejecuta la rutina
-        //OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
+        // Espera a que la tarea de control señale que hay nuevos datos para enviar
+        OS_WaitEFlag(EFLAG_P_CTRL, DESPIERTA_TX, OSEXACT_BITS, OSNO_TIMEOUT);
+        OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX); // Limpia el flag y ejecuta la rutina
 
         unsigned char data_buffer[3];
         unsigned int ID = 0x0002;
@@ -237,6 +261,9 @@ void AP_tx_datos(void){
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
+        
+        // Avisa al LCD que puede actualizarse y esperar al semáforo de control
+        OSSignalMsg(MSG_RX_LCD, (OStypeMsgP) & mensaje_mbox_LCD);
 
         OS_Yield();
     }
@@ -288,8 +315,17 @@ void _ISR _C1Interrupt(void) {
 
         }
 	}
-    
-    
+}
+
+/******************************************************************************/
+/* Timer ISR - Cálculo intensidad                                             */
+/******************************************************************************/
+
+void _ISR _T1Interrupt(void) {
+
+    TimerClearInt();
+    OSTimer();
+
 }
 
 /******************************************************************************/
@@ -297,7 +333,48 @@ void _ISR _C1Interrupt(void) {
 /******************************************************************************/
 
 int main(void) {
-    return 0;
+    // ===================
+    // Init peripherals
+    // ===================
+
+    LCDInit();
+
+    Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 5);
+    Timer1Start();
+
+    // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
+
+  
+    printf("--------------------Nueva ejecucion placa 2-------------------\n");
+
+    // =========================
+    // Create Salvo structures
+    // =========================
+    // Init Salvo
+    OSInit();
+
+    // Create tasks (name, tcb, priority) and push them to ELIGIBLE STATE
+    // From 1 up to OSTASKS tcbs available
+    // Priorities from 0 (highest) down to 15 (lowest)
+
+    OSCreateTask(P_ctrl, OSTCBP(1), 10);
+    OSCreateTask(AP_tx_datos, OSTCBP(2), 10);
+    OSCreateTask(AP_act_LCD, OSTCBP(3), 10);
+
+    // Creamos herramientas de concurrencia
+    OSCreateMsg(MSG_RX_LCD, (OStypeMsgP) 0);
+    // Honestamente, no sé porque OSEFCBP(1), podría ser otro
+    //            OSTCBP(1)      eso mismo  val. inicial
+    OSCreateEFlag(EFLAG_P_CTRL, OSEFCBP(1), 0x00);
+    
+    OSCreateBinSem(BINSEM_CTRL_LCD, 0);
+
+    // =============================================
+    // Enter multitasking environment
+    // =============================================
+    while (1) {
+        OSSched();
+    }
 }
 
 /******************************************************************************/
