@@ -1,24 +1,24 @@
-// SI TODO ESTÁ COMENTADO ES PORQUE SI NO NO ME DEJA COMPILAR PORQUE
+// SI TODO ESTï¿½ COMENTADO ES PORQUE SI NO NO ME DEJA COMPILAR PORQUE
 // HAY DOS MAINS
 
 
 /******************************************************************************/
 /*                                                                            */
-/*  Description: Práctica Final Sistemas Empotrados                           */
+/*  Description: Prï¿½ctica Final Sistemas Empotrados                           */
 /*               Curso 2019-2020                                              */
-/*               Ingeniería Informática UIB                                   */
+/*               Ingenierï¿½a Informï¿½tica UIB                                   */
 /*                                                                            */
 /*  Authors:     Izar Castorina                                               */
 /*               Lisandro Rocha                                               */
-/*               Joan Albert Vallori Aguiló                                   */
+/*               Joan Albert Vallori Aguilï¿½                                   */
 /*                                                                            */
 /******************************************************************************/
 
 /**
  TODO:
  * - Control de la luminosidad
- * - Envío por CAN
- * 
+ * - Envï¿½o por CAN
+ *
  */
 
 #include <p30f4011.h>
@@ -30,6 +30,7 @@
 
 #include "libLCD.h"
 #include "libTIMER.h"
+#include "libCAN.h"
 
 #define TASK_CTRL_P         OSTCBP(1)   //Task 1
 #define TASK_TX_AP          OSTCBP(2)   //Task 2
@@ -43,11 +44,11 @@
 //Herramientas de concurrencia
 #define EFLAG_P_CTRL        OSECBP(1)   // Flag para control de luz
 
-#define DESPIERTA_TX        0b00000001  // Valor del flag para despertar envío CAN
+#define DESPIERTA_TX        0b00000001  // Valor del flag para despertar envï¿½o CAN
 
-// NO SÉ SI SE PUEDEN TENER DOS HERRAMIENTAS CON EL MISMO OSECBP!
+// NO Sï¿½ SI SE PUEDEN TENER DOS HERRAMIENTAS CON EL MISMO OSECBP!
 #define MSG_RX_LCD          OSECBP(3)   // Mailbox para actualizar LCD
-#define BINSEM_CTRL_LCD     OSECBP(3)   // Semáforo para actualizar LCD
+#define BINSEM_CTRL_LCD     OSECBP(3)   // Semï¿½foro para actualizar LCD
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -103,18 +104,18 @@ volatile unsigned int lums1 = 0, lums2 = 0, lums3 = 0;   // Intensidad luz artif
  * Decide la intensidad de la luz en cada hab.
  */
 void P_ctrl(void){
-    
+
     while(1) {
-        
+
         unsigned int luz1_previa = luz1;
         unsigned int luz2_previa = luz2;
         unsigned int luz3_previa = luz3;
-        
-        // Determinación automática de la intensidad de las luces
-        
-        if (lumenes <= 341) {    // Según la luz exterior
+
+        // Determinaciï¿½n automï¿½tica de la intensidad de las luces
+
+        if (lumenes <= 341) {    // Segï¿½n la luz exterior
             // Luz baja (noche), si hay gente enciende
-            switch (hab1) { // Según el n. de personas
+            switch (hab1) { // Segï¿½n el n. de personas
                 case 0: luz1 = 0; break;
                 case 1: luz1 = 1; break;
                 default: luz1 = 2; break;
@@ -130,7 +131,7 @@ void P_ctrl(void){
                 default: luz2 = 2; break;
             }
         } else if (lumenes > 341 && lumenes <= 682) {
-            // Luz media (tarde), si hay más de una persona enciende 1 luz
+            // Luz media (tarde), si hay mï¿½s de una persona enciende 1 luz
             switch (hab1) {
                 case 0: luz1 = 0; break;
                 case 1: luz1 = 0; break;
@@ -147,60 +148,60 @@ void P_ctrl(void){
                 default: luz3 = 1; break;
             }
         } else if (lumenes > 682) {
-            // Luz alta (día), no enciende nada
+            // Luz alta (dï¿½a), no enciende nada
             luz1 = 0;
             luz2 = 0;
             luz3 = 0;
         }
-        
+
         // Ahora se calcula teniendo en cuenta los comandos manuales
-        // impartidos a través de los botones en la placa 1
-        
-        // CUIDADO: NO TENGO MANERA DE TESTEAR ESTO, PUEDE QUE RESTE/SUME A CADA ACTIVACIîN!!
-        
+        // impartidos a travï¿½s de los botones en la placa 1
+
+        // CUIDADO: NO TENGO MANERA DE TESTEAR ESTO, PUEDE QUE RESTE/SUME A CADA ACTIVACIï¿½N!!
+
         luz1 = luz1 + luz1_man;
         luz2 = luz2 + luz2_man;
         luz3 = luz3 + luz3_man;
-        
-        // Si se ha producido algún cambio, dile al CAN de enviar la info actualizada
+
+        // Si se ha producido algï¿½n cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-            OSSignalBinSem(BINSEM_CTRL_LCD); // Señala al LCD que puede actualizarse
+            OSSignalBinSem(BINSEM_CTRL_LCD); // Seï¿½ala al LCD que puede actualizarse
         }
-                
+
         OS_Delay(3);
     }
-    
+
 }
 
 /**
  * Muestra en el LCD:
- * - Los lúmenes del exterior
- * - Los lúmenes por habitación
+ * - Los lï¿½menes del exterior
+ * - Los lï¿½menes por habitaciï¿½n
  */
 void AP_act_LCD(void){
-    // Calcula la intensidad actual de lúmenes y la enseña
+    // Calcula la intensidad actual de lï¿½menes y la enseï¿½a
     // lums1..3
-    
+
     OStypeMsgP msg_recibido;
-    
+
     while (1) {
 
-        // Espera a que la tarea de CAN señale que hay que actualizar
+        // Espera a que la tarea de CAN seï¿½ale que hay que actualizar
         OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
-        
+
         // Espera a que se hayan calculado los valores de luz
         OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
-        
-        // Max. longitud línea: 16 chars.
+
+        // Max. longitud lï¿½nea: 16 chars.
         char linea1, linea2 [16];
-        
+
         lums1 = luz1 * LUMS_STEP;
         lums2 = luz2 * LUMS_STEP;
         lums3 = luz3 * LUMS_STEP;
 
-        sprintf(linea1, "EX:%d H1:%d", lumenes, lums1);
-        sprintf(linea2, "H2:%d H3:%d", lums2, lums3);
+        sprintf(linea1, "EX:%u H1:%u", lumenes, lums1);
+        sprintf(linea2, "H2:%u H3:%u", lums2, lums3);
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
@@ -209,42 +210,45 @@ void AP_act_LCD(void){
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
+        unsigned int i;
+        for(i=0; i<10; i++) Delay5ms();
+
         OS_Yield();
     }
-    
+
 }
 
 
 /**
- * Envia: 
- * - Los lúmenes de luz exterior
+ * Envia:
+ * - Los lï¿½menes de luz exterior
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void){
-    // Llamado después de P_ctrl
-    // Envía los valores actualizados de lumenes y luces
-    
-    // Cada unsigned char tiene tamaño de 1 byte
-    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
+    // Llamado despuï¿½s de P_ctrl
+    // Envï¿½a los valores actualizados de lumenes y luces
+
+    // Cada unsigned char tiene tamaï¿½o de 1 byte
+    // Cada unsigned int tiene tamaï¿½o de 2 bytes (hasta 65.535, luego 4)
 
     /*
      SISTEMA DE IDENTIFICADORES
-     * 
+     *
      * SID = 0x0001 (1)   --> Mensaje recibido desde la placa 1
      * SID = 0x0002 (2)   --> Enviar luz1..3
      *
      */
 
     // ***CUIDADO***
-    // Puede que haga falta un delay después de clearTxInt, pero el profe no
-    // quiere esperas activas. Si no funciona la transmisión, podría ser esta
-    // la razón
-    
+    // Puede que haga falta un delay despuï¿½s de clearTxInt, pero el profe no
+    // quiere esperas activas. Si no funciona la transmisiï¿½n, podrï¿½a ser esta
+    // la razï¿½n
+
     static unsigned char mensaje_mbox_LCD = 1;
 
     while (1) {
 
-        // Espera a que la tarea de control señale que hay nuevos datos para enviar
+        // Espera a que la tarea de control seï¿½ale que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_P_CTRL, DESPIERTA_TX, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX); // Limpia el flag y ejecuta la rutina
 
@@ -252,9 +256,9 @@ void AP_tx_datos(void){
         unsigned int ID = 0x0002;
         unsigned char tamDatos = sizeof (data_buffer);
 
-        // Envío informaciones
+        // Envï¿½o informaciones
         if (CANtxInt) { // Si se puede enviar
-            CANclearTxInt(); // Clear del interrupt de transmisión CAN
+            CANclearTxInt(); // Clear del interrupt de transmisiï¿½n CAN
 
             data_buffer[0] = (unsigned char) luz1;
             data_buffer[1] = (unsigned char) luz2;
@@ -262,13 +266,13 @@ void AP_tx_datos(void){
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
-        
-        // Avisa al LCD que puede actualizarse y esperar al semáforo de control
+
+        // Avisa al LCD que puede actualizarse y esperar al semï¿½foro de control
         OSSignalMsg(MSG_RX_LCD, (OStypeMsgP) & mensaje_mbox_LCD);
 
         OS_Yield();
     }
-    
+
 }
 
 /******************************************************************************/
@@ -277,9 +281,9 @@ void AP_tx_datos(void){
 
 
 /******************************************************************************/
-/* CAN ISR - Recepción datos                                                  */
-/* Recibe info de num. personas y luz deseada (manual) en cada habitación     */
-/* También recibe el número de lúmenes exteriores                             */
+/* CAN ISR - Recepciï¿½n datos                                                  */
+/* Recibe info de num. personas y luz deseada (manual) en cada habitaciï¿½n     */
+/* Tambiï¿½n recibe el nï¿½mero de lï¿½menes exteriores                             */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
     unsigned int rxMsgSID;
@@ -301,16 +305,16 @@ void _ISR _C1Interrupt(void) {
 
 		// Clear RX buffer
 		CANclearRxBuffer();
-        
+
         if (rxMsgSID == 0x0001) {
-            
+
             hab1 = (unsigned int) rxMsgData[2];
             hab2 = (unsigned int) rxMsgData[3];
             hab3 = (unsigned int) rxMsgData[4];
             luz1_man = (int) rxMsgData[5];
             luz2_man = (int) rxMsgData[6];
             luz3_man = (int) rxMsgData[7];
-            
+
             lumenes = (unsigned int) rxMsgData[1] << 8; // lum_l
             lumenes += (unsigned int) rxMsgData[0];
 
@@ -319,7 +323,7 @@ void _ISR _C1Interrupt(void) {
 }
 
 /******************************************************************************/
-/* Timer ISR - Cálculo intensidad                                             */
+/* Timer ISR - Cï¿½lculo intensidad                                             */
 /******************************************************************************/
 
 void _ISR _T1Interrupt(void) {
@@ -343,10 +347,10 @@ int main(void) {
     Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 5);
     Timer1Start();
 
-    // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
+    CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulaciï¿½n
 
-  
-    printf("--------------------Nueva ejecucion placa 2-------------------\n");
+
+  //  printf("--------------------Nueva ejecucion placa 2-------------------\n");
 
     // =========================
     // Create Salvo structures
@@ -364,10 +368,10 @@ int main(void) {
 
     // Creamos herramientas de concurrencia
     OSCreateMsg(MSG_RX_LCD, (OStypeMsgP) 0);
-    // Honestamente, no sé porque OSEFCBP(1), podría ser otro
+    // Honestamente, no sï¿½ porque OSEFCBP(1), podrï¿½a ser otro
     //            OSTCBP(1)      eso mismo  val. inicial
     OSCreateEFlag(EFLAG_P_CTRL, OSEFCBP(1), 0x00);
-    
+
     OSCreateBinSem(BINSEM_CTRL_LCD, 0);
 
     // =============================================

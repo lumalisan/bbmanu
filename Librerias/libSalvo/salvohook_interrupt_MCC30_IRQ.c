@@ -14,7 +14,6 @@ associated with Salvo services.
 ************************************************************/
 #include <salvo.h>
 
-
 void OSDisableHook(void)
 {
 	__asm__ volatile("disi #0x3FFF");

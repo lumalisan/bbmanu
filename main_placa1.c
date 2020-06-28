@@ -1,12 +1,12 @@
 /******************************************************************************/
 /*                                                                            */
-/*  Description: Práctica Final Sistemas Empotrados                           */
+/*  Description: Prï¿½ctica Final Sistemas Empotrados                           */
 /*               Curso 2019-2020                                              */
-/*               Ingeniería Informática UIB                                   */
+/*               Ingenierï¿½a Informï¿½tica UIB                                   */
 /*                                                                            */
 /*  Authors:     Izar Castorina                                               */
 /*               Lisandro Rocha                                               */
-/*               Joan Albert Vallori Aguiló                                   */
+/*               Joan Albert Vallori Aguilï¿½                                   */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,13 +29,14 @@
 #include "libLCD.h"
 #include "libCAN.h"
 #include "libTIMER.h"
+#include "delay.h"
 
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
-#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmisión CAN
+#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmisiï¿½n CAN
 #define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
 #define TASK_LEDS_AP        OSTCBP(4)   //Task 4, Act. LEDs
 // NO CREO QUE HAGA FALTA DEFINIR TAREA RX_AP PORQUE ES POR INT.
-// #define TASK_RX_AP          OSTCBP(5)   //Task 5, Recepción CAN
+// #define TASK_RX_AP          OSTCBP(5)   //Task 5, Recepciï¿½n CAN
 
 //Task priorities
 #define PRIO_MUESTREAR      10
@@ -83,18 +84,18 @@ volatile int luz1_man = 0, luz2_man = 0, luz3_man = 0;
 /* Procedures declaration                                                     */
 /******************************************************************************/
 
-/*  NO BORRAR TODAVÍA: PERMITE ACTUALIZAR LEDS SEGÚN PARÁMETROS
+/*  NO BORRAR TODAVï¿½A: PERMITE ACTUALIZAR LEDS SEGï¿½N PARï¿½METROS
 int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
-    
+
     // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
     // Hab.     LED
     //  1      0   1
     //  2      2   3
     //  3      4   5
-    
+
     if (habitacion < 1 || habitacion > 3)   // Fuera de rango
         return -1;                          // Error
-    
+
     if (habitacion == 1) {
         switch (nivelLuz) {
             case 0: offLED(0); offLED(1); break;
@@ -142,24 +143,24 @@ int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
  */
 
 /**
- * Muestrea la pulsación de botones
+ * Muestrea la pulsaciï¿½n de botones
  */
 void P_muestrear_botones(void) {
 
     while (1) {
 
-        printf("DEBUG - muestreo botones\n");
+      //  printf("DEBUG - muestreo botones\n");
 
         volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
 
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
 
         switch (key) {
-            case 0: hab1++; // Añadir persona H1
+            case 0: hab1++; // Aï¿½adir persona H1
                 break;
-            case 1: hab2++; // Añadir persona H2
+            case 1: hab2++; // Aï¿½adir persona H2
                 break;
-            case 2: hab3++; // Añadir persona H3
+            case 2: hab3++; // Aï¿½adir persona H3
                 break;
             case 3: if (hab1 > 0) hab1--; // Quitar persona H1
                 break;
@@ -183,10 +184,10 @@ void P_muestrear_botones(void) {
                 break; // Si no se ha tocado nada
         }
 
-        if (modificados == 1) // Envía actualización CAN solo si se ha tocado algún botón
+        if (modificados == 1) // Envï¿½a actualizaciï¿½n CAN solo si se ha tocado algï¿½n botï¿½n
             OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
-        printf("DEBUG - Acabo el muestreo botones\n");
+      //  printf("DEBUG - Acabo el muestreo botones\n");
         OS_Delay(1);
 
     }
@@ -196,35 +197,35 @@ void P_muestrear_botones(void) {
 }
 
 /**
- * Envia: 
- * - Los lúmenes de luz exterior
- * - El número de personas en cada hab.
+ * Envia:
+ * - Los lï¿½menes de luz exterior
+ * - El nï¿½mero de personas en cada hab.
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void) {
 
-    // Cada unsigned char tiene tamaño de 1 byte (0 - 255)
-    // Cada char tiene tamaño de 1 byte (-128, 127)
-    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
+    // Cada unsigned char tiene tamaï¿½o de 1 byte (0 - 255)
+    // Cada char tiene tamaï¿½o de 1 byte (-128, 127)
+    // Cada unsigned int tiene tamaï¿½o de 2 bytes (hasta 65.535, luego 4)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
     // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
 
     /*
      SISTEMA DE IDENTIFICADORES
-     * 
+     *
      * SID = 0x0001 (1)   --> El mensaje es de 7 bytes y contiene todo
      * SID = 0x0002 (2)   --> Mensaje recibido desde la placa 2
      *
      */
 
     // ***CUIDADO***
-    // Puede que haga falta un delay después de clearTxInt, pero el profe no
-    // quiere esperas activas. Si no funciona la transmisión, podría ser esta
-    // la razón
+    // Puede que haga falta un delay despuï¿½s de clearTxInt, pero el profe no
+    // quiere esperas activas. Si no funciona la transmisiï¿½n, podrï¿½a ser esta
+    // la razï¿½n
 
     while (1) {
 
-        // Espera a que la tarea de botones señale que hay nuevos datos para enviar
+        // Espera a que la tarea de botones seï¿½ale que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Limpia el flag y ejecuta la rutina
         OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
@@ -232,15 +233,15 @@ void AP_tx_datos(void) {
         unsigned char data_buffer[8];
         unsigned int ID = 0x0001;
         unsigned char tamDatos = sizeof (data_buffer);
-        
-        // Dividimos los lúmenes (2 bytes) en dos uns. chars
+
+        // Dividimos los lï¿½menes (2 bytes) en dos uns. chars
         unsigned char *lum_chars = (unsigned char *) &lumenes;
         unsigned char lum_h = lum_chars[0];
         unsigned char lum_l = lum_chars[1];
 
-        // Envío informaciones
+        // Envï¿½o informaciones
         if (CANtxInt) { // Si se puede enviar
-            CANclearTxInt(); // Clear del interrupt de transmisión CAN
+            CANclearTxInt(); // Clear del interrupt de transmisiï¿½n CAN
 
             data_buffer[0] = lum_h;
             data_buffer[1] = lum_l;
@@ -261,22 +262,22 @@ void AP_tx_datos(void) {
 
 /**
  * Muestra en el LCD:
- * - Los lúmenes del exterior
- * - El número de personas en cada hab.
+ * - Los lï¿½menes del exterior
+ * - El nï¿½mero de personas en cada hab.
  */
 void AP_act_LCD(void) {
 
     while (1) {
 
-        // Espera a que la tarea de CAN señale que hay que actualizar
+        // Espera a que la tarea de CAN seï¿½ale que hay que actualizar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Limpia el flag y ejecuta la rutina
 
-        // Max. longitud línea: 16 chars.
+        // Max. longitud lï¿½nea: 16 chars.
         char linea1, linea2 [16];
 
-        sprintf(linea1, "H.1:%d 2:%d 3:%d", hab1, hab2, hab3);
-        sprintf(linea2, "Lumens: %d", lumenes);
+        sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
+        sprintf(linea2, "Lumens: %u", lumenes);
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
@@ -285,6 +286,9 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
+        unsigned int i;
+        for(i=0; i<10; i++) Delay5ms();
+
         OS_Yield();
     }
 
@@ -292,8 +296,8 @@ void AP_act_LCD(void) {
 
 /**
  * Muestra en los LEDs:
- * - Los lúmenes del exterior
- * - El número de personas en cada hab.
+ * - Los lï¿½menes del exterior
+ * - El nï¿½mero de personas en cada hab.
  */
 void AP_act_LEDs(void) {
     // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
@@ -309,7 +313,7 @@ void AP_act_LEDs(void) {
         // Espera al mensaje en el mailbox para actualizar los LEDs
         OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
 
-        // Habitación 1
+        // Habitaciï¿½n 1
         switch (luz1) {
             case 0: offLED(0);
                 offLED(1);
@@ -322,7 +326,7 @@ void AP_act_LEDs(void) {
                 break;
             default: break;
         }
-        // Habitación 2
+        // Habitaciï¿½n 2
         switch (luz2) {
             case 0: offLED(2);
                 offLED(3);
@@ -335,7 +339,7 @@ void AP_act_LEDs(void) {
                 break;
             default: break;
         }
-        // Habitación 3
+        // Habitaciï¿½n 3
         switch (luz3) {
             case 0: offLED(4);
                 offLED(5);
@@ -390,11 +394,11 @@ void _ISR _T1Interrupt(void) {
 }
 
 /******************************************************************************/
-/* CAN ISR - Recepción datos (nivel de luz para cada habitación               */
+/* CAN ISR - Recepciï¿½n datos (nivel de luz para cada habitaciï¿½n               */
 
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
-    
+
 
     static unsigned char mensaje_mbox_LEDs = 1;
 
@@ -426,7 +430,7 @@ void _ISR _C1Interrupt(void) {
         }
     }
 
-    // Envía mensaje en mailbox para que se actualicen los LEDs
+    // Envï¿½a mensaje en mailbox para que se actualicen los LEDs
     OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
 
     // COMENTADO POR AHORA, SI LA TAREA SE QUEDA PILLADA ES QUE HACE FALTA PONERLO
@@ -454,31 +458,28 @@ int main(void) {
     Timer1Init(TIMER_PERIOD_FOR_10ms, TIMER_PSCALER_FOR_10ms, 5);
     Timer1Start();
 
-    // CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulación
-
+    CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulaciï¿½n
+/*
     lumenes = 2560;
     unsigned char *lum_chars = (unsigned char *) &lumenes;
     unsigned char lum_h = lum_chars[0];
     unsigned char lum_l = lum_chars[1];
-    
+
     unsigned int lums_reconv = (unsigned int) lum_l << 8;
     unsigned int aux = (unsigned int) lum_h;
     lums_reconv += aux;
-    
-    
+*/
 
-    printf("--------------------Nueva ejecucion-------------------\n");
-    //printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
-    //printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
 
-    printf("DEBUG: lumenes en unsigned char: %c | %c\n", lum_h, lum_l);
-    printf("DEBUG: lumenes reconvertido: %d\n", lums_reconv);
+  //  printf("--------------------Nueva ejecucion-------------------\n");
+    ////printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
+    ////printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
 
-    int test = -2;
-    char test_c = (char) test;
-    
-    printf("DEBUG - test signed char: %c\n", test_c);
-    printf("DEBUG - test signed char reconv: %d\n", (int) test_c);
+  //  printf("DEBUG: lumenes en unsigned char: %c | %c\n", lum_h, lum_l);
+  //  printf("DEBUG: lumenes reconvertido: %d\n", lums_reconv);
+
+  //  printf("DEBUG - test signed char: %c\n", test_c);
+  //  printf("DEBUG - test signed char reconv: %d\n", (int) test_c);
 
     // =========================
     // Create Salvo structures
@@ -497,7 +498,7 @@ int main(void) {
 
     // Creamos herramientas de concurrencia
     OSCreateMsg(MSG_CAN, (OStypeMsgP) 0);
-    // Honestamente, no sé porque OSEFCBP(1), podría ser otro
+    // Honestamente, no sï¿½ porque OSEFCBP(1), podrï¿½a ser otro
     //            OSTCBP(1)      eso mismo  val. inicial
     OSCreateEFlag(EFLAG_BOTONES, OSEFCBP(1), 0x00);
 
