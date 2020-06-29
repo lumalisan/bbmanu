@@ -1,12 +1,12 @@
 /******************************************************************************/
 /*                                                                            */
-/*  Description: Pr�ctica Final Sistemas Empotrados                           */
+/*  Description: Practica Final Sistemas Empotrados                           */
 /*               Curso 2019-2020                                              */
-/*               Ingenier�a Inform�tica UIB                                   */
+/*               Ingenieria Informatica UIB                                   */
 /*                                                                            */
 /*  Authors:     Izar Castorina                                               */
 /*               Lisandro Rocha                                               */
-/*               Joan Albert Vallori Aguil�                                   */
+/*               Joan Albert Vallori Aguilo                                   */
 /*                                                                            */
 /******************************************************************************/
 
@@ -31,6 +31,7 @@
 #include "libTIMER.h"
 #include "delay.h"
 
+// Tasks TCBs
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
 #define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmisi�n CAN
 #define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
@@ -44,13 +45,15 @@
 #define PRIO_LCD            10
 #define PRIO_LEDS           10
 
-//Herramientas de concurrencia
+// OS events control blocks (number of OS EVENT)
+// Recall that the number of OS event must range from 1 to OSEVENTS (defined in salvocfg.h)
 #define EFLAG_BOTONES       OSECBP(1)   // Flag para muestreo botones
+#define EFLAG_BOTONES_EFCB  OSEFCBP(1)
+
+#define MSG_CAN             OSECBP(2)   // Mailbox para mensajes CAN
 
 #define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
 #define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
-
-#define MSG_CAN             OSECBP(4)   // Mailbox para mensajes CAN
 
 
 /******************************************************************************/
@@ -84,7 +87,7 @@ volatile int luz1_man = 0, luz2_man = 0, luz3_man = 0;
 /* Procedures declaration                                                     */
 /******************************************************************************/
 
-/*  NO BORRAR TODAV�A: PERMITE ACTUALIZAR LEDS SEG�N PAR�METROS
+/*  NO BORRAR TODAVIA: PERMITE ACTUALIZAR LEDS SEGUN PARAMETROS
 int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
 
     // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
@@ -143,7 +146,7 @@ int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
  */
 
 /**
- * Muestrea la pulsaci�n de botones
+ * Muestrea la pulsacion de botones
  */
 void P_muestrear_botones(void) {
 
@@ -151,16 +154,16 @@ void P_muestrear_botones(void) {
 
       //  printf("DEBUG - muestreo botones\n");
 
-        volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
+        volatile unsigned char key = getKey(); // O getKeyNotBlocking ?
 
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
 
         switch (key) {
-            case 0: hab1++; // A�adir persona H1
+            case 0: hab1++; // Añadir persona H1
                 break;
-            case 1: hab2++; // A�adir persona H2
+            case 1: hab2++; // Añadir persona H2
                 break;
-            case 2: hab3++; // A�adir persona H3
+            case 2: hab3++; // Añadir persona H3
                 break;
             case 3: if (hab1 > 0) hab1--; // Quitar persona H1
                 break;
@@ -184,11 +187,11 @@ void P_muestrear_botones(void) {
                 break; // Si no se ha tocado nada
         }
 
-        if (modificados == 1) // Env�a actualizaci�n CAN solo si se ha tocado alg�n bot�n
+        if (modificados == 1) // Envia actualizacion CAN solo si se ha tocado algun boton
             OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
       //  printf("DEBUG - Acabo el muestreo botones\n");
-        OS_Delay(1);
+        for (i = 0; i < 60; i++) Delay5ms();
 
     }
 
@@ -198,15 +201,15 @@ void P_muestrear_botones(void) {
 
 /**
  * Envia:
- * - Los l�menes de luz exterior
- * - El n�mero de personas en cada hab.
+ * - Los lumenes de luz exterior
+ * - El numero de personas en cada hab.
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void) {
 
-    // Cada unsigned char tiene tama�o de 1 byte (0 - 255)
-    // Cada char tiene tama�o de 1 byte (-128, 127)
-    // Cada unsigned int tiene tama�o de 2 bytes (hasta 65.535, luego 4)
+    // Cada unsigned char tiene tamaño de 1 byte (0 - 255)
+    // Cada char tiene tamaño de 1 byte (-128, 127)
+    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
     // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
 
@@ -219,13 +222,13 @@ void AP_tx_datos(void) {
      */
 
     // ***CUIDADO***
-    // Puede que haga falta un delay despu�s de clearTxInt, pero el profe no
-    // quiere esperas activas. Si no funciona la transmisi�n, podr�a ser esta
-    // la raz�n
+    // Puede que haga falta un delay despues de clearTxInt, pero el profe no
+    // quiere esperas activas. Si no funciona la transmision, podria ser esta
+    // la razon
 
     while (1) {
 
-        // Espera a que la tarea de botones se�ale que hay nuevos datos para enviar
+        // Espera a que la tarea de botones señale que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Limpia el flag y ejecuta la rutina
         OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
@@ -234,14 +237,14 @@ void AP_tx_datos(void) {
         unsigned int ID = 0x0001;
         unsigned char tamDatos = sizeof (data_buffer);
 
-        // Dividimos los l�menes (2 bytes) en dos uns. chars
+        // Dividimos los lumenes (2 bytes) en dos uns. chars
         unsigned char *lum_chars = (unsigned char *) &lumenes;
         unsigned char lum_h = lum_chars[0];
         unsigned char lum_l = lum_chars[1];
 
-        // Env�o informaciones
+        // Envio informaciones
         if (CANtxInt) { // Si se puede enviar
-            CANclearTxInt(); // Clear del interrupt de transmisi�n CAN
+            CANclearTxInt(); // Clear del interrupt de transmision CAN
 
             data_buffer[0] = lum_h;
             data_buffer[1] = lum_l;
@@ -262,19 +265,31 @@ void AP_tx_datos(void) {
 
 /**
  * Muestra en el LCD:
- * - Los l�menes del exterior
- * - El n�mero de personas en cada hab.
+ * - Los lumenes del exterior
+ * - El numero de personas en cada hab.
  */
 void AP_act_LCD(void) {
 
     while (1) {
 
-        // Espera a que la tarea de CAN se�ale que hay que actualizar
+        // Espera a que la tarea de CAN señale que hay que actualizar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Limpia el flag y ejecuta la rutina
 
-        // Max. longitud l�nea: 16 chars.
-        char linea1, linea2 [16];
+        // LIS
+        // Tiene sentido esperar al flag pero no leerlo?
+
+        // Max. longitud linea: 16 chars.
+        char linea1 [16];
+        char linea2 [16];
+
+        // LIS
+        // Hace falta inicializarlos? (linea1, linea2)
+        unsigned int i;
+        for(i=0; i<16; i++){
+          linea1[i] = ' ';
+          linea2[i] = ' ';
+        }
 
         sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
         sprintf(linea2, "Lumens: %u", lumenes);
@@ -286,7 +301,6 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
-        unsigned int i;
         for(i=0; i<10; i++) Delay5ms();
 
         OS_Yield();
@@ -296,8 +310,8 @@ void AP_act_LCD(void) {
 
 /**
  * Muestra en los LEDs:
- * - Los l�menes del exterior
- * - El n�mero de personas en cada hab.
+ * - Los lumenes del exterior
+ * - El numero de personas en cada hab.
  */
 void AP_act_LEDs(void) {
     // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
@@ -307,13 +321,29 @@ void AP_act_LEDs(void) {
     //  2      4   5
 
     OStypeMsgP msg_recibido;
+    //typeMessage * pMessage;
 
     while (1) {
+
+        //LIS
+        // El profe siempre usa espera activa en sus ejemplos, lo q me lleva
+        // a pensar q es la unica manera de hacerlo
+        for (i=0; i < 10; i++) Delay15ms();
 
         // Espera al mensaje en el mailbox para actualizar los LEDs
         OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
 
-        // Habitaci�n 1
+        //LIS
+        // Se espera al mensaje pero nunca se usa para nada. Esto tiene sentido?
+        // Yo creo que aqui falla algo
+        // En el ejemplo del profe lo usa como metodo para acceder al contenido
+        // mediante el puntero pMessage
+
+        //pMessage = (typeMessage *) msgP;
+        //toggleLED((*pMessage).x);
+        //toggleLED((*pMessage).y);
+
+        // Habitacion 1
         switch (luz1) {
             case 0: offLED(0);
                 offLED(1);
@@ -326,7 +356,7 @@ void AP_act_LEDs(void) {
                 break;
             default: break;
         }
-        // Habitaci�n 2
+        // Habitacion 2
         switch (luz2) {
             case 0: offLED(2);
                 offLED(3);
@@ -339,7 +369,7 @@ void AP_act_LEDs(void) {
                 break;
             default: break;
         }
-        // Habitaci�n 3
+        // Habitacion 3
         switch (luz3) {
             case 0: offLED(4);
                 offLED(5);
@@ -353,7 +383,9 @@ void AP_act_LEDs(void) {
             default: break;
         }
 
-        OS_Yield();
+        //LIS
+        // Creo q el Yield aqui no hace falta
+        //OS_Yield();
     }
 
 }
@@ -365,7 +397,6 @@ void AP_act_LEDs(void) {
 
 /******************************************************************************/
 /* ADC ISR - CAD Reading                                                      */
-
 /******************************************************************************/
 
 void _ISR _ADCInterrupt(void) {
@@ -383,19 +414,15 @@ void _ISR _ADCInterrupt(void) {
 
 /******************************************************************************/
 /* Timer ISR - Muestreo botones                                               */
-
 /******************************************************************************/
 
 void _ISR _T1Interrupt(void) {
-
     TimerClearInt();
     OSTimer();
-
 }
 
 /******************************************************************************/
-/* CAN ISR - Recepci�n datos (nivel de luz para cada habitaci�n               */
-
+/* CAN ISR - Recepcion datos (nivel de luz para cada habitaci�n               */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
 
@@ -430,17 +457,16 @@ void _ISR _C1Interrupt(void) {
         }
     }
 
-    // Env�a mensaje en mailbox para que se actualicen los LEDs
+    // Envia mensaje en mailbox para que se actualicen los LEDs
     OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
 
     // COMENTADO POR AHORA, SI LA TAREA SE QUEDA PILLADA ES QUE HACE FALTA PONERLO
-    // OS_Yield();
+    OS_Yield();
 
 }
 
 /******************************************************************************/
 /* Main                                                                       */
-
 /******************************************************************************/
 
 int main(void) {
@@ -449,16 +475,11 @@ int main(void) {
     // Init peripherals
     // ===================
     initLEDs();
-    CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
-    CADStart(CAD_INTERACTION_BY_INTERRUPT);
-
     LCDInit();
     KeybInit();
-
-    Timer1Init(TIMER_PERIOD_FOR_10ms, TIMER_PSCALER_FOR_10ms, 5);
-    Timer1Start();
-
-    CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulaci�n
+    //CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
+    //CADStart(CAD_INTERACTION_BY_INTERRUPT);
+    //CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);
 /*
     lumenes = 2560;
     unsigned char *lum_chars = (unsigned char *) &lumenes;
@@ -469,7 +490,6 @@ int main(void) {
     unsigned int aux = (unsigned int) lum_h;
     lums_reconv += aux;
 */
-
 
   //  printf("--------------------Nueva ejecucion-------------------\n");
     ////printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
@@ -491,16 +511,22 @@ int main(void) {
     // From 1 up to OSTASKS tcbs available
     // Priorities from 0 (highest) down to 15 (lowest)
 
-    OSCreateTask(P_muestrear_botones, OSTCBP(1), 10);
-    OSCreateTask(AP_tx_datos, OSTCBP(2), 10);
-    OSCreateTask(AP_act_LCD, OSTCBP(3), 10);
-    OSCreateTask(AP_act_LEDs, OSTCBP(4), 10);
+    OSCreateTask(P_muestrear_botones, TASK_MUESTREAR_P, PRIO_MUESTREAR);
+    OSCreateTask(AP_tx_datos, TASK_TX_AP, PRIO_TX);
+    OSCreateTask(AP_act_LCD, TASK_LCD_AP, PRIO_LCD);
+    OSCreateTask(AP_act_LEDs, TASK_LEDS_AP, PRIO_LEDS);
 
-    // Creamos herramientas de concurrencia
+    // Create mailbox
     OSCreateMsg(MSG_CAN, (OStypeMsgP) 0);
-    // Honestamente, no s� porque OSEFCBP(1), podr�a ser otro
-    //            OSTCBP(1)      eso mismo  val. inicial
-    OSCreateEFlag(EFLAG_BOTONES, OSEFCBP(1), 0x00);
+
+    // Create event flag (ecbP, efcbP, initial value)
+    OSCreateEFlag(EFLAG_BOTONES, EFLAG_BOTONES_EFCB, 0x00);
+
+    // =============================================
+  	// Enable peripherals that trigger interrupts
+  	// =============================================
+    Timer1Init(TIMER_PERIOD_FOR_10ms, TIMER_PSCALER_FOR_10ms, 4);
+    Timer1Start();
 
     // =============================================
     // Enter multitasking environment
