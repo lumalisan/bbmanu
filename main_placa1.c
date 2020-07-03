@@ -33,7 +33,7 @@
 
 // Tasks TCBs
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
-#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmisi�n CAN
+#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmision CAN
 #define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
 #define TASK_LEDS_AP        OSTCBP(4)   //Task 4, Act. LEDs
 // NO CREO QUE HAGA FALTA DEFINIR TAREA RX_AP PORQUE ES POR INT.
@@ -154,8 +154,8 @@ void P_muestrear_botones(void) {
 
       //  printf("DEBUG - muestreo botones\n");
 
-        volatile unsigned char key = getKey(); // O getKeyNotBlocking ?
-
+        volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
+		    unsigned char i = 0;
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
 
         switch (key) {
@@ -191,7 +191,8 @@ void P_muestrear_botones(void) {
             OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
       //  printf("DEBUG - Acabo el muestreo botones\n");
-        for (i = 0; i < 60; i++) Delay5ms();
+        //for (i = 0; i < 60; i++) Delay5ms();
+        OS_Delay(1);
 
     }
 
@@ -278,15 +279,15 @@ void AP_act_LCD(void) {
 
         // LIS
         // Tiene sentido esperar al flag pero no leerlo?
-
+        LCDClear();
         // Max. longitud linea: 16 chars.
-        char linea1 [16];
-        char linea2 [16];
+        char linea1 [20];
+        char linea2 [20];
 
         // LIS
         // Hace falta inicializarlos? (linea1, linea2)
         unsigned int i;
-        for(i=0; i<16; i++){
+        for(i=0; i<20; i++){
           linea1[i] = ' ';
           linea2[i] = ' ';
         }
@@ -301,7 +302,7 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
-        for(i=0; i<10; i++) Delay5ms();
+        for(i=0; i<10; i++) Delay15ms();
 
         OS_Yield();
     }
@@ -322,6 +323,8 @@ void AP_act_LEDs(void) {
 
     OStypeMsgP msg_recibido;
     //typeMessage * pMessage;
+
+	  unsigned int i = 0;
 
     while (1) {
 
@@ -385,7 +388,7 @@ void AP_act_LEDs(void) {
 
         //LIS
         // Creo q el Yield aqui no hace falta
-        //OS_Yield();
+        OS_Yield();
     }
 
 }
@@ -461,7 +464,7 @@ void _ISR _C1Interrupt(void) {
     OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
 
     // COMENTADO POR AHORA, SI LA TAREA SE QUEDA PILLADA ES QUE HACE FALTA PONERLO
-    OS_Yield();
+    //OS_Yield();
 
 }
 
@@ -477,9 +480,9 @@ int main(void) {
     initLEDs();
     LCDInit();
     KeybInit();
-    //CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
-    //CADStart(CAD_INTERACTION_BY_INTERRUPT);
-    //CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);
+    CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
+    CADStart(CAD_INTERACTION_BY_INTERRUPT);
+    CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
 /*
     lumenes = 2560;
     unsigned char *lum_chars = (unsigned char *) &lumenes;
