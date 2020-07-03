@@ -44,7 +44,7 @@
 //Herramientas de concurrencia
 #define EFLAG_P_CTRL        OSECBP(1)   // Flag para control de luz
 
-#define DESPIERTA_TX        0b00000001  // Valor del flag para despertar env�o CAN
+#define DESPIERTA_TX        0x01  // Valor del flag para despertar env�o CAN
 
 // NO S� SI SE PUEDEN TENER DOS HERRAMIENTAS CON EL MISMO OSECBP!
 #define MSG_RX_LCD          OSECBP(3)   // Mailbox para actualizar LCD
@@ -75,10 +75,10 @@ _FGS(CODE_PROT_OFF);
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones (calculada)
-volatile int luz1_man = 0, luz2_man = 0, luz3_man = 0; // Intensidad luz (recibida)
+volatile unsigned int luz1_man = 0, luz2_man = 0, luz3_man = 0; // Intensidad luz (recibida)
 volatile unsigned int lums1 = 0, lums2 = 0, lums3 = 0;   // Intensidad luz artificial en lumenes
 
-#define LUMS_STEP   341     // Cada incremento de lums es +- 341
+#define LUMS_STEP   1000     // Cada incremento de lums es +- 1000
 
 /******************************************************************************/
 /* Procedures declaration                                                     */
@@ -126,9 +126,9 @@ void P_ctrl(void){
                 default: luz2 = 2; break;
             }
             switch (hab3) {
-                case 0: luz2 = 0; break;
-                case 1: luz2 = 1; break;
-                default: luz2 = 2; break;
+                case 0: luz3 = 0; break;
+                case 1: luz3 = 1; break;
+                default: luz3 = 2; break;
             }
         } else if (lumenes > 341 && lumenes <= 682) {
             // Luz media (tarde), si hay m�s de una persona enciende 1 luz
@@ -157,17 +157,20 @@ void P_ctrl(void){
         // Ahora se calcula teniendo en cuenta los comandos manuales
         // impartidos a trav�s de los botones en la placa 1
 
-        // CUIDADO: NO TENGO MANERA DE TESTEAR ESTO, PUEDE QUE RESTE/SUME A CADA ACTIVACI�N!!
-
-        luz1 = luz1 + luz1_man;
-        luz2 = luz2 + luz2_man;
-        luz3 = luz3 + luz3_man;
+        // REVISAR ESTO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (luz1_man - 3 > luz1) luz1 = 0;
+        else luz1 = luz1 + luz1_man - 3;
+        if (luz2_man - 3 > luz1) luz2 = 0;
+        else luz2 = luz2 + luz2_man - 3;
+        if (luz3_man - 3 > luz1) luz3 = 0;
+        else luz3 = luz3 + luz3_man - 3;
 
         // Si se ha producido alg�n cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-            OSSignalBinSem(BINSEM_CTRL_LCD); // Se�ala al LCD que puede actualizarse
         }
+        
+        OSSignalBinSem(BINSEM_CTRL_LCD); // Se�ala al LCD que puede actualizarse
 
         OS_Delay(1);
     }
@@ -188,10 +191,10 @@ void AP_act_LCD(void){
     while (1) {
 
         // Espera a que la tarea de CAN se�ale que hay que actualizar
-        //OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
+        OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
 
         // Espera a que se hayan calculado los valores de luz
-        //OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
+        OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
 
         // Max. longitud l�nea: 16 chars.
         LCDClear();
@@ -204,6 +207,10 @@ void AP_act_LCD(void){
 
         sprintf(linea1, "EX:%u H1:%u", lumenes, lums1);
         sprintf(linea2, "H2:%u H3:%u", lums2, lums3);
+        
+        // DEBUG
+        //sprintf(linea1, "EX:%u H1:%u", lumenes, luz1_man);
+        //sprintf(linea2, "H2:%u H3:%u", luz2_man, luz3_man);
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
@@ -213,7 +220,7 @@ void AP_act_LCD(void){
         IFS0bits.ADIF = 0; // Reset interrupt
 
         unsigned int i;
-        for(i=0; i<10; i++) Delay15ms();
+        for(i=0; i<5; i++) Delay15ms();
 
         OS_Yield();
     }
