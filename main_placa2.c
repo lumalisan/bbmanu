@@ -169,7 +169,7 @@ void P_ctrl(void){
             OSSignalBinSem(BINSEM_CTRL_LCD); // Se�ala al LCD que puede actualizarse
         }
 
-        OS_Delay(3);
+        OS_Delay(1);
     }
 
 }
@@ -188,13 +188,15 @@ void AP_act_LCD(void){
     while (1) {
 
         // Espera a que la tarea de CAN se�ale que hay que actualizar
-        OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
+        //OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
 
         // Espera a que se hayan calculado los valores de luz
-        OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
+        //OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
 
         // Max. longitud l�nea: 16 chars.
-        char linea1, linea2 [16];
+        LCDClear();
+        char linea1 [20];
+        char linea2 [20];
 
         lums1 = luz1 * LUMS_STEP;
         lums2 = luz2 * LUMS_STEP;
@@ -211,7 +213,7 @@ void AP_act_LCD(void){
         IFS0bits.ADIF = 0; // Reset interrupt
 
         unsigned int i;
-        for(i=0; i<10; i++) Delay5ms();
+        for(i=0; i<10; i++) Delay15ms();
 
         OS_Yield();
     }
@@ -347,12 +349,12 @@ int main(void) {
     Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 5);
     Timer1Start();
 
-    CANinit(NORMAL_MODE, FALSE, FALSE, 0, 0);  // Comentado por ahora, da problemas con la simulaci�n
+    CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);  // Comentado por ahora, da problemas con la simulaci�n
 
 
   //  printf("--------------------Nueva ejecucion placa 2-------------------\n");
 
-    // =========================
+    // ========================= 
     // Create Salvo structures
     // =========================
     // Init Salvo
