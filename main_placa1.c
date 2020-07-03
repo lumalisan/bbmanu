@@ -81,53 +81,11 @@ _FGS(CODE_PROT_OFF);
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
-volatile int luz1_man = 0, luz2_man = 0, luz3_man = 0;
+volatile int luz1_man = 3, luz2_man = 3, luz3_man = 3;
 
 /******************************************************************************/
 /* Procedures declaration                                                     */
 /******************************************************************************/
-
-/*  NO BORRAR TODAVIA: PERMITE ACTUALIZAR LEDS SEGUN PARAMETROS
-int actualizaLeds(unsigned int habitacion, unsigned int nivelLuz) {
-
-    // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
-    // Hab.     LED
-    //  1      0   1
-    //  2      2   3
-    //  3      4   5
-
-    if (habitacion < 1 || habitacion > 3)   // Fuera de rango
-        return -1;                          // Error
-
-    if (habitacion == 1) {
-        switch (nivelLuz) {
-            case 0: offLED(0); offLED(1); break;
-            case 1: onLED(0);  offLED(1); break;
-            case 2: onLED(0);  onLED(1);  break;
-            default: break;
-        }
-        return 0;
-    }
-    if (habitacion == 2) {
-        switch (nivelLuz) {
-            case 0: offLED(2); offLED(3); break;
-            case 1: onLED(2);  offLED(3); break;
-            case 2: onLED(2);  onLED(3);  break;
-            default: break;
-        }
-        return 0;
-    }
-    if (habitacion == 3) {
-        switch (nivelLuz) {
-            case 0: offLED(4); offLED(5); break;
-            case 1: onLED(4);  offLED(5); break;
-            case 2: onLED(4);  onLED(5);  break;
-            default: break;
-        }
-        return 0;
-    }
-}
- * */
 
 
 /******************************************************************************/
@@ -152,8 +110,6 @@ void P_muestrear_botones(void) {
 
     while (1) {
 
-      //  printf("DEBUG - muestreo botones\n");
-
         volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
 		    unsigned char i = 0;
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
@@ -171,17 +127,17 @@ void P_muestrear_botones(void) {
                 break;
             case 5: if (hab3 > 0) hab3--; // Quitar persona H3
                 break;
-            case 6: if (luz1_man < 3) luz1_man++; // Subir luz H1
+            case 6: if (luz1_man < 6) luz1_man++; // Subir luz H1
                 break;
-            case 7: if (luz2_man < 3) luz2_man++; // Subir luz H2
+            case 7: if (luz2_man < 6) luz2_man++; // Subir luz H2
                 break;
-            case 8: if (luz3_man < 3) luz3_man++; // Subir luz H3
+            case 8: if (luz3_man < 6) luz3_man++; // Subir luz H3
                 break;
-            case 9: if (luz1_man > -3) luz1_man--; // Bajar luz H1
+            case 9: if (luz1_man > 0) luz1_man--; // Bajar luz H1
                 break;
-            case 10: if (luz2_man > -3) luz2_man--; // Bajar luz H2
+            case 10: if (luz2_man > 0) luz2_man--; // Bajar luz H2
                 break;
-            case 11: if (luz3_man > -3) luz3_man--; // Bajar luz H3
+            case 11: if (luz3_man > 0) luz3_man--; // Bajar luz H3
                 break;
             default: modificados = 0;
                 break; // Si no se ha tocado nada
@@ -190,14 +146,11 @@ void P_muestrear_botones(void) {
         if (modificados == 1) // Envia actualizacion CAN solo si se ha tocado algun boton
             OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
-      //  printf("DEBUG - Acabo el muestreo botones\n");
         //for (i = 0; i < 60; i++) Delay5ms();
         OS_Delay(1);
 
     }
 
-    // 300 ms delay so the keys are not oversampled
-    //for (i = 0; i < 60; i++) Delay5ms();
 }
 
 /**
@@ -232,7 +185,6 @@ void AP_tx_datos(void) {
         // Espera a que la tarea de botones señale que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_CAN, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Limpia el flag y ejecuta la rutina
-        OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
 
         unsigned char data_buffer[8];
         unsigned int ID = 0x0001;
@@ -259,6 +211,8 @@ void AP_tx_datos(void) {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
+        OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
+
         OS_Yield();
     }
 
@@ -277,22 +231,15 @@ void AP_act_LCD(void) {
         OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Limpia el flag y ejecuta la rutina
 
-        // LIS
-        // Tiene sentido esperar al flag pero no leerlo?
+        // Limpiamos el LCD para que no haya caracteres no deseados
         LCDClear();
-        // Max. longitud linea: 16 chars.
+
+        // Max. longitud linea: 20 chars.
         char linea1 [20];
         char linea2 [20];
 
-        // LIS
-        // Hace falta inicializarlos? (linea1, linea2)
-        unsigned int i;
-        for(i=0; i<20; i++){
-          linea1[i] = ' ';
-          linea2[i] = ' ';
-        }
-
         sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
+        //sprintf(linea1, "%u %u %u", luz1, luz2, luz3);
         sprintf(linea2, "Lumens: %u", lumenes);
 
         LCDMoveFirstLine();
@@ -302,7 +249,9 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
-        for(i=0; i<10; i++) Delay15ms();
+        // Esperamos un poco asi nos da tiempo a ver lo q sale por pantalla
+        unsigned int i;
+        for(i=0; i<10; i++) Delay5ms();
 
         OS_Yield();
     }
@@ -327,11 +276,6 @@ void AP_act_LEDs(void) {
 	  unsigned int i = 0;
 
     while (1) {
-
-        //LIS
-        // El profe siempre usa espera activa en sus ejemplos, lo q me lleva
-        // a pensar q es la unica manera de hacerlo
-        for (i=0; i < 10; i++) Delay15ms();
 
         // Espera al mensaje en el mailbox para actualizar los LEDs
         OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
@@ -386,8 +330,6 @@ void AP_act_LEDs(void) {
             default: break;
         }
 
-        //LIS
-        // Creo q el Yield aqui no hace falta
         OS_Yield();
     }
 
@@ -483,26 +425,6 @@ int main(void) {
     CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
     CADStart(CAD_INTERACTION_BY_INTERRUPT);
     CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
-/*
-    lumenes = 2560;
-    unsigned char *lum_chars = (unsigned char *) &lumenes;
-    unsigned char lum_h = lum_chars[0];
-    unsigned char lum_l = lum_chars[1];
-
-    unsigned int lums_reconv = (unsigned int) lum_l << 8;
-    unsigned int aux = (unsigned int) lum_h;
-    lums_reconv += aux;
-*/
-
-  //  printf("--------------------Nueva ejecucion-------------------\n");
-    ////printf("DEBUG: sizeof lumenes: %d | sizeof hab1: %d\n", sizeof(lumenes), sizeof(hab1));
-    ////printf("DEBUG: sizeof de un sizeof: %d\n", sizeof(sizeof(lumenes)));
-
-  //  printf("DEBUG: lumenes en unsigned char: %c | %c\n", lum_h, lum_l);
-  //  printf("DEBUG: lumenes reconvertido: %d\n", lums_reconv);
-
-  //  printf("DEBUG - test signed char: %c\n", test_c);
-  //  printf("DEBUG - test signed char reconv: %d\n", (int) test_c);
 
     // =========================
     // Create Salvo structures
@@ -528,7 +450,7 @@ int main(void) {
     // =============================================
   	// Enable peripherals that trigger interrupts
   	// =============================================
-    Timer1Init(TIMER_PERIOD_FOR_10ms, TIMER_PSCALER_FOR_10ms, 4);
+    Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 4);
     Timer1Start();
 
     // =============================================
