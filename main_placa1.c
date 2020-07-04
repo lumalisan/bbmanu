@@ -30,14 +30,13 @@
 #include "libCAN.h"
 #include "libTIMER.h"
 #include "delay.h"
+#include "uart.h"
 
 // Tasks TCBs
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
 #define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmision CAN
 #define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
 #define TASK_LEDS_AP        OSTCBP(4)   //Task 4, Act. LEDs
-// NO CREO QUE HAGA FALTA DEFINIR TAREA RX_AP PORQUE ES POR INT.
-// #define TASK_RX_AP          OSTCBP(5)   //Task 5, Recepci�n CAN
 
 //Task priorities
 #define PRIO_MUESTREAR      10
@@ -55,6 +54,9 @@
 #define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
 #define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
 
+// UART configuration
+#define BAUD_RATE	115200
+#define BRG       (FCY / (16L * BAUD_RATE)) - 1L
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -86,7 +88,7 @@ volatile int luz1_man = 3, luz2_man = 3, luz3_man = 3;
 /******************************************************************************/
 /* Procedures declaration                                                     */
 /******************************************************************************/
-
+void UARTConfig();
 
 /******************************************************************************/
 /* TASKS declaration and implementation                                       */
@@ -367,7 +369,7 @@ void _ISR _T1Interrupt(void) {
 }
 
 /******************************************************************************/
-/* CAN ISR - Recepcion datos (nivel de luz para cada habitaci�n               */
+/* CAN ISR - Recepcion datos (nivel de luz para cada habitacion               */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
 
@@ -422,9 +424,12 @@ int main(void) {
     initLEDs();
     LCDInit();
     KeybInit();
+    Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 4);
     CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
-    CADStart(CAD_INTERACTION_BY_INTERRUPT);
     CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
+
+    // Initialize UART
+    UARTConfig();
 
     // =========================
     // Create Salvo structures
@@ -433,9 +438,6 @@ int main(void) {
     OSInit();
 
     // Create tasks (name, tcb, priority) and push them to ELIGIBLE STATE
-    // From 1 up to OSTASKS tcbs available
-    // Priorities from 0 (highest) down to 15 (lowest)
-
     OSCreateTask(P_muestrear_botones, TASK_MUESTREAR_P, PRIO_MUESTREAR);
     OSCreateTask(AP_tx_datos, TASK_TX_AP, PRIO_TX);
     OSCreateTask(AP_act_LCD, TASK_LCD_AP, PRIO_LCD);
@@ -450,7 +452,10 @@ int main(void) {
     // =============================================
   	// Enable peripherals that trigger interrupts
   	// =============================================
-    Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 4);
+    // Start CAD
+    CADStart(CAD_INTERACTION_BY_INTERRUPT);
+
+    // Start timer
     Timer1Start();
 
     // =============================================
@@ -465,3 +470,15 @@ int main(void) {
 /******************************************************************************/
 /* Procedures implementation                                                  */
 /******************************************************************************/
+void UARTConfig() {
+    U1MODE = 0;                     // Clear UART config - to avoid problems with bootloader
+
+    // Config UART
+	  OpenUART1(UART_EN &             // Enable UART
+              UART_DIS_LOOPBACK &   // Disable loopback mode
+              UART_NO_PAR_8BIT &    // 8bits / No parity
+              UART_1STOPBIT,        // 1 Stop bit
+              UART_TX_PIN_NORMAL &  // Tx break bit normal
+              UART_TX_ENABLE,       // Enable Transmition
+			        BRG);                 // Baudrate
+}
