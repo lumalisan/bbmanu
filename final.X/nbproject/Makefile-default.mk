@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../Librerias/libSalvo/salvohook_interrupt_MCC30_IRQ.c ../Librerias/libSalvo/salvohook_wdt_MCC30_clrwdt.c ../Librerias/libSalvo/salvomem.c ../Librerias/libEncastats/delay.s ../Librerias/libEncastats/libCAD.c ../Librerias/libEncastats/libCAN.c ../Librerias/libEncastats/libKEYB.c ../Librerias/libEncastats/libLCD.c ../Librerias/libEncastats/libLEDs.c ../Librerias/libEncastats/libTIMER.c ../main_placa1.c ../main_placa2.c
+SOURCEFILES_QUOTED_IF_SPACED=../Librerias/libSalvo/salvohook_interrupt_MCC30_IRQ.c ../Librerias/libSalvo/salvohook_wdt_MCC30_clrwdt.c ../Librerias/libSalvo/salvomem.c ../Librerias/libEncastats/delay.s ../Librerias/libEncastats/libCAD.c ../Librerias/libEncastats/libCAN.c ../Librerias/libEncastats/libKEYB.c ../Librerias/libEncastats/libLCD.c ../Librerias/libEncastats/libLEDs.c ../Librerias/libEncastats/libTIMER.c ../main_placa1.c ../main_placa2.c ../Librerias/libEncastats/putsUART1.c ../Librerias/libEncastats/CloseUART1.c ../Librerias/libEncastats/BusyUART1.c ../Librerias/libEncastats/ConfigIntUART1.c ../Librerias/libEncastats/ReadUART1.c ../Librerias/libEncastats/WriteUART1.c ../Librerias/libEncastats/DataRdyUART1.c ../Librerias/libEncastats/OpenUART1.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o ${OBJECTDIR}/_ext/2142485135/salvomem.o ${OBJECTDIR}/_ext/564672080/delay.o ${OBJECTDIR}/_ext/564672080/libCAD.o ${OBJECTDIR}/_ext/564672080/libCAN.o ${OBJECTDIR}/_ext/564672080/libKEYB.o ${OBJECTDIR}/_ext/564672080/libLCD.o ${OBJECTDIR}/_ext/564672080/libLEDs.o ${OBJECTDIR}/_ext/564672080/libTIMER.o ${OBJECTDIR}/_ext/1472/main_placa1.o ${OBJECTDIR}/_ext/1472/main_placa2.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o.d ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o.d ${OBJECTDIR}/_ext/2142485135/salvomem.o.d ${OBJECTDIR}/_ext/564672080/delay.o.d ${OBJECTDIR}/_ext/564672080/libCAD.o.d ${OBJECTDIR}/_ext/564672080/libCAN.o.d ${OBJECTDIR}/_ext/564672080/libKEYB.o.d ${OBJECTDIR}/_ext/564672080/libLCD.o.d ${OBJECTDIR}/_ext/564672080/libLEDs.o.d ${OBJECTDIR}/_ext/564672080/libTIMER.o.d ${OBJECTDIR}/_ext/1472/main_placa1.o.d ${OBJECTDIR}/_ext/1472/main_placa2.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o ${OBJECTDIR}/_ext/2142485135/salvomem.o ${OBJECTDIR}/_ext/564672080/delay.o ${OBJECTDIR}/_ext/564672080/libCAD.o ${OBJECTDIR}/_ext/564672080/libCAN.o ${OBJECTDIR}/_ext/564672080/libKEYB.o ${OBJECTDIR}/_ext/564672080/libLCD.o ${OBJECTDIR}/_ext/564672080/libLEDs.o ${OBJECTDIR}/_ext/564672080/libTIMER.o ${OBJECTDIR}/_ext/1472/main_placa1.o ${OBJECTDIR}/_ext/1472/main_placa2.o ${OBJECTDIR}/_ext/564672080/putsUART1.o ${OBJECTDIR}/_ext/564672080/CloseUART1.o ${OBJECTDIR}/_ext/564672080/BusyUART1.o ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o ${OBJECTDIR}/_ext/564672080/ReadUART1.o ${OBJECTDIR}/_ext/564672080/WriteUART1.o ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o ${OBJECTDIR}/_ext/564672080/OpenUART1.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o.d ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o.d ${OBJECTDIR}/_ext/2142485135/salvomem.o.d ${OBJECTDIR}/_ext/564672080/delay.o.d ${OBJECTDIR}/_ext/564672080/libCAD.o.d ${OBJECTDIR}/_ext/564672080/libCAN.o.d ${OBJECTDIR}/_ext/564672080/libKEYB.o.d ${OBJECTDIR}/_ext/564672080/libLCD.o.d ${OBJECTDIR}/_ext/564672080/libLEDs.o.d ${OBJECTDIR}/_ext/564672080/libTIMER.o.d ${OBJECTDIR}/_ext/1472/main_placa1.o.d ${OBJECTDIR}/_ext/1472/main_placa2.o.d ${OBJECTDIR}/_ext/564672080/putsUART1.o.d ${OBJECTDIR}/_ext/564672080/CloseUART1.o.d ${OBJECTDIR}/_ext/564672080/BusyUART1.o.d ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d ${OBJECTDIR}/_ext/564672080/ReadUART1.o.d ${OBJECTDIR}/_ext/564672080/WriteUART1.o.d ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d ${OBJECTDIR}/_ext/564672080/OpenUART1.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o ${OBJECTDIR}/_ext/2142485135/salvomem.o ${OBJECTDIR}/_ext/564672080/delay.o ${OBJECTDIR}/_ext/564672080/libCAD.o ${OBJECTDIR}/_ext/564672080/libCAN.o ${OBJECTDIR}/_ext/564672080/libKEYB.o ${OBJECTDIR}/_ext/564672080/libLCD.o ${OBJECTDIR}/_ext/564672080/libLEDs.o ${OBJECTDIR}/_ext/564672080/libTIMER.o ${OBJECTDIR}/_ext/1472/main_placa1.o ${OBJECTDIR}/_ext/1472/main_placa2.o
+OBJECTFILES=${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o ${OBJECTDIR}/_ext/2142485135/salvohook_wdt_MCC30_clrwdt.o ${OBJECTDIR}/_ext/2142485135/salvomem.o ${OBJECTDIR}/_ext/564672080/delay.o ${OBJECTDIR}/_ext/564672080/libCAD.o ${OBJECTDIR}/_ext/564672080/libCAN.o ${OBJECTDIR}/_ext/564672080/libKEYB.o ${OBJECTDIR}/_ext/564672080/libLCD.o ${OBJECTDIR}/_ext/564672080/libLEDs.o ${OBJECTDIR}/_ext/564672080/libTIMER.o ${OBJECTDIR}/_ext/1472/main_placa1.o ${OBJECTDIR}/_ext/1472/main_placa2.o ${OBJECTDIR}/_ext/564672080/putsUART1.o ${OBJECTDIR}/_ext/564672080/CloseUART1.o ${OBJECTDIR}/_ext/564672080/BusyUART1.o ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o ${OBJECTDIR}/_ext/564672080/ReadUART1.o ${OBJECTDIR}/_ext/564672080/WriteUART1.o ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o ${OBJECTDIR}/_ext/564672080/OpenUART1.o
 
 # Source Files
-SOURCEFILES=../Librerias/libSalvo/salvohook_interrupt_MCC30_IRQ.c ../Librerias/libSalvo/salvohook_wdt_MCC30_clrwdt.c ../Librerias/libSalvo/salvomem.c ../Librerias/libEncastats/delay.s ../Librerias/libEncastats/libCAD.c ../Librerias/libEncastats/libCAN.c ../Librerias/libEncastats/libKEYB.c ../Librerias/libEncastats/libLCD.c ../Librerias/libEncastats/libLEDs.c ../Librerias/libEncastats/libTIMER.c ../main_placa1.c ../main_placa2.c
+SOURCEFILES=../Librerias/libSalvo/salvohook_interrupt_MCC30_IRQ.c ../Librerias/libSalvo/salvohook_wdt_MCC30_clrwdt.c ../Librerias/libSalvo/salvomem.c ../Librerias/libEncastats/delay.s ../Librerias/libEncastats/libCAD.c ../Librerias/libEncastats/libCAN.c ../Librerias/libEncastats/libKEYB.c ../Librerias/libEncastats/libLCD.c ../Librerias/libEncastats/libLEDs.c ../Librerias/libEncastats/libTIMER.c ../main_placa1.c ../main_placa2.c ../Librerias/libEncastats/putsUART1.c ../Librerias/libEncastats/CloseUART1.c ../Librerias/libEncastats/BusyUART1.c ../Librerias/libEncastats/ConfigIntUART1.c ../Librerias/libEncastats/ReadUART1.c ../Librerias/libEncastats/WriteUART1.c ../Librerias/libEncastats/DataRdyUART1.c ../Librerias/libEncastats/OpenUART1.c
 
 
 
@@ -172,6 +172,62 @@ ${OBJECTDIR}/_ext/1472/main_placa2.o: ../main_placa2.c  nbproject/Makefile-${CND
 	${MP_CC} $(MP_EXTRA_CC_PRE)  ../main_placa2.c  -o ${OBJECTDIR}/_ext/1472/main_placa2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1472/main_placa2.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main_placa2.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/_ext/564672080/putsUART1.o: ../Librerias/libEncastats/putsUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/putsUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/putsUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/putsUART1.c  -o ${OBJECTDIR}/_ext/564672080/putsUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/putsUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/putsUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/CloseUART1.o: ../Librerias/libEncastats/CloseUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/CloseUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/CloseUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/CloseUART1.c  -o ${OBJECTDIR}/_ext/564672080/CloseUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/CloseUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/CloseUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/BusyUART1.o: ../Librerias/libEncastats/BusyUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/BusyUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/BusyUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/BusyUART1.c  -o ${OBJECTDIR}/_ext/564672080/BusyUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/BusyUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/BusyUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o: ../Librerias/libEncastats/ConfigIntUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/ConfigIntUART1.c  -o ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/ReadUART1.o: ../Librerias/libEncastats/ReadUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ReadUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ReadUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/ReadUART1.c  -o ${OBJECTDIR}/_ext/564672080/ReadUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/ReadUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/ReadUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/WriteUART1.o: ../Librerias/libEncastats/WriteUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/WriteUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/WriteUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/WriteUART1.c  -o ${OBJECTDIR}/_ext/564672080/WriteUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/WriteUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/WriteUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/DataRdyUART1.o: ../Librerias/libEncastats/DataRdyUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/DataRdyUART1.c  -o ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/OpenUART1.o: ../Librerias/libEncastats/OpenUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/OpenUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/OpenUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/OpenUART1.c  -o ${OBJECTDIR}/_ext/564672080/OpenUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/OpenUART1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/OpenUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
 ${OBJECTDIR}/_ext/2142485135/salvohook_interrupt_MCC30_IRQ.o: ../Librerias/libSalvo/salvohook_interrupt_MCC30_IRQ.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/2142485135" 
@@ -249,6 +305,62 @@ ${OBJECTDIR}/_ext/1472/main_placa2.o: ../main_placa2.c  nbproject/Makefile-${CND
 	@${RM} ${OBJECTDIR}/_ext/1472/main_placa2.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  ../main_placa2.c  -o ${OBJECTDIR}/_ext/1472/main_placa2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1472/main_placa2.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1472/main_placa2.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/putsUART1.o: ../Librerias/libEncastats/putsUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/putsUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/putsUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/putsUART1.c  -o ${OBJECTDIR}/_ext/564672080/putsUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/putsUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/putsUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/CloseUART1.o: ../Librerias/libEncastats/CloseUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/CloseUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/CloseUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/CloseUART1.c  -o ${OBJECTDIR}/_ext/564672080/CloseUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/CloseUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/CloseUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/BusyUART1.o: ../Librerias/libEncastats/BusyUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/BusyUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/BusyUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/BusyUART1.c  -o ${OBJECTDIR}/_ext/564672080/BusyUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/BusyUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/BusyUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o: ../Librerias/libEncastats/ConfigIntUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/ConfigIntUART1.c  -o ${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/ConfigIntUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/ReadUART1.o: ../Librerias/libEncastats/ReadUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ReadUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/ReadUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/ReadUART1.c  -o ${OBJECTDIR}/_ext/564672080/ReadUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/ReadUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/ReadUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/WriteUART1.o: ../Librerias/libEncastats/WriteUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/WriteUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/WriteUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/WriteUART1.c  -o ${OBJECTDIR}/_ext/564672080/WriteUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/WriteUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/WriteUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/DataRdyUART1.o: ../Librerias/libEncastats/DataRdyUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/DataRdyUART1.c  -o ${OBJECTDIR}/_ext/564672080/DataRdyUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/DataRdyUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/564672080/OpenUART1.o: ../Librerias/libEncastats/OpenUART1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/564672080" 
+	@${RM} ${OBJECTDIR}/_ext/564672080/OpenUART1.o.d 
+	@${RM} ${OBJECTDIR}/_ext/564672080/OpenUART1.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Librerias/libEncastats/OpenUART1.c  -o ${OBJECTDIR}/_ext/564672080/OpenUART1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/564672080/OpenUART1.o.d"        -g -omf=coff -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"../Librerias/libEncastats" -I"../Librerias/libSalvo" -I"../Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/gld" -I"../Y:/Downloads/bbmanu/Librerias/libEncastats" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo" -I"../Y:/Downloads/bbmanu/Librerias/libSalvo/MCC30" -I"../Y:/Downloads/bbmanu/Librerias/newLibCAD" -I"." -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	@${FIXDEPS} "${OBJECTDIR}/_ext/564672080/OpenUART1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 

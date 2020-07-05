@@ -14,6 +14,7 @@
       <itemPath>../Librerias/libSalvo/salvocfg.h</itemPath>
       <itemPath>../Librerias/libSalvo/salvo.h</itemPath>
       <itemPath>../Librerias/libSalvo/MCC30/salvoportmcc30.h</itemPath>
+      <itemPath>../Librerias/libEncastats/uart.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -35,6 +36,14 @@
       <itemPath>../Librerias/libEncastats/libTIMER.c</itemPath>
       <itemPath>../main_placa1.c</itemPath>
       <itemPath>../main_placa2.c</itemPath>
+      <itemPath>../Librerias/libEncastats/putsUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/CloseUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/BusyUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/ConfigIntUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/ReadUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/WriteUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/DataRdyUART1.c</itemPath>
+      <itemPath>../Librerias/libEncastats/OpenUART1.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -257,7 +266,7 @@
         <property key="uart1io.uartioenabled" value="true"/>
         <property key="uart2io.output" value="window"/>
         <property key="uart2io.outputfile" value=""/>
-        <property key="uart2io.uartioenabled" value="false"/>
+        <property key="uart2io.uartioenabled" value="true"/>
         <property key="uart3io.output" value="window"/>
         <property key="uart3io.outputfile" value=""/>
         <property key="uart3io.uartioenabled" value="false"/>

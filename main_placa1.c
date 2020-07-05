@@ -32,6 +32,7 @@
 #include "delay.h"
 #include "uart.h"
 
+
 // Tasks TCBs
 #define TASK_MUESTREAR_P    OSTCBP(1)   //Task 1, Botones
 #define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmision CAN
@@ -54,10 +55,6 @@
 #define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
 #define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
 
-// UART configuration
-#define BAUD_RATE	115200
-#define BRG       (FCY / (16L * BAUD_RATE)) - 1L
-
 /******************************************************************************/
 /* Configuration words                                                        */
 /******************************************************************************/
@@ -69,6 +66,17 @@ _FGS(CODE_PROT_OFF);
 /******************************************************************************/
 /* Hardware                                                                   */
 /******************************************************************************/
+
+#define FXT 7372800 // Oscillator frequency
+#define PLL 16
+#define FCY (FXT * PLL) / 4 // Real system frequency
+
+//#define TCY 1000000.0 / FCY //33.90842014 // microseconds
+#define TCY 33.90842014 // nsecs
+
+// UART configuration
+#define BAUD_RATE 115200
+#define BRG       (FCY / (16L * BAUD_RATE)) - 1L
 
 
 /******************************************************************************/
@@ -479,6 +487,6 @@ void UARTConfig() {
               UART_NO_PAR_8BIT &    // 8bits / No parity
               UART_1STOPBIT,        // 1 Stop bit
               UART_TX_PIN_NORMAL &  // Tx break bit normal
-              UART_TX_ENABLE,       // Enable Transmition
-			        BRG);                 // Baudrate
+              UART_TX_ENABLE,       // Enable Transmission
+              BRG);                 // Baudrate
 }
