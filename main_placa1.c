@@ -38,12 +38,14 @@
 #define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmision CAN
 #define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
 #define TASK_LEDS_AP        OSTCBP(4)   //Task 4, Act. LEDs
+#define TASK_UART_AP        OSTCBP(5)
 
 //Task priorities
 #define PRIO_MUESTREAR      10
 #define PRIO_TX             10
 #define PRIO_LCD            10
 #define PRIO_LEDS           10
+#define PRIO_UART           5
 
 // OS events control blocks (number of OS EVENT)
 // Recall that the number of OS event must range from 1 to OSEVENTS (defined in salvocfg.h)
@@ -256,7 +258,7 @@ void AP_act_LCD(void) {
         LCDPrint(linea1);
         LCDMoveSecondLine();
         LCDPrint(linea2);
-
+        
         IFS0bits.ADIF = 0; // Reset interrupt
 
         // Esperamos un poco asi nos da tiempo a ver lo q sale por pantalla
@@ -345,6 +347,30 @@ void AP_act_LEDs(void) {
 
 }
 
+void AP_UART_IN(void) {
+    
+    char c;
+    char buffer[20];
+    
+    while(1) {
+                
+        while(!DataRdyUART1());
+        
+        if (DataRdyUART1()) {
+            c = ReadUART1();
+            fprintf(buffer, "Recibido: %c\n", c);
+            putsUART1((unsigned int *) buffer);
+        } else {
+            fprintf(buffer, "No he recibido una mierda\n");
+            putsUART1((unsigned int *) buffer);
+        }
+        
+        OS_Yield();
+        
+    }
+    
+}
+
 /******************************************************************************/
 /* Interrupts                                                                 */
 /******************************************************************************/
@@ -367,6 +393,55 @@ void _ISR _ADCInterrupt(void) {
     // OS_Yield();
 }
 
+// DEBUG
+
+void _ISR _U1RXInterrupt(void) {
+    
+    IFS0bits.U1RXIF = 0; // Reset UART RX interrupt
+    
+    LCDClear();
+    
+    char c;
+    
+    char linea1[20];
+    char linea2[16];
+    
+    unsigned int cont = 0;
+    
+    while (DataRdyUART1()) {    // Hasta que haya datos
+        c = ReadUART1();
+        cont++;
+        
+        if (cont != 16)
+            strcat(linea2, c);
+        else {
+            sprintf(linea2, "%c", c);
+            cont = 0;
+        }
+    }
+    
+    c = ReadUART1();
+    
+    
+    
+    sprintf(linea1, "Recibido de UART");
+    sprintf(linea2, "%c", c);
+    
+    LCDMoveFirstLine();
+    LCDPrint(linea1);
+    LCDMoveSecondLine();
+    LCDPrint(linea2);
+        
+    IFS0bits.ADIF = 0; // Reset interrupt
+    
+    
+    unsigned int i;
+    for (i=0; i<200; i++) {
+        Delay5ms();
+    }
+    
+}
+
 /******************************************************************************/
 /* Timer ISR - Muestreo botones                                               */
 /******************************************************************************/
@@ -380,7 +455,6 @@ void _ISR _T1Interrupt(void) {
 /* CAN ISR - Recepcion datos (nivel de luz para cada habitacion               */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
-
 
     static unsigned char mensaje_mbox_LEDs = 1;
 
@@ -450,6 +524,8 @@ int main(void) {
     OSCreateTask(AP_tx_datos, TASK_TX_AP, PRIO_TX);
     OSCreateTask(AP_act_LCD, TASK_LCD_AP, PRIO_LCD);
     OSCreateTask(AP_act_LEDs, TASK_LEDS_AP, PRIO_LEDS);
+    
+    OSCreateTask(AP_UART_IN, TASK_UART_AP, PRIO_UART);
 
     // Create mailbox
     OSCreateMsg(MSG_CAN, (OStypeMsgP) 0);
@@ -469,6 +545,7 @@ int main(void) {
     // =============================================
     // Enter multitasking environment
     // =============================================
+    
     while (1) {
         OSSched();
     }
@@ -487,6 +564,8 @@ void UARTConfig() {
               UART_NO_PAR_8BIT &    // 8bits / No parity
               UART_1STOPBIT,        // 1 Stop bit
               UART_TX_PIN_NORMAL &  // Tx break bit normal
-              UART_TX_ENABLE,       // Enable Transmission
+              UART_TX_ENABLE &
+              UART_RX_INT_EN,       // Enable Transmission and RX Interruptions
               BRG);                 // Baudrate
+      ConfigIntUART1(0x000F);       // Enable RX Interrupt, highest priority
 }

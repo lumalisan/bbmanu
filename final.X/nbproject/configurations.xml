@@ -262,10 +262,10 @@
         <property key="uart0io.outputfile" value=""/>
         <property key="uart0io.uartioenabled" value="false"/>
         <property key="uart1io.output" value="window"/>
-        <property key="uart1io.outputfile" value=""/>
+        <property key="uart1io.outputfile" value="DEBUG_UART1_OUTPUT.txt"/>
         <property key="uart1io.uartioenabled" value="true"/>
         <property key="uart2io.output" value="window"/>
-        <property key="uart2io.outputfile" value=""/>
+        <property key="uart2io.outputfile" value="DEBUG_UART2_OUTPUT.txt"/>
         <property key="uart2io.uartioenabled" value="true"/>
         <property key="uart3io.output" value="window"/>
         <property key="uart3io.outputfile" value=""/>
