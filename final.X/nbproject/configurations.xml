@@ -15,6 +15,7 @@
       <itemPath>../Librerias/libSalvo/salvo.h</itemPath>
       <itemPath>../Librerias/libSalvo/MCC30/salvoportmcc30.h</itemPath>
       <itemPath>../Librerias/libEncastats/uart.h</itemPath>
+      <itemPath>../variables.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

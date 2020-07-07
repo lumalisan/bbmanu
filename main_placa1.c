@@ -67,17 +67,6 @@ _FGS(CODE_PROT_OFF);
 /* Hardware                                                                   */
 /******************************************************************************/
 
-#define FXT 7372800 // Oscillator frequency
-#define PLL 16
-#define FCY (FXT * PLL) / 4 // Real system frequency
-
-//#define TCY 1000000.0 / FCY //33.90842014 // microseconds
-#define TCY 33.90842014 // nsecs
-
-// UART configuration
-#define BAUD_RATE 115200
-#define BRG       (FCY / (16L * BAUD_RATE)) - 1L
-
 
 /******************************************************************************/
 /* Salvo elements declarations                                                */
@@ -91,16 +80,12 @@ _FGS(CODE_PROT_OFF);
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
-volatile int luz1_man = 3, luz2_man = 3, luz3_man = 3;
-
-char rx_uart[16];
-char * datos = rx_uart;
+volatile unsigned int luz1_man = 3, luz2_man = 3, luz3_man = 3;
 
 
 /******************************************************************************/
 /* Procedures declaration                                                     */
 /******************************************************************************/
-void UARTConfig();
 
 /******************************************************************************/
 /* TASKS declaration and implementation                                       */
@@ -368,58 +353,8 @@ void _ISR _ADCInterrupt(void) {
     IFS0bits.ADIF = 0; // Reset del interrupt
 
     OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Dice al CAN de enviar datos nuevos
-
-    // COMENTADO POR AHORA, SI LA TAREA SE QUEDA PILLADA ES QUE HACE FALTA PONERLO
-    // OS_Yield();
 }
 
-/******************************************************************************/
-/* UART ISR - Lectura de datos por UART                                       */
-/* La rutina ha sido programada para activarse cada vez que se detecta un char*/
-/******************************************************************************/
-
-void _ISR _U1RXInterrupt(void) {
-
-    IFS0bits.U1RXIF = 0; // Reset del interrupt UART RX
-
-    char c;
-
-    char linea1[20];    // Mensaje a enseñar en la primera linea de LCD (DEBUG)
-    sprintf(linea1, "Recibido de UART");
-
-    while (DataRdyUART1()) { // Hasta que haya datos
-        c = ReadUART1();     // Leemos el carácter
-        (*(datos)++) = c;    // Lo ponemos en el string rx_uart (var. global)
-    }
-
-    if (c == '\r' || c == '\n') {   // Si se detecta un Enter
-        
-        LCDClear();             // Limpio pantalla
-        
-        rx_uart[strcspn(rx_uart, "\r\n")] = 0;  // Elimino los \r y \n del string
-        
-        // Escribo en pantalla
-        LCDMoveFirstLine();
-        LCDPrint(linea1);
-        LCDMoveSecondLine();
-        LCDPrint(rx_uart);
-
-        IFS0bits.ADIF = 0; // Reset interrupt del LCD  
-
-        // Que quede en la pantalla durante 1 seg.
-        unsigned int i;
-        for (i = 0; i < 200; i++) {
-            Delay5ms();
-        }
-        
-        strncpy(rx_uart, "", sizeof(rx_uart)); // Reset string a vacio
-        datos = rx_uart;                       // Reset puntero a principio
-        
-    }
-
-
-
-}
 
 /******************************************************************************/
 /* Timer ISR - Muestreo botones                                               */
@@ -433,6 +368,8 @@ void _ISR _T1Interrupt(void) {
 
 /******************************************************************************/
 /* CAN ISR - Recepcion datos (nivel de luz para cada habitacion               */
+
+// TODO - IMPLEMENTAR RECEPCION DATOS DE CONTROL CON LOS NUEVOS IDs
 
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
@@ -492,9 +429,6 @@ int main(void) {
     CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
     CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
 
-    // Initialize UART
-    UARTConfig();
-
     // =========================
     // Create Salvo structures
     // =========================
@@ -536,20 +470,3 @@ int main(void) {
 /* Procedures implementation                                                  */
 
 /******************************************************************************/
-void UARTConfig() {
-    U1MODE = 0; // Clear UART config - to avoid problems with bootloader
-    // Activar int. RX -->1 111 <-- Prioridad entre 0 y 7
-    ConfigIntUART1(0x000F); // Enable RX Interrupt, highest priority
-
-
-    // Config UART
-    OpenUART1(UART_EN & // Enable UART
-            UART_DIS_LOOPBACK & // Disable loopback mode
-            UART_NO_PAR_8BIT & // 8bits / No parity
-            UART_1STOPBIT, // 1 Stop bit
-            UART_TX_PIN_NORMAL & // Tx break bit normal
-            UART_TX_ENABLE &
-            UART_INT_RX_CHAR & // Interrupt para cada char recibido
-            UART_RX_INT_EN, // Enable Transmission and RX Interruptions
-            BRG); // Baudrate
-}
