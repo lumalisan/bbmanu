@@ -498,15 +498,15 @@ void UARTConfig() {
 
 void checkComando() {
     char *string;
-    strcpy(string, rx_uart);
-    const char s[2] = " ";
-    unsigned int contador = 0;
+    strcpy(string, rx_uart); // Copiamos el string porque strtok es destructivo
+    const char s[2] = " "; // Caracter delimitador de los tokens
+    unsigned int contador = 0; // Contador de cuantos tokens se crean
 
     char *token;
     char *args[MAX_ARGS];
-    token = strtok(string, s);
+    token = strtok(string, s); // Sacamos el primer token
 
-    while (token != NULL) {
+    while (token != NULL) { // Hasta que siga habiendo y hasta 5, sacamos mas
         if (contador < MAX_ARGS) {
             args[contador] = token;
             contador++;
@@ -514,6 +514,7 @@ void checkComando() {
         }
     }
 
+    // Variables para el envio por CAN
     unsigned int ID;
     unsigned char tamDatos;
 
@@ -522,7 +523,7 @@ void checkComando() {
     // - turnAllOn (x): Enciende todas las luces al nivel x (si especificado, si no al maximo)
     // - turnAllOff:    Apaga todas las luces
     // - setLights x y: Pone las luces de la hab. x al nivel y
-    
+
     if (strcmp(args[0], "turnAllOn") == 0) {
 
         if (contador == 1) { // Si no se ha especificado otro parametro
@@ -537,17 +538,21 @@ void checkComando() {
 
         } else if (args[1] != NULL) { // Se comprueba que no sea NULL el segundo argumento
             ID = 0x0011;
-            unsigned char data_buffer = (unsigned char) args[1];
-            tamDatos = sizeof (data_buffer);
 
-            if (CANtxInt) {
-                CANclearTxInt();
-                CANsendMessage(ID, data_buffer, tamDatos);
+            int nivel = atoi(args[1]);
+            // El nivel puede ir de 0 hasta maximo 2
+            if (nivel >= 0 && nivel <= 2) {
+                unsigned char data_buffer = (unsigned char) args[1];
+                tamDatos = sizeof (data_buffer);
+
+                if (CANtxInt) {
+                    CANclearTxInt();
+                    CANsendMessage(ID, data_buffer, tamDatos);
+                }
             }
         }
 
     } else if (strcmp(args[0], "turnAllOff") == 0) {
-
         ID = 0x0020;
         unsigned char data_buffer = 0;
         tamDatos = sizeof (data_buffer);
@@ -558,7 +563,7 @@ void checkComando() {
         }
 
     } else if (strcmp(args[0], "setLights") == 0) {
-
+        
         if (args[1] != NULL && args[2] != NULL) {
             
             // atoi convierte de string a int, devuelve 0 si no se puede convertir
@@ -567,16 +572,15 @@ void checkComando() {
             // el usuario quiere poner a cero (apagar) las luces de una hab.
             int num_hab = atoi(args[1]);
             int val_luz = atoi(args[2]);
-            
+
             // Si los valores son validos, enviamos los datos
             if (num_hab >= 1 && num_hab <= 3 && val_luz >= 0 && val_luz <= 2) {
-            
+
                 ID = 0x0030;
                 unsigned char data_buffer[2];
-                data_buffer[0] = (unsigned char) args[1];  // Num. habitacion
-                data_buffer[1] = (unsigned char) args[2];  // Valor luces
-
-                tamDatos = sizeof(data_buffer);
+                data_buffer[0] = (unsigned char) args[1]; // Num. habitacion
+                data_buffer[1] = (unsigned char) args[2]; // Valor luces
+                tamDatos = sizeof (data_buffer);
 
                 if (CANtxInt) {
                     CANclearTxInt();

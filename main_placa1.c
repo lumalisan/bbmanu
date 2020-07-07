@@ -394,22 +394,42 @@ void _ISR _C1Interrupt(void) {
 
         // Clear RX buffer
         CANclearRxBuffer();
-
-        if (rxMsgSID == 0x0002) {
-
-            luz1 = (unsigned int) rxMsgData[0];
-            luz2 = (unsigned int) rxMsgData[1];
-            luz3 = (unsigned int) rxMsgData[2];
-
+        
+        switch (rxMsgSID) {
+            case 0x0002:
+                luz1 = (unsigned int) rxMsgData[0];
+                luz2 = (unsigned int) rxMsgData[1];
+                luz3 = (unsigned int) rxMsgData[2];
+                break;
+            case 0x0010:
+                // encender todo
+                luz1_man = luz2_man = luz3_man = 6;
+                break;
+            case 0x0011:
+                // encender todo a nivel x
+                unsigned int nivel = (unsigned int) rxMsgData[0];
+                luz1_man = luz2_man = luz3_man = (nivel) + 3;
+                break;
+            case 0x0020:
+                // apagar todo
+                luz1_man = luz2_man = luz3_man = 0;
+                break;
+            case 0x0030:
+                // encender hab x a nivel y
+                unsigned int num_hab = (unsigned int) rxMsgData[0];
+                unsigned int niv_luz = (unsigned int) rxMsgData[1];
+                
+                switch (num_hab) {
+                    case 1: luz1_man = niv_luz + 3; break;
+                    case 2: luz2_man = niv_luz + 3; break;
+                    case 3: luz3_man = niv_luz + 3; break;
+                }
+                break;             
         }
     }
 
     // Envia mensaje en mailbox para que se actualicen los LEDs
     OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
-
-    // COMENTADO POR AHORA, SI LA TAREA SE QUEDA PILLADA ES QUE HACE FALTA PONERLO
-    //OS_Yield();
-
 }
 
 /******************************************************************************/
