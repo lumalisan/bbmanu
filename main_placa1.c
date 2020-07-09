@@ -395,6 +395,11 @@ void _ISR _C1Interrupt(void) {
         // Clear RX buffer
         CANclearRxBuffer();
         
+        // Las declaraciones van aqui porque si no no compila, gracias MPLAB
+        unsigned int nivel;
+        unsigned int num_hab;
+        unsigned int niv_luz;        
+        
         switch (rxMsgSID) {
             case 0x0002:
                 luz1 = (unsigned int) rxMsgData[0];
@@ -404,29 +409,59 @@ void _ISR _C1Interrupt(void) {
             case 0x0010:
                 // encender todo
                 luz1_man = luz2_man = luz3_man = 6;
+                luz1 = luz2 = luz3 = 2;
                 break;
             case 0x0011:
                 // encender todo a nivel x
-                unsigned int nivel = (unsigned int) rxMsgData[0];
+                nivel = (unsigned int) rxMsgData[0];
                 luz1_man = luz2_man = luz3_man = (nivel) + 3;
+                luz1 = luz2 = luz3 = nivel;
                 break;
             case 0x0020:
                 // apagar todo
                 luz1_man = luz2_man = luz3_man = 0;
+                luz1 = luz2 = luz3 = 0;
                 break;
             case 0x0030:
                 // encender hab x a nivel y
-                unsigned int num_hab = (unsigned int) rxMsgData[0];
-                unsigned int niv_luz = (unsigned int) rxMsgData[1];
+                num_hab = (unsigned int) rxMsgData[0];
+                niv_luz = (unsigned int) rxMsgData[1];
                 
                 switch (num_hab) {
-                    case 1: luz1_man = niv_luz + 3; break;
-                    case 2: luz2_man = niv_luz + 3; break;
-                    case 3: luz3_man = niv_luz + 3; break;
+                    case 1: luz1_man = niv_luz + 3;
+                            luz1 = niv_luz; break;
+                    case 2: luz2_man = niv_luz + 3; 
+                            luz2 = niv_luz; break;
+                    case 3: luz3_man = niv_luz + 3; 
+                            luz3 = niv_luz; break;
                 }
                 break;             
         }
+        
+        LCDClear(); // Limpio pantalla
+        
+        char debug_1[20];
+        char debug_2[20];
+        sprintf(debug_1, "DEBUG - Recibido");
+        sprintf(debug_2, "CAN ID 0x%04x", rxMsgSID);
+
+        // Escribo en pantalla
+        LCDMoveFirstLine();
+        LCDPrint(debug_1);
+        LCDMoveSecondLine();
+        LCDPrint(debug_2);
+
+        IFS0bits.ADIF = 0; // Reset interrupt del LCD  
+
+        // Que quede en la pantalla durante 2 seg.
+        unsigned int i;
+        for (i = 0; i < 400; i++) {
+            Delay5ms();
+        }
+        
     }
+    
+    OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Dice al CAN de enviar datos nuevos
 
     // Envia mensaje en mailbox para que se actualicen los LEDs
     OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
