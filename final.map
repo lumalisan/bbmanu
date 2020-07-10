@@ -145,12 +145,12 @@ Program Memory  [Origin = 0x100, Length = 0x7efe]
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x100               0xb8a          0x114f  (4431)
-.const                       0xc8a                0x58            0x84  (132)
-.text                        0xce2              0x1588          0x204c  (8268)
-.dinit                      0x226a               0x100           0x180  (384)
-.text                       0x236a               0x5de           0x8cd  (2253)
+.const                       0xc8a                0x5a            0x87  (135)
+.text                        0xce4              0x1634          0x214e  (8526)
+.dinit                      0x2318               0x100           0x180  (384)
+.text                       0x2418               0x5de           0x8cd  (2253)
 
-                     Total program memory used (bytes):         0x3c6c  (15468) 31%
+                     Total program memory used (bytes):         0x3d71  (15729) 32%
 
 
 Data Memory  [Origin = 0x800, Length = 0x800]
@@ -283,194 +283,194 @@ External Symbols in Program Memory (by address):
                   0x0005d6                  __vfprintf_cdnopuxX
                   0x000b40                  _strchr
                   0x000b50                  _strspn
-                  0x000ce2                  _P_ctrl
-                  0x000e66                  _AP_act_LCD
-                  0x000ee6                  _AP_tx_datos
-                  0x000f3c                  __C1Interrupt
-                  0x000fc2                  __U1RXInterrupt
-                  0x001024                  __T1Interrupt
-                  0x00104a                  _main
-                  0x001098                  _UARTConfig
-                  0x0010ae                  _checkComando
-                  0x00137c                  _LCDInit
-                  0x0013c2                  _LCDClear
-                  0x0013ce                  _LCDMoveHome
-                  0x0013da                  _LCDMoveFirstLine
-                  0x0013e6                  _LCDMoveSecondLine
-                  0x0013f2                  _LCDPrint
-                  0x00140e                  _LCDMoveLeft
-                  0x00141a                  _LCDMoveRight
-                  0x001426                  _LCDScrollLeft
-                  0x001432                  _LCDScrollRight
-                  0x00143e                  _LCDHideCursor
-                  0x00144a                  _LCDTurnOnUnderline
-                  0x001456                  _LCDTurnOnBlinking
-                  0x001462                  _waitLCD
-                  0x0014a0                  _LCDWriteCmd
-                  0x001596                  _LCDWriteNibbleCmd
-                  0x001620                  _LCDWriteData
-                  0x00171a                  _CANinit
-                  0x001860                  _CANrxInt
-                  0x00186c                  _CANtxInt
-                  0x00187c                  _CANclearGlobalInt
-                  0x001884                  _CANclearRxInt
-                  0x00188c                  _CANclearTxInt
-                  0x001894                  _CANsendMessage
-                  0x001902                  _CANtransmissionCompleted
-                  0x00191c                  _CANreadRxMessageSID
-                  0x00192a                  _CANreadRxMessageDLC
-                  0x001936                  _CANreadRxMessageDATA
-                  0x0019fc                  _CANclearRxBuffer
-                  0x001a04                  _CANreceptionCompleted
-                  0x001a20                  _KeybInit
-                  0x001a34                  _getKey
-                  0x001b14                  _getKeyNotBlocking
-                  0x001c00                  _initLEDs
-                  0x001c12                  _onLED
-                  0x001c88                  _offLED
-                  0x001d08                  _toggleLED
-                  0x001d42                  _printNumInLED
-                  0x001d7a                  _OSCreateEFlag
-                  0x001da6                  _OSWaitEFlag
-                  0x001e24                  _OSSignalEFlag
-                  0x001ef2                  _OSSched
-                  0x002048                  _OSInsPrioQ
-                  0x0020bc                  _OSInsDelayQ
-                  0x00215a                  _CADInit
-                  0x0021da                  _CADStart
-                  0x0021f2                  _CADStop
-                  0x00220a                  _CADRequestValue
-                  0x002212                  _CADReadyValue
-                  0x00221e                  _CADGetValue
-                  0x002226                  _CADClearInt
-                  0x00222e                  __T3Interrupt
-                  0x002244                  _CADinitSimpleConfiguration
-                  0x00236a                  _OSCreateMsg
-                  0x00238c                  _OSWaitMsg
-                  0x0023ea                  _OSSignalMsg
-                  0x002468                  _OSWaitEvent
-                  0x00254e                  _OSCreateBinSem
-                  0x002572                  _OSWaitBinSem
-                  0x0025a6                  _OSSignalBinSem
-                  0x002622                  _OSDelPrioQ
-                  0x002692                  _OSDelDelayQ
-                  0x0026f6                  _OSCreateTask
-                  0x00276e                  _OSInitPrioTask
-                  0x0027a2                  _Timer1Init
-                  0x0027e6                  _Timer1Start
-                  0x0027ee                  _Timer1Stop
-                  0x0027fa                  _Timer1ReInitialize
-                  0x002812                  _TimerClearInt
-                  0x00281a                  _OSDelay
-                  0x002884                  _Delay3Tcy
-                  0x002886                  _Delay10us
-                  0x00288e                  _Delay20us
-                  0x002896                  _Delay150us
-                  0x00289e                  _Delay5ms
-                  0x0028a6                  _Delay15ms
-                  0x0028ba                  _OSTimer
-                  0x0028e4                  _OSInit
-                  0x002908                  _OSDispatch
-                  0x002916                  _OSCtxSw
-                  0x002924                  _OSReturn
-                  0x00292a                  _OSDisableHook
-                  0x002932                  _OSEnableHook
-                  0x00293a                  _OSClrWDTHook
-                  0x002942                  _OSIdlingHook
+                  0x000ce4                  _P_ctrl
+                  0x000e8c                  _AP_act_LCD
+                  0x000f14                  _AP_tx_datos
+                  0x000f6a                  __C1Interrupt
+                  0x000ff0                  __U1RXInterrupt
+                  0x001052                  __T1Interrupt
+                  0x001078                  _main
+                  0x0010c6                  _UARTConfig
+                  0x0010dc                  _checkComando
+                  0x00142a                  _LCDInit
+                  0x001470                  _LCDClear
+                  0x00147c                  _LCDMoveHome
+                  0x001488                  _LCDMoveFirstLine
+                  0x001494                  _LCDMoveSecondLine
+                  0x0014a0                  _LCDPrint
+                  0x0014bc                  _LCDMoveLeft
+                  0x0014c8                  _LCDMoveRight
+                  0x0014d4                  _LCDScrollLeft
+                  0x0014e0                  _LCDScrollRight
+                  0x0014ec                  _LCDHideCursor
+                  0x0014f8                  _LCDTurnOnUnderline
+                  0x001504                  _LCDTurnOnBlinking
+                  0x001510                  _waitLCD
+                  0x00154e                  _LCDWriteCmd
+                  0x001644                  _LCDWriteNibbleCmd
+                  0x0016ce                  _LCDWriteData
+                  0x0017c8                  _CANinit
+                  0x00190e                  _CANrxInt
+                  0x00191a                  _CANtxInt
+                  0x00192a                  _CANclearGlobalInt
+                  0x001932                  _CANclearRxInt
+                  0x00193a                  _CANclearTxInt
+                  0x001942                  _CANsendMessage
+                  0x0019b0                  _CANtransmissionCompleted
+                  0x0019ca                  _CANreadRxMessageSID
+                  0x0019d8                  _CANreadRxMessageDLC
+                  0x0019e4                  _CANreadRxMessageDATA
+                  0x001aaa                  _CANclearRxBuffer
+                  0x001ab2                  _CANreceptionCompleted
+                  0x001ace                  _KeybInit
+                  0x001ae2                  _getKey
+                  0x001bc2                  _getKeyNotBlocking
+                  0x001cae                  _initLEDs
+                  0x001cc0                  _onLED
+                  0x001d36                  _offLED
+                  0x001db6                  _toggleLED
+                  0x001df0                  _printNumInLED
+                  0x001e28                  _OSCreateEFlag
+                  0x001e54                  _OSWaitEFlag
+                  0x001ed2                  _OSSignalEFlag
+                  0x001fa0                  _OSSched
+                  0x0020f6                  _OSInsPrioQ
+                  0x00216a                  _OSInsDelayQ
+                  0x002208                  _CADInit
+                  0x002288                  _CADStart
+                  0x0022a0                  _CADStop
+                  0x0022b8                  _CADRequestValue
+                  0x0022c0                  _CADReadyValue
+                  0x0022cc                  _CADGetValue
+                  0x0022d4                  _CADClearInt
+                  0x0022dc                  __T3Interrupt
+                  0x0022f2                  _CADinitSimpleConfiguration
+                  0x002418                  _OSCreateMsg
+                  0x00243a                  _OSWaitMsg
+                  0x002498                  _OSSignalMsg
+                  0x002516                  _OSWaitEvent
+                  0x0025fc                  _OSCreateBinSem
+                  0x002620                  _OSWaitBinSem
+                  0x002654                  _OSSignalBinSem
+                  0x0026d0                  _OSDelPrioQ
+                  0x002740                  _OSDelDelayQ
+                  0x0027a4                  _OSCreateTask
+                  0x00281c                  _OSInitPrioTask
+                  0x002850                  _Timer1Init
+                  0x002894                  _Timer1Start
+                  0x00289c                  _Timer1Stop
+                  0x0028a8                  _Timer1ReInitialize
+                  0x0028c0                  _TimerClearInt
+                  0x0028c8                  _OSDelay
+                  0x002932                  _Delay3Tcy
+                  0x002934                  _Delay10us
+                  0x00293c                  _Delay20us
+                  0x002944                  _Delay150us
+                  0x00294c                  _Delay5ms
+                  0x002954                  _Delay15ms
+                  0x002968                  _OSTimer
+                  0x002992                  _OSInit
+                  0x0029b6                  _OSDispatch
+                  0x0029c4                  _OSCtxSw
+                  0x0029d2                  _OSReturn
+                  0x0029d8                  _OSDisableHook
+                  0x0029e0                  _OSEnableHook
+                  0x0029e8                  _OSClrWDTHook
+                  0x0029f0                  _OSIdlingHook
                   0xf8000a                  __FGS.sec
 
 External Symbols in Program Memory (by name):
 
-                  0x000e66                  _AP_act_LCD
-                  0x000ee6                  _AP_tx_datos
-                  0x002226                  _CADClearInt
-                  0x00221e                  _CADGetValue
-                  0x00215a                  _CADInit
-                  0x002212                  _CADReadyValue
-                  0x00220a                  _CADRequestValue
-                  0x0021da                  _CADStart
-                  0x0021f2                  _CADStop
-                  0x002244                  _CADinitSimpleConfiguration
-                  0x00187c                  _CANclearGlobalInt
-                  0x0019fc                  _CANclearRxBuffer
-                  0x001884                  _CANclearRxInt
-                  0x00188c                  _CANclearTxInt
-                  0x00171a                  _CANinit
-                  0x001936                  _CANreadRxMessageDATA
-                  0x00192a                  _CANreadRxMessageDLC
-                  0x00191c                  _CANreadRxMessageSID
-                  0x001a04                  _CANreceptionCompleted
-                  0x001860                  _CANrxInt
-                  0x001894                  _CANsendMessage
-                  0x001902                  _CANtransmissionCompleted
-                  0x00186c                  _CANtxInt
+                  0x000e8c                  _AP_act_LCD
+                  0x000f14                  _AP_tx_datos
+                  0x0022d4                  _CADClearInt
+                  0x0022cc                  _CADGetValue
+                  0x002208                  _CADInit
+                  0x0022c0                  _CADReadyValue
+                  0x0022b8                  _CADRequestValue
+                  0x002288                  _CADStart
+                  0x0022a0                  _CADStop
+                  0x0022f2                  _CADinitSimpleConfiguration
+                  0x00192a                  _CANclearGlobalInt
+                  0x001aaa                  _CANclearRxBuffer
+                  0x001932                  _CANclearRxInt
+                  0x00193a                  _CANclearTxInt
+                  0x0017c8                  _CANinit
+                  0x0019e4                  _CANreadRxMessageDATA
+                  0x0019d8                  _CANreadRxMessageDLC
+                  0x0019ca                  _CANreadRxMessageSID
+                  0x001ab2                  _CANreceptionCompleted
+                  0x00190e                  _CANrxInt
+                  0x001942                  _CANsendMessage
+                  0x0019b0                  _CANtransmissionCompleted
+                  0x00191a                  _CANtxInt
                   0x00043c                  _ConfigIntUART1
                   0x000436                  _DataRdyUART1
-                  0x002886                  _Delay10us
-                  0x002896                  _Delay150us
-                  0x0028a6                  _Delay15ms
-                  0x00288e                  _Delay20us
-                  0x002884                  _Delay3Tcy
-                  0x00289e                  _Delay5ms
-                  0x001a20                  _KeybInit
-                  0x0013c2                  _LCDClear
-                  0x00143e                  _LCDHideCursor
-                  0x00137c                  _LCDInit
-                  0x0013da                  _LCDMoveFirstLine
-                  0x0013ce                  _LCDMoveHome
-                  0x00140e                  _LCDMoveLeft
-                  0x00141a                  _LCDMoveRight
-                  0x0013e6                  _LCDMoveSecondLine
-                  0x0013f2                  _LCDPrint
-                  0x001426                  _LCDScrollLeft
-                  0x001432                  _LCDScrollRight
-                  0x001456                  _LCDTurnOnBlinking
-                  0x00144a                  _LCDTurnOnUnderline
-                  0x0014a0                  _LCDWriteCmd
-                  0x001620                  _LCDWriteData
-                  0x001596                  _LCDWriteNibbleCmd
-                  0x00293a                  _OSClrWDTHook
-                  0x00254e                  _OSCreateBinSem
-                  0x001d7a                  _OSCreateEFlag
-                  0x00236a                  _OSCreateMsg
-                  0x0026f6                  _OSCreateTask
-                  0x002916                  _OSCtxSw
-                  0x002692                  _OSDelDelayQ
-                  0x002622                  _OSDelPrioQ
-                  0x00281a                  _OSDelay
-                  0x00292a                  _OSDisableHook
-                  0x002908                  _OSDispatch
-                  0x002932                  _OSEnableHook
-                  0x002942                  _OSIdlingHook
-                  0x0028e4                  _OSInit
-                  0x00276e                  _OSInitPrioTask
-                  0x0020bc                  _OSInsDelayQ
-                  0x002048                  _OSInsPrioQ
-                  0x002924                  _OSReturn
-                  0x001ef2                  _OSSched
-                  0x0025a6                  _OSSignalBinSem
-                  0x001e24                  _OSSignalEFlag
-                  0x0023ea                  _OSSignalMsg
-                  0x0028ba                  _OSTimer
-                  0x002572                  _OSWaitBinSem
-                  0x001da6                  _OSWaitEFlag
-                  0x002468                  _OSWaitEvent
-                  0x00238c                  _OSWaitMsg
+                  0x002934                  _Delay10us
+                  0x002944                  _Delay150us
+                  0x002954                  _Delay15ms
+                  0x00293c                  _Delay20us
+                  0x002932                  _Delay3Tcy
+                  0x00294c                  _Delay5ms
+                  0x001ace                  _KeybInit
+                  0x001470                  _LCDClear
+                  0x0014ec                  _LCDHideCursor
+                  0x00142a                  _LCDInit
+                  0x001488                  _LCDMoveFirstLine
+                  0x00147c                  _LCDMoveHome
+                  0x0014bc                  _LCDMoveLeft
+                  0x0014c8                  _LCDMoveRight
+                  0x001494                  _LCDMoveSecondLine
+                  0x0014a0                  _LCDPrint
+                  0x0014d4                  _LCDScrollLeft
+                  0x0014e0                  _LCDScrollRight
+                  0x001504                  _LCDTurnOnBlinking
+                  0x0014f8                  _LCDTurnOnUnderline
+                  0x00154e                  _LCDWriteCmd
+                  0x0016ce                  _LCDWriteData
+                  0x001644                  _LCDWriteNibbleCmd
+                  0x0029e8                  _OSClrWDTHook
+                  0x0025fc                  _OSCreateBinSem
+                  0x001e28                  _OSCreateEFlag
+                  0x002418                  _OSCreateMsg
+                  0x0027a4                  _OSCreateTask
+                  0x0029c4                  _OSCtxSw
+                  0x002740                  _OSDelDelayQ
+                  0x0026d0                  _OSDelPrioQ
+                  0x0028c8                  _OSDelay
+                  0x0029d8                  _OSDisableHook
+                  0x0029b6                  _OSDispatch
+                  0x0029e0                  _OSEnableHook
+                  0x0029f0                  _OSIdlingHook
+                  0x002992                  _OSInit
+                  0x00281c                  _OSInitPrioTask
+                  0x00216a                  _OSInsDelayQ
+                  0x0020f6                  _OSInsPrioQ
+                  0x0029d2                  _OSReturn
+                  0x001fa0                  _OSSched
+                  0x002654                  _OSSignalBinSem
+                  0x001ed2                  _OSSignalEFlag
+                  0x002498                  _OSSignalMsg
+                  0x002968                  _OSTimer
+                  0x002620                  _OSWaitBinSem
+                  0x001e54                  _OSWaitEFlag
+                  0x002516                  _OSWaitEvent
+                  0x00243a                  _OSWaitMsg
                   0x000492                  _OpenUART1
-                  0x000ce2                  _P_ctrl
+                  0x000ce4                  _P_ctrl
                   0x000424                  _ReadUART1
-                  0x0027a2                  _Timer1Init
-                  0x0027fa                  _Timer1ReInitialize
-                  0x0027e6                  _Timer1Start
-                  0x0027ee                  _Timer1Stop
-                  0x002812                  _TimerClearInt
-                  0x001098                  _UARTConfig
-                  0x000f3c                  __C1Interrupt
+                  0x002850                  _Timer1Init
+                  0x0028a8                  _Timer1ReInitialize
+                  0x002894                  _Timer1Start
+                  0x00289c                  _Timer1Stop
+                  0x0028c0                  _TimerClearInt
+                  0x0010c6                  _UARTConfig
+                  0x000f6a                  __C1Interrupt
                   0x00019c                  __DefaultInterrupt
                   0xf8000a                  __FGS.sec
-                  0x001024                  __T1Interrupt
-                  0x00222e                  __T3Interrupt
-                  0x000fc2                  __U1RXInterrupt
+                  0x001052                  __T1Interrupt
+                  0x0022dc                  __T3Interrupt
+                  0x000ff0                  __U1RXInterrupt
                   0x000318                  ___divdi3
                   0x000352                  ___moddi3
                   0x000302                  ___udivdi3
@@ -483,14 +483,14 @@ External Symbols in Program Memory (by name):
                   0x00049a                  __sprintf_cdnopuxX
                   0x0005d6                  __vfprintf_cdnopuxX
                   0x00058e                  _atoi
-                  0x0010ae                  _checkComando
-                  0x001a34                  _getKey
-                  0x001b14                  _getKeyNotBlocking
-                  0x001c00                  _initLEDs
-                  0x00104a                  _main
-                  0x001c88                  _offLED
-                  0x001c12                  _onLED
-                  0x001d42                  _printNumInLED
+                  0x0010dc                  _checkComando
+                  0x001ae2                  _getKey
+                  0x001bc2                  _getKeyNotBlocking
+                  0x001cae                  _initLEDs
+                  0x001078                  _main
+                  0x001d36                  _offLED
+                  0x001cc0                  _onLED
+                  0x001df0                  _printNumInLED
                   0x000566                  _strcat
                   0x000b40                  _strchr
                   0x00057e                  _strcmp
@@ -499,8 +499,8 @@ External Symbols in Program Memory (by name):
                   0x0004ee                  _strncpy
                   0x000b50                  _strspn
                   0x00052c                  _strtok
-                  0x001d08                  _toggleLED
-                  0x001462                  _waitLCD
+                  0x001db6                  _toggleLED
+                  0x001510                  _waitLCD
 
 Memory Configuration
 
@@ -722,13 +722,13 @@ userdata
                   0x000014          0x4 LONG 0x19c DEFINED (__INT0Interrupt)?ABSOLUTE (__INT0Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000016          0x4 LONG 0x19c DEFINED (__IC1Interrupt)?ABSOLUTE (__IC1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000018          0x4 LONG 0x19c DEFINED (__OC1Interrupt)?ABSOLUTE (__OC1Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00001a          0x4 LONG 0x1024 DEFINED (__T1Interrupt)?ABSOLUTE (__T1Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00001a          0x4 LONG 0x1052 DEFINED (__T1Interrupt)?ABSOLUTE (__T1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00001c          0x4 LONG 0x19c DEFINED (__IC2Interrupt)?ABSOLUTE (__IC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00001e          0x4 LONG 0x19c DEFINED (__OC2Interrupt)?ABSOLUTE (__OC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000020          0x4 LONG 0x19c DEFINED (__T2Interrupt)?ABSOLUTE (__T2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x000022          0x4 LONG 0x222e DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x000022          0x4 LONG 0x22dc DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000024          0x4 LONG 0x19c DEFINED (__SPI1Interrupt)?ABSOLUTE (__SPI1Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x000026          0x4 LONG 0xfc2 DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x000026          0x4 LONG 0xff0 DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000028          0x4 LONG 0x19c DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00002a          0x4 LONG 0x19c DEFINED (__ADCInterrupt)?ABSOLUTE (__ADCInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00002c          0x4 LONG 0x19c DEFINED (__NVMInterrupt)?ABSOLUTE (__NVMInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -746,7 +746,7 @@ userdata
                   0x000044          0x4 LONG 0x19c DEFINED (__U2RXInterrupt)?ABSOLUTE (__U2RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000046          0x4 LONG 0x19c DEFINED (__U2TXInterrupt)?ABSOLUTE (__U2TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000048          0x4 LONG 0x19c DEFINED (__SPI2Interrupt)?ABSOLUTE (__SPI2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00004a          0x4 LONG 0xf3c DEFINED (__C1Interrupt)?ABSOLUTE (__C1Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00004a          0x4 LONG 0xf6a DEFINED (__C1Interrupt)?ABSOLUTE (__C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00004c          0x4 LONG 0x19c DEFINED (__IC3Interrupt)?ABSOLUTE (__IC3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00004e          0x4 LONG 0x19c DEFINED (__IC4Interrupt)?ABSOLUTE (__IC4Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000050          0x4 LONG 0x19c DEFINED (__IC5Interrupt)?ABSOLUTE (__IC5Interrupt):ABSOLUTE (__DefaultInterrupt)
@@ -786,13 +786,13 @@ userdata
                   0x000094          0x4 LONG 0x19c DEFINED (__AltINT0Interrupt)?ABSOLUTE (__AltINT0Interrupt):DEFINED (__INT0Interrupt)?ABSOLUTE (__INT0Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000096          0x4 LONG 0x19c DEFINED (__AltIC1Interrupt)?ABSOLUTE (__AltIC1Interrupt):DEFINED (__IC1Interrupt)?ABSOLUTE (__IC1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000098          0x4 LONG 0x19c DEFINED (__AltOC1Interrupt)?ABSOLUTE (__AltOC1Interrupt):DEFINED (__OC1Interrupt)?ABSOLUTE (__OC1Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00009a          0x4 LONG 0x1024 DEFINED (__AltT1Interrupt)?ABSOLUTE (__AltT1Interrupt):DEFINED (__T1Interrupt)?ABSOLUTE (__T1Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00009a          0x4 LONG 0x1052 DEFINED (__AltT1Interrupt)?ABSOLUTE (__AltT1Interrupt):DEFINED (__T1Interrupt)?ABSOLUTE (__T1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00009c          0x4 LONG 0x19c DEFINED (__AltIC2Interrupt)?ABSOLUTE (__AltIC2Interrupt):DEFINED (__IC2Interrupt)?ABSOLUTE (__IC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00009e          0x4 LONG 0x19c DEFINED (__AltOC2Interrupt)?ABSOLUTE (__AltOC2Interrupt):DEFINED (__OC2Interrupt)?ABSOLUTE (__OC2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a0          0x4 LONG 0x19c DEFINED (__AltT2Interrupt)?ABSOLUTE (__AltT2Interrupt):DEFINED (__T2Interrupt)?ABSOLUTE (__T2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x0000a2          0x4 LONG 0x222e DEFINED (__AltT3Interrupt)?ABSOLUTE (__AltT3Interrupt):DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x0000a2          0x4 LONG 0x22dc DEFINED (__AltT3Interrupt)?ABSOLUTE (__AltT3Interrupt):DEFINED (__T3Interrupt)?ABSOLUTE (__T3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a4          0x4 LONG 0x19c DEFINED (__AltSPI1Interrupt)?ABSOLUTE (__AltSPI1Interrupt):DEFINED (__SPI1Interrupt)?ABSOLUTE (__SPI1Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x0000a6          0x4 LONG 0xfc2 DEFINED (__AltU1RXInterrupt)?ABSOLUTE (__AltU1RXInterrupt):DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x0000a6          0x4 LONG 0xff0 DEFINED (__AltU1RXInterrupt)?ABSOLUTE (__AltU1RXInterrupt):DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000a8          0x4 LONG 0x19c DEFINED (__AltU1TXInterrupt)?ABSOLUTE (__AltU1TXInterrupt):DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000aa          0x4 LONG 0x19c DEFINED (__AltADCInterrupt)?ABSOLUTE (__AltADCInterrupt):DEFINED (__ADCInterrupt)?ABSOLUTE (__ADCInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000ac          0x4 LONG 0x19c DEFINED (__AltNVMInterrupt)?ABSOLUTE (__AltNVMInterrupt):DEFINED (__NVMInterrupt)?ABSOLUTE (__NVMInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -810,7 +810,7 @@ userdata
                   0x0000c4          0x4 LONG 0x19c DEFINED (__AltU2RXInterrupt)?ABSOLUTE (__AltU2RXInterrupt):DEFINED (__U2RXInterrupt)?ABSOLUTE (__U2RXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000c6          0x4 LONG 0x19c DEFINED (__AltU2TXInterrupt)?ABSOLUTE (__AltU2TXInterrupt):DEFINED (__U2TXInterrupt)?ABSOLUTE (__U2TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000c8          0x4 LONG 0x19c DEFINED (__AltSPI2Interrupt)?ABSOLUTE (__AltSPI2Interrupt):DEFINED (__SPI2Interrupt)?ABSOLUTE (__SPI2Interrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x0000ca          0x4 LONG 0xf3c DEFINED (__AltC1Interrupt)?ABSOLUTE (__AltC1Interrupt):DEFINED (__C1Interrupt)?ABSOLUTE (__C1Interrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x0000ca          0x4 LONG 0xf6a DEFINED (__AltC1Interrupt)?ABSOLUTE (__AltC1Interrupt):DEFINED (__C1Interrupt)?ABSOLUTE (__C1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000cc          0x4 LONG 0x19c DEFINED (__AltIC3Interrupt)?ABSOLUTE (__AltIC3Interrupt):DEFINED (__IC3Interrupt)?ABSOLUTE (__IC3Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000ce          0x4 LONG 0x19c DEFINED (__AltIC4Interrupt)?ABSOLUTE (__AltIC4Interrupt):DEFINED (__IC4Interrupt)?ABSOLUTE (__IC4Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x0000d0          0x4 LONG 0x19c DEFINED (__AltIC5Interrupt)?ABSOLUTE (__AltIC5Interrupt):DEFINED (__IC5Interrupt)?ABSOLUTE (__IC5Interrupt):ABSOLUTE (__DefaultInterrupt)
@@ -1709,129 +1709,129 @@ __c30_signature
  .data              0x09c2          0x2 c:/programmi/microchip/mplab c30/bin/bin/../../lib\libpic30-coff.a(c30_uart.o)
                     0x09c2                  __C30_UART
 
-.const              0x8c8a         0x58 load address 0x000c8a  
- .const             0x8c8a         0x58 main_placa2.o
+.const              0x8c8a         0x5a load address 0x000c8a  
+ .const             0x8c8a         0x5a main_placa2.o
 
-.text             0x000ce2       0x1588
- .text            0x000ce2        0x69a main_placa2.o
-                  0x000ce2                  P_ctrl
-                  0x000e66                  AP_act_LCD
-                  0x000ee6                  AP_tx_datos
-                  0x000f3c                  _C1Interrupt
-                  0x000fc2                  _U1RXInterrupt
-                  0x001024                  _T1Interrupt
-                  0x00104a                  main
-                  0x001098                  UARTConfig
-                  0x0010ae                  checkComando
- .text            0x00137c        0x39e libLCD.o
-                  0x00137c                  LCDInit
-                  0x0013c2                  LCDClear
-                  0x0013ce                  LCDMoveHome
-                  0x0013da                  LCDMoveFirstLine
-                  0x0013e6                  LCDMoveSecondLine
-                  0x0013f2                  LCDPrint
-                  0x00140e                  LCDMoveLeft
-                  0x00141a                  LCDMoveRight
-                  0x001426                  LCDScrollLeft
-                  0x001432                  LCDScrollRight
-                  0x00143e                  LCDHideCursor
-                  0x00144a                  LCDTurnOnUnderline
-                  0x001456                  LCDTurnOnBlinking
-                  0x001462                  waitLCD
-                  0x0014a0                  LCDWriteCmd
-                  0x001596                  LCDWriteNibbleCmd
-                  0x001620                  LCDWriteData
- .text            0x00171a        0x306 libCAN.o
-                  0x00171a                  CANinit
-                  0x001860                  CANrxInt
-                  0x00186c                  CANtxInt
-                  0x00187c                  CANclearGlobalInt
-                  0x001884                  CANclearRxInt
-                  0x00188c                  CANclearTxInt
-                  0x001894                  CANsendMessage
-                  0x001902                  CANtransmissionCompleted
-                  0x00191c                  CANreadRxMessageSID
-                  0x00192a                  CANreadRxMessageDLC
-                  0x001936                  CANreadRxMessageDATA
-                  0x0019fc                  CANclearRxBuffer
-                  0x001a04                  CANreceptionCompleted
- .text            0x001a20        0x1e0 libKEYB.o
-                  0x001a20                  KeybInit
-                  0x001a34                  getKey
-                  0x001b14                  getKeyNotBlocking
- .text            0x001c00        0x17a libLEDs.o
-                  0x001c00                  initLEDs
-                  0x001c12                  onLED
-                  0x001c88                  offLED
-                  0x001d08                  toggleLED
-                  0x001d42                  printNumInLED
- .text            0x001d7a        0x178 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoeflag.o)
-                  0x001d7a                  OSCreateEFlag
-                  0x001da6                  OSWaitEFlag
-                  0x001e24                  OSSignalEFlag
- .text            0x001ef2        0x156 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
-                  0x001ef2                  OSSched
- .text            0x002048        0x112 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
-                  0x002048                  OSInsPrioQ
-                  0x0020bc                  OSInsDelayQ
- .text            0x00215a        0x110 libCAD.o
-                  0x00215a                  CADInit
-                  0x0021da                  CADStart
-                  0x0021f2                  CADStop
-                  0x00220a                  CADRequestValue
-                  0x002212                  CADReadyValue
-                  0x00221e                  CADGetValue
-                  0x002226                  CADClearInt
-                  0x00222e                  _T3Interrupt
-                  0x002244                  CADinitSimpleConfiguration
+.text             0x000ce4       0x1634
+ .text            0x000ce4        0x746 main_placa2.o
+                  0x000ce4                  P_ctrl
+                  0x000e8c                  AP_act_LCD
+                  0x000f14                  AP_tx_datos
+                  0x000f6a                  _C1Interrupt
+                  0x000ff0                  _U1RXInterrupt
+                  0x001052                  _T1Interrupt
+                  0x001078                  main
+                  0x0010c6                  UARTConfig
+                  0x0010dc                  checkComando
+ .text            0x00142a        0x39e libLCD.o
+                  0x00142a                  LCDInit
+                  0x001470                  LCDClear
+                  0x00147c                  LCDMoveHome
+                  0x001488                  LCDMoveFirstLine
+                  0x001494                  LCDMoveSecondLine
+                  0x0014a0                  LCDPrint
+                  0x0014bc                  LCDMoveLeft
+                  0x0014c8                  LCDMoveRight
+                  0x0014d4                  LCDScrollLeft
+                  0x0014e0                  LCDScrollRight
+                  0x0014ec                  LCDHideCursor
+                  0x0014f8                  LCDTurnOnUnderline
+                  0x001504                  LCDTurnOnBlinking
+                  0x001510                  waitLCD
+                  0x00154e                  LCDWriteCmd
+                  0x001644                  LCDWriteNibbleCmd
+                  0x0016ce                  LCDWriteData
+ .text            0x0017c8        0x306 libCAN.o
+                  0x0017c8                  CANinit
+                  0x00190e                  CANrxInt
+                  0x00191a                  CANtxInt
+                  0x00192a                  CANclearGlobalInt
+                  0x001932                  CANclearRxInt
+                  0x00193a                  CANclearTxInt
+                  0x001942                  CANsendMessage
+                  0x0019b0                  CANtransmissionCompleted
+                  0x0019ca                  CANreadRxMessageSID
+                  0x0019d8                  CANreadRxMessageDLC
+                  0x0019e4                  CANreadRxMessageDATA
+                  0x001aaa                  CANclearRxBuffer
+                  0x001ab2                  CANreceptionCompleted
+ .text            0x001ace        0x1e0 libKEYB.o
+                  0x001ace                  KeybInit
+                  0x001ae2                  getKey
+                  0x001bc2                  getKeyNotBlocking
+ .text            0x001cae        0x17a libLEDs.o
+                  0x001cae                  initLEDs
+                  0x001cc0                  onLED
+                  0x001d36                  offLED
+                  0x001db6                  toggleLED
+                  0x001df0                  printNumInLED
+ .text            0x001e28        0x178 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoeflag.o)
+                  0x001e28                  OSCreateEFlag
+                  0x001e54                  OSWaitEFlag
+                  0x001ed2                  OSSignalEFlag
+ .text            0x001fa0        0x156 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvosched.o)
+                  0x001fa0                  OSSched
+ .text            0x0020f6        0x112 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqins.o)
+                  0x0020f6                  OSInsPrioQ
+                  0x00216a                  OSInsDelayQ
+ .text            0x002208        0x110 libCAD.o
+                  0x002208                  CADInit
+                  0x002288                  CADStart
+                  0x0022a0                  CADStop
+                  0x0022b8                  CADRequestValue
+                  0x0022c0                  CADReadyValue
+                  0x0022cc                  CADGetValue
+                  0x0022d4                  CADClearInt
+                  0x0022dc                  _T3Interrupt
+                  0x0022f2                  CADinitSimpleConfiguration
 
-.dinit            0x00226a        0x100
- .dinit           0x00226a        0x100 data_init
+.dinit            0x002318        0x100
+ .dinit           0x002318        0x100 data_init
 
-.text             0x00236a        0x5de
- .text            0x00236a         0xfe Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvomsg.o)
-                  0x00236a                  OSCreateMsg
-                  0x00238c                  OSWaitMsg
-                  0x0023ea                  OSSignalMsg
- .text            0x002468         0xe6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoevent.o)
-                  0x002468                  OSWaitEvent
- .text            0x00254e         0xd4 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvobinsem.o)
-                  0x00254e                  OSCreateBinSem
-                  0x002572                  OSWaitBinSem
-                  0x0025a6                  OSSignalBinSem
- .text            0x002622         0xd4 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
-                  0x002622                  OSDelPrioQ
-                  0x002692                  OSDelDelayQ
- .text            0x0026f6         0xac Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
-                  0x0026f6                  OSCreateTask
-                  0x00276e                  OSInitPrioTask
- .text            0x0027a2         0x78 libTIMER.o
-                  0x0027a2                  Timer1Init
-                  0x0027e6                  Timer1Start
-                  0x0027ee                  Timer1Stop
-                  0x0027fa                  Timer1ReInitialize
-                  0x002812                  TimerClearInt
- .text            0x00281a         0x6a Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvodelay.o)
-                  0x00281a                  OSDelay
- .text            0x002884         0x36 delay.o
-                  0x002884                  Delay3Tcy
-                  0x002886                  Delay10us
-                  0x00288e                  Delay20us
-                  0x002896                  Delay150us
-                  0x00289e                  Delay5ms
-                  0x0028a6                  Delay15ms
- .text            0x0028ba         0x2a Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvotimer.o)
-                  0x0028ba                  OSTimer
- .text            0x0028e4         0x24 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
-                  0x0028e4                  OSInit
- .text            0x002908         0x22 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
-                  0x002908                  OSDispatch
-                  0x002916                  OSCtxSw
-                  0x002924                  OSReturn
- .text            0x00292a         0x10 salvohook_interrupt_MCC30_IRQ.o
-                  0x00292a                  OSDisableHook
-                  0x002932                  OSEnableHook
- .text            0x00293a          0x8 salvohook_wdt_MCC30_clrwdt.o
-                  0x00293a                  OSClrWDTHook
- .text            0x002942          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
-                  0x002942                  OSIdlingHook
+.text             0x002418        0x5de
+ .text            0x002418         0xfe Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvomsg.o)
+                  0x002418                  OSCreateMsg
+                  0x00243a                  OSWaitMsg
+                  0x002498                  OSSignalMsg
+ .text            0x002516         0xe6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoevent.o)
+                  0x002516                  OSWaitEvent
+ .text            0x0025fc         0xd4 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvobinsem.o)
+                  0x0025fc                  OSCreateBinSem
+                  0x002620                  OSWaitBinSem
+                  0x002654                  OSSignalBinSem
+ .text            0x0026d0         0xd4 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoqdel.o)
+                  0x0026d0                  OSDelPrioQ
+                  0x002740                  OSDelDelayQ
+ .text            0x0027a4         0xac Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit2.o)
+                  0x0027a4                  OSCreateTask
+                  0x00281c                  OSInitPrioTask
+ .text            0x002850         0x78 libTIMER.o
+                  0x002850                  Timer1Init
+                  0x002894                  Timer1Start
+                  0x00289c                  Timer1Stop
+                  0x0028a8                  Timer1ReInitialize
+                  0x0028c0                  TimerClearInt
+ .text            0x0028c8         0x6a Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvodelay.o)
+                  0x0028c8                  OSDelay
+ .text            0x002932         0x36 delay.o
+                  0x002932                  Delay3Tcy
+                  0x002934                  Delay10us
+                  0x00293c                  Delay20us
+                  0x002944                  Delay150us
+                  0x00294c                  Delay5ms
+                  0x002954                  Delay15ms
+ .text            0x002968         0x2a Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvotimer.o)
+                  0x002968                  OSTimer
+ .text            0x002992         0x24 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoinit.o)
+                  0x002992                  OSInit
+ .text            0x0029b6         0x22 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvoportmcc30.o)
+                  0x0029b6                  OSDispatch
+                  0x0029c4                  OSCtxSw
+                  0x0029d2                  OSReturn
+ .text            0x0029d8         0x10 salvohook_interrupt_MCC30_IRQ.o
+                  0x0029d8                  OSDisableHook
+                  0x0029e0                  OSEnableHook
+ .text            0x0029e8          0x8 salvohook_wdt_MCC30_clrwdt.o
+                  0x0029e8                  OSClrWDTHook
+ .text            0x0029f0          0x6 Y:\Downloads\bbmanu\Librerias\libSalvo\MCC30\libsalvofmcc30s-t.a(salvohook_idle.o)
+                  0x0029f0                  OSIdlingHook

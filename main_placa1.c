@@ -203,9 +203,9 @@ void AP_tx_datos(void) {
             data_buffer[2] = (unsigned char) hab1;
             data_buffer[3] = (unsigned char) hab2;
             data_buffer[4] = (unsigned char) hab3;
-            data_buffer[5] = (char) luz1_man;
-            data_buffer[6] = (char) luz2_man;
-            data_buffer[7] = (char) luz3_man;
+            data_buffer[5] = (unsigned char) luz1_man;
+            data_buffer[6] = (unsigned char) luz2_man;
+            data_buffer[7] = (unsigned char) luz3_man;
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
@@ -237,9 +237,10 @@ void AP_act_LCD(void) {
         char linea1 [20];
         char linea2 [20];
 
-        sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
-        //sprintf(linea1, "%u %u %u", luz1, luz2, luz3);
-        sprintf(linea2, "Lumens: %u", lumenes);
+        //sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
+        sprintf(linea1, "%u %u %u", luz1, luz2, luz3);
+        //sprintf(linea2, "Lumens: %u", lumenes);
+        sprintf(linea2, "%u %u %u", luz1_man, luz2_man, luz3_man);
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
