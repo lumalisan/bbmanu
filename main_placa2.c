@@ -88,7 +88,7 @@ _FGS(CODE_PROT_OFF);
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones (calculada)
-volatile unsigned int luz1_man = 3, luz2_man = 3, luz3_man = 3; // Intensidad luz (recibida)
+volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2; // Intensidad luz (recibida)
 volatile unsigned int lums1 = 0, lums2 = 0, lums3 = 0; // Intensidad luz artificial en lumenes
 
 char rx_uart[16];
@@ -128,16 +128,16 @@ void P_ctrl(void) {
         unsigned int luz1_previa = luz1;
         unsigned int luz2_previa = luz2;
         unsigned int luz3_previa = luz3;
-        
+
         unsigned int luz1_m_pr = luz1_man;
         unsigned int luz2_m_pr = luz2_man;
         unsigned int luz3_m_pr = luz3_man;
 
-        // DeterminaciÔøΩn automÔøΩtica de la intensidad de las luces
+        // Determinacion automatica de la intensidad de las luces
 
-        if (lumenes <= 341) { // SegÔøΩn la luz exterior
+        if (lumenes <= 341) { // Segun la luz exterior
             // Luz baja (noche), si hay gente enciende
-            switch (hab1) { // SegÔøΩn el n. de personas
+            switch (hab1) { // Segun el n. de personas
                 case 0: luz1 = 0;
                     break;
                 case 1: luz1 = 1;
@@ -161,8 +161,8 @@ void P_ctrl(void) {
                 default: luz3 = 2;
                     break;
             }
-        } else if (lumenes > 341 && lumenes <= 682) {
-            // Luz media (tarde), si hay mÔøΩs de una persona enciende 1 luz
+        } else if (lumenes <= 682) {
+            // Luz media (tarde), si hay mas de una persona enciende 1 luz
             switch (hab1) {
                 case 0: luz1 = 0;
                     break;
@@ -188,42 +188,85 @@ void P_ctrl(void) {
                     break;
             }
         } else if (lumenes > 682) {
-            // Luz alta (dÔøΩa), no enciende nada
+            // Luz alta (dia), no enciende nada
             luz1 = 0;
             luz2 = 0;
             luz3 = 0;
         }
 
         // Ahora se calcula teniendo en cuenta los comandos manuales
-        // impartidos a travÔøΩs de los botones en la placa 1
+        // impartidos a traves de los botones en la placa 1
 
+        // Al enviar un numero sin signo, hemos adoptado como medida un rango
+        // de 0 a 4 donde:
+        // El 0 = -2
+        // El 1 = -1
+        // El 2 = 0
+        // El 3 = 1
+        // El 4 = 2
 
-        if (luz1_man - 3 < luz1) {
+        switch (((int) luz1_man) - 2) {
+          case -2:
+          if (((int) luz1) - 2 >= 0) {
+            luz1 = luz1 - 2;
+          } else {
             luz1 = 0;
+          }
+          break;
+          case -1: luz1 = 1;
+          if (((int) luz1) - 1 >= 0) {
+            luz1 = luz1 - 1;
+          } else {
+            luz1 = 0;
+          }
+          break;
+          case 0:
+          // No hacemos nada
+          break;
+          case 1:
+          if (((int) luz1) + 1 <= 2) {
+            luz1 = luz1 + 1;
+          } else {
+            luz1 = 2;
+          }
+          break;
+          case 2:
+          if (((int) luz1) + 2 <= 2) {
+            luz1 = luz1 + 2;
+          } else {
+            luz1 = 2;
+          }
+          break;
+        }
+
+/*
+        if (((int) luz1_man) - 2 < luz1) {
+            luz1 = luz1--;
         }
         else {
-            luz1 = luz1 + luz1_man - 3;
+            luz1 = luz1 + luz1_man - 2;
         }
-        if (luz2_man - 3 < luz1) {
+        if (luz2_man - 2 < luz2) {
             luz2 = 0;
         }
         else {
-            luz2 = luz2 + luz2_man - 3;
+            luz2 = luz2 + luz2_man - 2;
         }
-        if (luz3_man - 3 < luz1) {
+        if (luz3_man - 2 < luz3) {
             luz3 = 0;
         }
         else {
-            luz3 = luz3 + luz3_man - 3;
+            luz3 = luz3 + luz3_man - 2;
         }
+*/
 
-        // Si se ha producido algÔøΩn cambio, dile al CAN de enviar la info actualizada
+        // Si se ha producido algun cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa ||
                 luz1_man != luz1_m_pr || luz2_man != luz2_m_pr || luz3_man != luz3_m_pr) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         }
 
-        OSSignalBinSem(BINSEM_CTRL_LCD); // SeÔøΩala al LCD que puede actualizarse
+        OSSignalBinSem(BINSEM_CTRL_LCD); // Sanyala al LCD que puede actualizarse
 
         OS_Delay(1);
     }
@@ -232,11 +275,11 @@ void P_ctrl(void) {
 
 /**
  * Muestra en el LCD:
- * - Los lÔøΩmenes del exterior
- * - Los lÔøΩmenes por habitaciÔøΩn
+ * - Los lumenes del exterior
+ * - Los lumenes por habitaciÔøΩn
  */
 void AP_act_LCD(void) {
-    // Calcula la intensidad actual de lÔøΩmenes y la enseÔøΩa
+    // Calcula la intensidad actual de lumenes y la enseÔøΩa
     // lums1..3
 
     OStypeMsgP msg_recibido;
@@ -266,7 +309,7 @@ void AP_act_LCD(void) {
         //sprintf(linea2, "H2:%u H3:%u", luz2_man, luz3_man);
         sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
         sprintf(linea2, "Man %u %u %u", luz1_man, luz2_man, luz3_man);
-        
+
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
@@ -285,7 +328,7 @@ void AP_act_LCD(void) {
 
 /**
  * Envia:
- * - Los lÔøΩmenes de luz exterior
+ * - Los lumenes de luz exterior
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void) {
@@ -307,7 +350,7 @@ void AP_tx_datos(void) {
 
     while (1) {
 
-        // Espera a que la tarea de control seÔøΩale que hay nuevos datos para enviar
+        // Espera a que la tarea de control senyales que hay nuevos datos para enviar
         OS_WaitEFlag(EFLAG_P_CTRL, DESPIERTA_TX, OSEXACT_BITS, OSNO_TIMEOUT);
         OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX); // Limpia el flag y ejecuta la rutina
 
@@ -315,7 +358,7 @@ void AP_tx_datos(void) {
         unsigned int ID = 0x0002;
         unsigned char tamDatos = sizeof (data_buffer);
 
-        // EnvÔøΩo informaciones
+        // Evio informaciones
         if (CANtxInt) { // Si se puede enviar
             CANclearTxInt(); // Clear del interrupt de transmisiÔøΩn CAN
 
@@ -326,7 +369,7 @@ void AP_tx_datos(void) {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
-        // Avisa al LCD que puede actualizarse y esperar al semÔøΩforo de control
+        // Avisa al LCD que puede actualizarse y esperar al semaforo de control
         OSSignalMsg(MSG_RX_LCD, (OStypeMsgP) & mensaje_mbox_LCD);
 
         OS_Yield();
@@ -340,9 +383,9 @@ void AP_tx_datos(void) {
 
 
 /******************************************************************************/
-/* CAN ISR - RecepciÔøΩn datos                                                  */
-/* Recibe info de num. personas y luz deseada (manual) en cada habitaciÔøΩn     */
-/* TambiÔøΩn recibe el nÔøΩmero de lÔøΩmenes exteriores                             */
+/* CAN ISR - Recepcion datos                                                  */
+/* Recibe info de num. personas y luz deseada (manual) en cada habitacion     */
+/* Tambien recibe el numero de lumenes exteriores                             */
 
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
@@ -393,11 +436,11 @@ void _ISR _U1RXInterrupt(void) {
 
     char c;
 
-    //char linea1[20]; // Mensaje a ense�ar en la primera linea de LCD (DEBUG)
+    //char linea1[20]; // Mensaje a ensenyar en la primera linea de LCD (DEBUG)
     //sprintf(linea1, "Recibido de UART");
 
     while (DataRdyUART1()) { // Hasta que haya datos
-        c = ReadUART1(); // Leemos el car�cter
+        c = ReadUART1(); // Leemos el car�cter
         (*(datos)++) = c; // Lo ponemos en el string rx_uart (var. global)
     }
 
@@ -413,7 +456,7 @@ void _ISR _U1RXInterrupt(void) {
         //        LCDMoveSecondLine();
         //        LCDPrint(rx_uart);
         //
-        //        IFS0bits.ADIF = 0; // Reset interrupt del LCD          
+        //        IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
         checkComando();
 
@@ -423,7 +466,7 @@ void _ISR _U1RXInterrupt(void) {
         //            Delay5ms();
         //        }
         //        LCDClear();
-        //        IFS0bits.ADIF = 0; // Reset interrupt del LCD     
+        //        IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
         strncpy(rx_uart, "", sizeof (rx_uart)); // Reset string a vacio
         datos = rx_uart; // Reset puntero a principio
@@ -465,7 +508,7 @@ int main(void) {
     UARTConfig();
 
 
-    // ========================= 
+    // =========================
     // Create Salvo structures
     // =========================
     // Init Salvo
@@ -534,7 +577,6 @@ int checkComando() {
         token = strtok(NULL, s);
         if (contador >= MAX_ARGS)
             break; // Si se llega al maximo de argumentos (5)
-
     }
 
     if (contador == 1) args[1] = NULL;
@@ -591,10 +633,10 @@ int checkComando() {
                 CANclearTxInt();
                 CANsendMessage(ID, data_buffer, tamDatos);
             }
-            
+
             luz1 = luz2 = luz3 = 2;
-            //luz1_man = luz2_man = luz3_man = 6;
-            
+            //luz1_man = luz2_man = luz3_man = 4;
+
             //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
             //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
             return ID;
@@ -612,14 +654,14 @@ int checkComando() {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-                
+
                 luz1 = luz2 = luz3 = nivel;
-                if ((nivel + 3) < 6) {
-                    luz1_man = luz2_man = luz3_man = (3 + nivel);
+                if ((nivel + 2) < 4) {
+                    luz1_man = luz2_man = luz3_man = (2 + nivel);
                 } else {
-                    luz1_man = luz2_man = luz3_man = 5;
+                    luz1_man = luz2_man = luz3_man = 4;
                 }
-                
+
                 //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 return ID;
@@ -636,10 +678,10 @@ int checkComando() {
             CANclearTxInt();
             CANsendMessage(ID, data_buffer, tamDatos);
         }
-        
+
         luz1 = luz2 = luz3 = 0;
-        luz1_man = luz2_man = luz3_man = 3;
-        
+        luz1_man = luz2_man = luz3_man = 2;
+
         //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         return ID;
@@ -669,7 +711,7 @@ int checkComando() {
             LCDMoveSecondLine();
             LCDPrint(debug_2);
 
-            IFS0bits.ADIF = 0; // Reset interrupt del LCD          
+            IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
             // Que quede en la pantalla durante 1 seg.
             unsigned int i;
@@ -677,7 +719,7 @@ int checkComando() {
                 Delay5ms();
             }
             LCDClear();
-            IFS0bits.ADIF = 0; // Reset interrupt del LCD    
+            IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
             // Si los valores son validos, enviamos los datos
             if (num_hab >= 1 && num_hab <= 3 && val_luz >= 0 && val_luz <= 2) {
@@ -692,19 +734,19 @@ int checkComando() {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-                
+
                 switch (num_hab) {
                     case 1: //luz1_man = val_luz + 3;
-                            luz1 = val_luz; 
+                            luz1 = val_luz;
                             break;
-                    case 2: //luz2_man = val_luz + 3; 
-                            luz2 = val_luz; 
+                    case 2: //luz2_man = val_luz + 3;
+                            luz2 = val_luz;
                             break;
-                    case 3: //luz3_man = val_luz + 3; 
-                            luz3 = val_luz; 
+                    case 3: //luz3_man = val_luz + 3;
+                            luz3 = val_luz;
                             break;
                 }
-                
+
                 // DEBUG
                 if (num_hab == 1) {
                     //luz1_man = (val_luz + 3);
@@ -716,15 +758,15 @@ int checkComando() {
                     //luz3_man = (val_luz + 3);
                     luz3 = val_luz;
                 }
-                
+
                 //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 return ID;
             }
         }
     }
-    
-    OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-    
+
+    //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
+
     return 0;
 }

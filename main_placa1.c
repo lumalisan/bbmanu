@@ -113,6 +113,14 @@ void P_muestrear_botones(void) {
         unsigned char i = 0;
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
 
+        // Al enviar un numero sin signo, hemos adoptado como medida un rango
+        // de 0 a 4 donde:
+        // El 0 = -2
+        // El 1 = -1
+        // El 2 = 0
+        // El 3 = 1
+        // El 4 = 2
+
         switch (key) {
             case 0: hab1++; // Añadir persona H1
                 break;
@@ -126,11 +134,11 @@ void P_muestrear_botones(void) {
                 break;
             case 5: if (hab3 > 0) hab3--; // Quitar persona H3
                 break;
-            case 6: if (luz1_man < 6) luz1_man++; // Subir luz H1
+            case 6: if (luz1_man < 4) luz1_man++; // Subir luz H1
                 break;
-            case 7: if (luz2_man < 6) luz2_man++; // Subir luz H2
+            case 7: if (luz2_man < 4) luz2_man++; // Subir luz H2
                 break;
-            case 8: if (luz3_man < 6) luz3_man++; // Subir luz H3
+            case 8: if (luz3_man < 4) luz3_man++; // Subir luz H3
                 break;
             case 9: if (luz1_man > 0) luz1_man--; // Bajar luz H1
                 break;
@@ -395,12 +403,12 @@ void _ISR _C1Interrupt(void) {
 
         // Clear RX buffer
         CANclearRxBuffer();
-        
+
         // Las declaraciones van aqui porque si no no compila, gracias MPLAB
         unsigned int nivel;
         unsigned int num_hab;
-        unsigned int niv_luz;        
-        
+        unsigned int niv_luz;
+
         switch (rxMsgSID) {
             case 0x0002:
                 luz1 = (unsigned int) rxMsgData[0];
@@ -427,20 +435,20 @@ void _ISR _C1Interrupt(void) {
                 // encender hab x a nivel y
                 num_hab = (unsigned int) rxMsgData[0];
                 niv_luz = (unsigned int) rxMsgData[1];
-                
+
                 switch (num_hab) {
                     case 1: luz1_man = niv_luz + 3;
                             luz1 = niv_luz; break;
-                    case 2: luz2_man = niv_luz + 3; 
+                    case 2: luz2_man = niv_luz + 3;
                             luz2 = niv_luz; break;
-                    case 3: luz3_man = niv_luz + 3; 
+                    case 3: luz3_man = niv_luz + 3;
                             luz3 = niv_luz; break;
                 }
-                break;             
+                break;
         }
-        
+
         LCDClear(); // Limpio pantalla
-        
+
         char debug_1[20];
         char debug_2[20];
         sprintf(debug_1, "DEBUG - Recibido");
@@ -452,16 +460,16 @@ void _ISR _C1Interrupt(void) {
         LCDMoveSecondLine();
         LCDPrint(debug_2);
 
-        IFS0bits.ADIF = 0; // Reset interrupt del LCD  
+        IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
         // Que quede en la pantalla durante 2 seg.
         unsigned int i;
         for (i = 0; i < 400; i++) {
             Delay5ms();
         }
-        
+
     }
-    
+
     OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Dice al CAN de enviar datos nuevos
 
     // Envia mensaje en mailbox para que se actualicen los LEDs
