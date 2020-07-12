@@ -214,7 +214,7 @@ void P_ctrl(void) {
                     luz1 = 0;
                 }
                 break;
-            case -1: luz1 = 1;
+            case -1:
                 if (((int) luz1) - 1 >= 0) {
                     luz1 = luz1 - 1;
                 } else {
@@ -246,7 +246,7 @@ void P_ctrl(void) {
                     luz2 = 0;
                 }
                 break;
-            case -1: luz2 = 1;
+            case -1:
                 if (((int) luz2) - 1 >= 0) {
                     luz2 = luz2 - 1;
                 } else {
@@ -278,7 +278,7 @@ void P_ctrl(void) {
                     luz3 = 0;
                 }
                 break;
-            case -1: luz3 = 1;
+            case -1:
                 if (((int) luz3) - 1 >= 0) {
                     luz3 = luz3 - 1;
                 } else {
