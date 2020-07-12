@@ -205,60 +205,122 @@ void P_ctrl(void) {
         // El 3 = 1
         // El 4 = 2
 
+        // Luz 1
         switch (((int) luz1_man) - 2) {
-          case -2:
-          if (((int) luz1) - 2 >= 0) {
-            luz1 = luz1 - 2;
-          } else {
-            luz1 = 0;
-          }
-          break;
-          case -1: luz1 = 1;
-          if (((int) luz1) - 1 >= 0) {
-            luz1 = luz1 - 1;
-          } else {
-            luz1 = 0;
-          }
-          break;
-          case 0:
-          // No hacemos nada
-          break;
-          case 1:
-          if (((int) luz1) + 1 <= 2) {
-            luz1 = luz1 + 1;
-          } else {
-            luz1 = 2;
-          }
-          break;
-          case 2:
-          if (((int) luz1) + 2 <= 2) {
-            luz1 = luz1 + 2;
-          } else {
-            luz1 = 2;
-          }
-          break;
+            case -2:
+                if (((int) luz1) - 2 >= 0) {
+                    luz1 = luz1 - 2;
+                } else {
+                    luz1 = 0;
+                }
+                break;
+            case -1: luz1 = 1;
+                if (((int) luz1) - 1 >= 0) {
+                    luz1 = luz1 - 1;
+                } else {
+                    luz1 = 0;
+                }
+                break;
+            case 1:
+                if (((int) luz1) + 1 <= 2) {
+                    luz1 = luz1 + 1;
+                } else {
+                    luz1 = 2;
+                }
+                break;
+            case 2:
+                if (((int) luz1) + 2 <= 2) {
+                    luz1 = luz1 + 2;
+                } else {
+                    luz1 = 2;
+                }
+                break;
+        }
+        
+        // Luz 2
+        switch (((int) luz2_man) - 2) {
+            case -2:
+                if (((int) luz2) - 2 >= 0) {
+                    luz2 = luz2 - 2;
+                } else {
+                    luz2 = 0;
+                }
+                break;
+            case -1: luz2 = 1;
+                if (((int) luz2) - 1 >= 0) {
+                    luz2 = luz2 - 1;
+                } else {
+                    luz2 = 0;
+                }
+                break;
+            case 1:
+                if (((int) luz2) + 1 <= 2) {
+                    luz2 = luz2 + 1;
+                } else {
+                    luz2 = 2;
+                }
+                break;
+            case 2:
+                if (((int) luz2) + 2 <= 2) {
+                    luz2 = luz2 + 2;
+                } else {
+                    luz2 = 2;
+                }
+                break;
+        }
+        
+        // Luz 3
+        switch (((int) luz3_man) - 2) {
+            case -2:
+                if (((int) luz3) - 2 >= 0) {
+                    luz3 = luz3 - 2;
+                } else {
+                    luz3 = 0;
+                }
+                break;
+            case -1: luz3 = 1;
+                if (((int) luz3) - 1 >= 0) {
+                    luz3 = luz3 - 1;
+                } else {
+                    luz3 = 0;
+                }
+                break;
+            case 1:
+                if (((int) luz3) + 1 <= 2) {
+                    luz3 = luz3 + 1;
+                } else {
+                    luz3 = 2;
+                }
+                break;
+            case 2:
+                if (((int) luz3) + 2 <= 2) {
+                    luz3 = luz3 + 2;
+                } else {
+                    luz3 = 2;
+                }
+                break;
         }
 
-/*
-        if (((int) luz1_man) - 2 < luz1) {
-            luz1 = luz1--;
-        }
-        else {
-            luz1 = luz1 + luz1_man - 2;
-        }
-        if (luz2_man - 2 < luz2) {
-            luz2 = 0;
-        }
-        else {
-            luz2 = luz2 + luz2_man - 2;
-        }
-        if (luz3_man - 2 < luz3) {
-            luz3 = 0;
-        }
-        else {
-            luz3 = luz3 + luz3_man - 2;
-        }
-*/
+        /*
+                if (((int) luz1_man) - 2 < luz1) {
+                    luz1 = luz1--;
+                }
+                else {
+                    luz1 = luz1 + luz1_man - 2;
+                }
+                if (luz2_man - 2 < luz2) {
+                    luz2 = 0;
+                }
+                else {
+                    luz2 = luz2 + luz2_man - 2;
+                }
+                if (luz3_man - 2 < luz3) {
+                    luz3 = 0;
+                }
+                else {
+                    luz3 = luz3 + luz3_man - 2;
+                }
+         */
 
         // Si se ha producido algun cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa ||
@@ -308,7 +370,7 @@ void AP_act_LCD(void) {
         //sprintf(linea1, "EX:%u H1:%u", lumenes, luz1_man);
         //sprintf(linea2, "H2:%u H3:%u", luz2_man, luz3_man);
         sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
-        sprintf(linea2, "Man %u %u %u", luz1_man, luz2_man, luz3_man);
+        sprintf(linea2, "Man %d %d %d", (int) luz1_man, (int) luz2_man, (int) luz3_man);
 
 
         LCDMoveFirstLine();
@@ -562,7 +624,7 @@ void UARTConfig() {
 
 int checkComando() {
     char string[30];
-    memset(string, '\0', sizeof(string));
+    memset(string, '\0', sizeof (string));
     strcpy(string, rx_uart); // Copiamos el string porque strtok es destructivo
     const char * s = " "; // Caracter delimitador de los tokens
     int contador = 0; // Contador de cuantos tokens se crean
@@ -634,7 +696,7 @@ int checkComando() {
                 CANsendMessage(ID, data_buffer, tamDatos);
             }
 
-            luz1 = luz2 = luz3 = 2;
+            //luz1 = luz2 = luz3 = 2;
             //luz1_man = luz2_man = luz3_man = 4;
 
             //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
@@ -647,20 +709,22 @@ int checkComando() {
             int nivel = atoi(args[1]);
             // El nivel puede ir de 0 hasta maximo 2
             if (nivel >= 0 && nivel <= 2) {
-                unsigned char data_buffer = (unsigned char) args[1];
+                unsigned char data_buffer[2];   // Solo hay que enviar un valor, pero si no se hace asi no funciona
+                data_buffer[0] = (unsigned char) atoi(args[1]);
                 tamDatos = sizeof (data_buffer);
 
                 if (CANtxInt) {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-
+                /*
                 luz1 = luz2 = luz3 = nivel;
                 if ((nivel + 2) < 4) {
                     luz1_man = luz2_man = luz3_man = (2 + nivel);
                 } else {
                     luz1_man = luz2_man = luz3_man = 4;
                 }
+                */
 
                 //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
@@ -679,8 +743,8 @@ int checkComando() {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
-        luz1 = luz2 = luz3 = 0;
-        luz1_man = luz2_man = luz3_man = 2;
+        //luz1 = luz2 = luz3 = 0;
+        //luz1_man = luz2_man = luz3_man = 2;
 
         //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
@@ -699,8 +763,8 @@ int checkComando() {
 
             char debug_1[20];
             char debug_2[20];
-            sprintf(debug_1, "A1: %u", num_hab);
-            sprintf(debug_2, "A2: %u", val_luz);
+            sprintf(debug_1, "N_H: %u", (unsigned char) atoi(args[1]));
+            sprintf(debug_2, "V_L: %u", (unsigned char) atoi(args[2]));
 
             // DEBUG
             LCDClear(); // Limpio pantalla
@@ -726,25 +790,26 @@ int checkComando() {
 
                 ID = 0x0030;
                 unsigned char data_buffer[2];
-                data_buffer[0] = (unsigned char) args[1]; // Num. habitacion
-                data_buffer[1] = (unsigned char) args[2]; // Valor luces
+                data_buffer[0] = (unsigned char) atoi(args[1]); // Num. habitacion
+                data_buffer[1] = (unsigned char) atoi(args[2]); // Valor luces
                 tamDatos = sizeof (data_buffer);
 
                 if (CANtxInt) {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-
+                
+                /*
                 switch (num_hab) {
                     case 1: //luz1_man = val_luz + 3;
-                            luz1 = val_luz;
-                            break;
+                        luz1 = val_luz;
+                        break;
                     case 2: //luz2_man = val_luz + 3;
-                            luz2 = val_luz;
-                            break;
+                        luz2 = val_luz;
+                        break;
                     case 3: //luz3_man = val_luz + 3;
-                            luz3 = val_luz;
-                            break;
+                        luz3 = val_luz;
+                        break;
                 }
 
                 // DEBUG
@@ -758,6 +823,7 @@ int checkComando() {
                     //luz3_man = (val_luz + 3);
                     luz3 = val_luz;
                 }
+                */
 
                 //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);

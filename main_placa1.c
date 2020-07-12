@@ -80,7 +80,7 @@ _FGS(CODE_PROT_OFF);
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
-volatile unsigned int luz1_man = 3, luz2_man = 3, luz3_man = 3;
+volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2;
 
 
 /******************************************************************************/
@@ -259,7 +259,7 @@ void AP_act_LCD(void) {
 
         // Esperamos un poco asi nos da tiempo a ver lo q sale por pantalla
         unsigned int i;
-        for (i = 0; i < 10; i++) Delay5ms();
+        for (i = 0; i < 4; i++) Delay15ms();
 
         OS_Yield();
     }
@@ -417,17 +417,21 @@ void _ISR _C1Interrupt(void) {
                 break;
             case 0x0010:
                 // encender todo
-                luz1_man = luz2_man = luz3_man = 6;
-                luz1 = luz2 = luz3 = 2;
+                luz1_man = luz2_man = luz3_man = 4;
+                //luz1 = luz2 = luz3 = 2;
                 break;
             case 0x0011:
                 // encender todo a nivel x
                 nivel = (unsigned int) rxMsgData[0];
-                luz1_man = luz2_man = luz3_man = (nivel) + 3;
-                luz1 = luz2 = luz3 = nivel;
+                if (nivel > 2) {
+                    luz1_man = luz2_man = luz3_man = 4;
+                } else {
+                    luz1_man = luz2_man = luz3_man = (nivel + 2);
+                }
+                //luz1 = luz2 = luz3 = nivel;
                 break;
             case 0x0020:
-                // apagar todo
+                // apagar todo forzadamente
                 luz1_man = luz2_man = luz3_man = 0;
                 luz1 = luz2 = luz3 = 0;
                 break;
@@ -435,14 +439,20 @@ void _ISR _C1Interrupt(void) {
                 // encender hab x a nivel y
                 num_hab = (unsigned int) rxMsgData[0];
                 niv_luz = (unsigned int) rxMsgData[1];
+                
+                if (niv_luz <= 2) {
 
-                switch (num_hab) {
-                    case 1: luz1_man = niv_luz + 3;
-                            luz1 = niv_luz; break;
-                    case 2: luz2_man = niv_luz + 3;
-                            luz2 = niv_luz; break;
-                    case 3: luz3_man = niv_luz + 3;
-                            luz3 = niv_luz; break;
+                    switch (num_hab) {
+                        case 1: luz1_man = niv_luz + 2;
+                                //luz1 = niv_luz;
+                                break;
+                        case 2: luz2_man = niv_luz + 2;
+                                //luz2 = niv_luz;
+                                break;
+                        case 3: luz3_man = niv_luz + 2;
+                                //luz3 = niv_luz;
+                                break;
+                    }
                 }
                 break;
         }
