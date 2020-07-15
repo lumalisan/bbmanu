@@ -10,10 +10,6 @@
 /*                                                                            */
 /******************************************************************************/
 
-/**
- TODO:
- * - Implementar UART
- */
 
 #include <libpic30.h>
 
@@ -31,6 +27,8 @@
 #include "libTIMER.h"
 #include "delay.h"
 #include "uart.h"
+
+#include "variables.h"
 
 
 // Tasks TCBs
@@ -52,8 +50,9 @@
 
 #define MSG_CAN             OSECBP(2)   // Mailbox para mensajes CAN
 
-#define DESPIERTA_CAN       0b00000011  // Valor del flag para despertar ISR CAN
-#define DESPIERTA_LCD       0b00000001  // Valor del flag para despertar rutina LCD
+#define DESPIERTA_CAN       0x01  		// Valor del flag para despertar ISR CAN
+
+#define BINSEM_LCD			OSECBP(3)	// Semaforo para actualizar LCD
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -103,13 +102,13 @@ volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2;
  */
 
 /**
- * Muestrea la pulsacion de botones
+ * Tarea periodica, muestrea la pulsacion de los botones
  */
 void P_muestrear_botones(void) {
 
     while (1) {
 
-        volatile unsigned char key = getKeyNotBlocking(); // O getKeyNotBlocking ?
+        volatile unsigned char key = getKeyNotBlocking();
         unsigned char i = 0;
         unsigned char modificados = 1; // Para saber si ha habido cambios o no
 
@@ -153,39 +152,34 @@ void P_muestrear_botones(void) {
         if (modificados == 1) // Envia actualizacion CAN solo si se ha tocado algun boton
             OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN);
 
-        //for (i = 0; i < 60; i++) Delay5ms();
         OS_Delay(1);
-
     }
 
 }
 
 /**
- * Envia:
+ * Envia por bus CAN:
  * - Los lumenes de luz exterior
  * - El numero de personas en cada hab.
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void) {
 
-    // Cada unsigned char tiene tamaño de 1 byte (0 - 255)
-    // Cada char tiene tamaño de 1 byte (-128, 127)
-    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4)
+    // Cada unsigned char tiene tamaño de 1 byte (rango 0 - 255)
+    // Cada char tiene tamaño de 1 byte (rango -128, 127)
+    // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4 bytes)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
     // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
 
     /*
      SISTEMA DE IDENTIFICADORES
      *
-     * SID = 0x0001 (1)   --> El mensaje es de 7 bytes y contiene todo
-     * SID = 0x0002 (2)   --> Mensaje recibido desde la placa 2
+     * SID = 0x0001 (1)   	 --> El mensaje es de 7 bytes y contiene todo
+     * SID = 0x0002 (2)   	 --> Mensaje recibido desde la placa 2
+	 * SID = 0x0010 - 0x0030 --> Comandos recibidos desde la placa 2
      *
      */
 
-    // ***CUIDADO***
-    // Puede que haga falta un delay despues de clearTxInt, pero el profe no
-    // quiere esperas activas. Si no funciona la transmision, podria ser esta
-    // la razon
 
     while (1) {
 
@@ -197,7 +191,7 @@ void AP_tx_datos(void) {
         unsigned int ID = 0x0001;
         unsigned char tamDatos = sizeof (data_buffer);
 
-        // Dividimos los lumenes (2 bytes) en dos uns. chars
+        // Dividimos los lumenes (2 bytes) en dos unsigned chars
         unsigned char *lum_chars = (unsigned char *) &lumenes;
         unsigned char lum_h = lum_chars[0];
         unsigned char lum_l = lum_chars[1];
@@ -218,7 +212,7 @@ void AP_tx_datos(void) {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
-        OSSetEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Dice al LCD de actualizarse
+		OSSignalBinSem(BINSEM_LCD); // Dice al LCD de actualizarse
 
         OS_Yield();
     }
@@ -235,8 +229,7 @@ void AP_act_LCD(void) {
     while (1) {
 
         // Espera a que la tarea de CAN señale que hay que actualizar
-        OS_WaitEFlag(EFLAG_BOTONES, DESPIERTA_LCD, OSEXACT_BITS, OSNO_TIMEOUT);
-        OSClrEFlag(EFLAG_BOTONES, DESPIERTA_LCD); // Limpia el flag y ejecuta la rutina
+        OS_WaitBinSem(BINSEM_LCD, OSNO_TIMEOUT);
 
         // Limpiamos el LCD para que no haya caracteres no deseados
         LCDClear();
@@ -268,17 +261,17 @@ void AP_act_LCD(void) {
 
 /**
  * Muestra en los LEDs:
- * - Los lumenes del exterior
- * - El numero de personas en cada hab.
+ * - La intensidad de la luz en cada habitacion
  */
 void AP_act_LEDs(void) {
+	
     // 3 habitaciones, niveles de luz: 0 (off), 1 (media), 2 (alta)
     // Hab.     LED
     //  0      0   1
     //  1      2   3
     //  2      4   5
 
-    OStypeMsgP msg_recibido;
+    OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
     //typeMessage * pMessage;
 
     unsigned int i = 0;
@@ -287,16 +280,6 @@ void AP_act_LEDs(void) {
 
         // Espera al mensaje en el mailbox para actualizar los LEDs
         OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
-
-        //LIS
-        // Se espera al mensaje pero nunca se usa para nada. Esto tiene sentido?
-        // Yo creo que aqui falla algo
-        // En el ejemplo del profe lo usa como metodo para acceder al contenido
-        // mediante el puntero pMessage
-
-        //pMessage = (typeMessage *) msgP;
-        //toggleLED((*pMessage).x);
-        //toggleLED((*pMessage).y);
 
         // Habitacion 1
         switch (luz1) {
@@ -351,13 +334,11 @@ void AP_act_LEDs(void) {
 
 /******************************************************************************/
 /* ADC ISR - CAD Reading                                                      */
-
 /******************************************************************************/
 
 void _ISR _ADCInterrupt(void) {
-
+	
     lumenes = CADGetValue(); // Leemos el valor
-    // CADRequestValue();    // Pedimos el siguiente valor
 
     IFS0bits.ADIF = 0; // Reset del interrupt
 
@@ -367,7 +348,6 @@ void _ISR _ADCInterrupt(void) {
 
 /******************************************************************************/
 /* Timer ISR - Muestreo botones                                               */
-
 /******************************************************************************/
 
 void _ISR _T1Interrupt(void) {
@@ -376,16 +356,13 @@ void _ISR _T1Interrupt(void) {
 }
 
 /******************************************************************************/
-/* CAN ISR - Recepcion datos (nivel de luz para cada habitacion               */
-
-// TODO - IMPLEMENTAR RECEPCION DATOS DE CONTROL CON LOS NUEVOS IDs
-
+/* CAN ISR - Recepcion datos								                  */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
 
-    static unsigned char mensaje_mbox_LEDs = 1;
+    static unsigned char mensaje_mbox_LEDs = 1;	// Contenido del mensaje en el Mbox
 
-    unsigned int rxMsgSID;
+    unsigned int rxMsgSID;		
     unsigned char rxMsgData[8];
     unsigned char rxMsgDLC;
 
@@ -418,7 +395,6 @@ void _ISR _C1Interrupt(void) {
             case 0x0010:
                 // encender todo
                 luz1_man = luz2_man = luz3_man = 4;
-                //luz1 = luz2 = luz3 = 2;
                 break;
             case 0x0011:
                 // encender todo a nivel x
@@ -428,7 +404,6 @@ void _ISR _C1Interrupt(void) {
                 } else {
                     luz1_man = luz2_man = luz3_man = (nivel + 2);
                 }
-                //luz1 = luz2 = luz3 = nivel;
                 break;
             case 0x0020:
                 // apagar todo forzadamente
@@ -441,21 +416,19 @@ void _ISR _C1Interrupt(void) {
                 niv_luz = (unsigned int) rxMsgData[1];
                 
                 if (niv_luz <= 2) {
-
                     switch (num_hab) {
                         case 1: luz1_man = niv_luz + 2;
-                                //luz1 = niv_luz;
                                 break;
                         case 2: luz2_man = niv_luz + 2;
-                                //luz2 = niv_luz;
                                 break;
                         case 3: luz3_man = niv_luz + 2;
-                                //luz3 = niv_luz;
                                 break;
                     }
                 }
                 break;
         }
+		
+		// Mensaje por pantalla con el ID del mensaje recibido
 
         LCDClear(); // Limpio pantalla
 
@@ -472,9 +445,9 @@ void _ISR _C1Interrupt(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
-        // Que quede en la pantalla durante 2 seg.
+        // Que quede en la pantalla durante 1,5 seg.
         unsigned int i;
-        for (i = 0; i < 400; i++) {
+        for (i = 0; i < 300; i++) {
             Delay5ms();
         }
 
@@ -520,6 +493,9 @@ int main(void) {
 
     // Create event flag (ecbP, efcbP, initial value)
     OSCreateEFlag(EFLAG_BOTONES, EFLAG_BOTONES_EFCB, 0x00);
+	
+	// Create binary semaphore
+	OSCreateBinSem(BINSEM_LCD, 0);
 
     // =============================================
     // Enable peripherals that trigger interrupts
@@ -539,8 +515,3 @@ int main(void) {
     }
 
 }
-
-/******************************************************************************/
-/* Procedures implementation                                                  */
-
-/******************************************************************************/

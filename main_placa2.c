@@ -14,12 +14,6 @@
 /*                                                                            */
 /******************************************************************************/
 
-/**
- TODO:
- * - Control de la luminosidad
- * - EnvÔøΩo por CAN
- *
- */
 
 #include <p30f4011.h>
 #include <stdio.h>
@@ -31,13 +25,13 @@
 #include "libLCD.h"
 #include "libTIMER.h"
 #include "libCAN.h"
-
 #include "uart.h"
+
 #include "variables.h"
 
-#define TASK_CTRL_P         OSTCBP(1)   //Task 1
-#define TASK_TX_AP          OSTCBP(2)   //Task 2
-#define TASK_LCD_AP         OSTCBP(3)   //Task 4
+#define TASK_CTRL_P         OSTCBP(1)   //Task 1, Control luminosidad
+#define TASK_TX_AP          OSTCBP(2)   //Task 2, Transmision CAN
+#define TASK_LCD_AP         OSTCBP(3)   //Task 3, Act. LCD
 
 //Task priorities
 #define PRIO_CTRL           10
@@ -47,10 +41,10 @@
 //Herramientas de concurrencia
 #define EFLAG_P_CTRL        OSECBP(1)   // Flag para control de luz
 
-#define DESPIERTA_TX        0x01  // Valor del flag para despertar envÔøΩo CAN
+#define DESPIERTA_TX        0x01  		// Valor del flag para despertar envÔøΩo CAN
 
 #define MSG_RX_LCD          OSECBP(3)   // Mailbox para actualizar LCD
-#define BINSEM_CTRL_LCD     OSECBP(3)   // SemÔøΩforo para actualizar LCD
+#define BINSEM_CTRL_LCD     OSECBP(3)   // Semaforo para actualizar LCD
 
 /******************************************************************************/
 /* Configuration words                                                        */
@@ -119,12 +113,13 @@ int checkComando();
  */
 
 /**
- * Decide la intensidad de la luz en cada hab.
+ * Tarea periodica, decide la intensidad de la luz en cada hab.
  */
 void P_ctrl(void) {
 
     while (1) {
 
+		// Guardamos los valores actuales
         unsigned int luz1_previa = luz1;
         unsigned int luz2_previa = luz2;
         unsigned int luz3_previa = luz3;
@@ -198,12 +193,18 @@ void P_ctrl(void) {
         // impartidos a traves de los botones en la placa 1
 
         // Al enviar un numero sin signo, hemos adoptado como medida un rango
-        // de 0 a 4 donde:
-        // El 0 = -2
-        // El 1 = -1
-        // El 2 = 0
-        // El 3 = 1
-        // El 4 = 2
+        // de 0 a 4 para los valores manuales, donde:
+        // El 0 = -2 (Apaga dos luces)
+        // El 1 = -1 (Apaga una luz)
+        // El 2 = 0	 (No hacer nada)
+        // El 3 = 1  (Enciende una luz)
+        // El 4 = 2  (Enciende dos luces)
+		
+		// Para cada luz, se mira el valor manual deseado y se adapta
+		// Los 'if's miran que los valores queden dentro del rango [0,4]
+		
+		// Si se quiere encender o apagar más luces de las que hay,
+		// entonces se fija el valor de luz a 2 (max.) o 0 (min.) respectivamente
 
         // Luz 1
         switch (((int) luz1_man) - 2) {
@@ -301,34 +302,13 @@ void P_ctrl(void) {
                 break;
         }
 
-        /*
-                if (((int) luz1_man) - 2 < luz1) {
-                    luz1 = luz1--;
-                }
-                else {
-                    luz1 = luz1 + luz1_man - 2;
-                }
-                if (luz2_man - 2 < luz2) {
-                    luz2 = 0;
-                }
-                else {
-                    luz2 = luz2 + luz2_man - 2;
-                }
-                if (luz3_man - 2 < luz3) {
-                    luz3 = 0;
-                }
-                else {
-                    luz3 = luz3 + luz3_man - 2;
-                }
-         */
-
         // Si se ha producido algun cambio, dile al CAN de enviar la info actualizada
         if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa ||
                 luz1_man != luz1_m_pr || luz2_man != luz2_m_pr || luz3_man != luz3_m_pr) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         }
 
-        OSSignalBinSem(BINSEM_CTRL_LCD); // Sanyala al LCD que puede actualizarse
+        OSSignalBinSem(BINSEM_CTRL_LCD); // Senyala al LCD que puede actualizarse
 
         OS_Delay(1);
     }
@@ -338,27 +318,27 @@ void P_ctrl(void) {
 /**
  * Muestra en el LCD:
  * - Los lumenes del exterior
- * - Los lumenes por habitaciÔøΩn
+ * - Los lumenes en cada habitacion
  */
 void AP_act_LCD(void) {
-    // Calcula la intensidad actual de lumenes y la enseÔøΩa
+    // Calcula la intensidad actual de lumenes y la muestra
     // lums1..3
 
-    OStypeMsgP msg_recibido;
+    OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
 
     while (1) {
 
-        // Espera a que la tarea de CAN seÔøΩale que hay que actualizar
+        // Espera a que la tarea de CAN indique que hay que actualizar
         OS_WaitMsg(MSG_RX_LCD, &msg_recibido, OSNO_TIMEOUT);
 
         // Espera a que se hayan calculado los valores de luz
         OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
 
-        // Max. longitud lÔøΩnea: 16 chars.
-        LCDClear();
+        LCDClear();	// Limpia la pantalla
         char linea1 [20];
         char linea2 [20];
 
+		// Cada luz encendida suma 1000 lumenes
         lums1 = luz1 * LUMS_STEP;
         lums2 = luz2 * LUMS_STEP;
         lums3 = luz3 * LUMS_STEP;
@@ -394,17 +374,18 @@ void AP_act_LCD(void) {
  * - El nivel de luz deseado en cada hab. (manual)
  */
 void AP_tx_datos(void) {
-    // Llamado despuÔøΩs de P_ctrl
-    // EnvÔøΩa los valores actualizados de lumenes y luces
+    // Llamado despues de P_ctrl
+    // Envia los valores actualizados de lumenes y luces
 
-    // Cada unsigned char tiene tamaÔøΩo de 1 byte
-    // Cada unsigned int tiene tamaÔøΩo de 2 bytes (hasta 65.535, luego 4)
+    // Cada unsigned char es 1 byte
+    // Cada unsigned int son 2 bytes (hasta 65.535, luego 4 bytes)
 
     /*
      SISTEMA DE IDENTIFICADORES
      *
-     * SID = 0x0001 (1)   --> Mensaje recibido desde la placa 1
-     * SID = 0x0002 (2)   --> Enviar luz1..3
+     * SID = 0x0001 (1)      --> Mensaje recibido desde la placa 1
+     * SID = 0x0002 (2)      --> Enviar luz1..3
+	 * SID = 0x0010 - 0x0030 --> Comandos impartidos por UART
      *
      */
 
@@ -422,7 +403,7 @@ void AP_tx_datos(void) {
 
         // Evio informaciones
         if (CANtxInt) { // Si se puede enviar
-            CANclearTxInt(); // Clear del interrupt de transmisiÔøΩn CAN
+            CANclearTxInt(); // Clear del interrupt de transmision CAN
 
             data_buffer[0] = (unsigned char) luz1;
             data_buffer[1] = (unsigned char) luz2;
@@ -448,7 +429,6 @@ void AP_tx_datos(void) {
 /* CAN ISR - Recepcion datos                                                  */
 /* Recibe info de num. personas y luz deseada (manual) en cada habitacion     */
 /* Tambien recibe el numero de lumenes exteriores                             */
-
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
     unsigned int rxMsgSID;
@@ -480,7 +460,7 @@ void _ISR _C1Interrupt(void) {
             luz3_man = (unsigned int) rxMsgData[7];
 
             lumenes = (unsigned int) rxMsgData[1] << 8; // lum_l
-            lumenes += (unsigned int) rxMsgData[0];
+            lumenes += (unsigned int) rxMsgData[0];		// Se suma lum_h
 
         }
     }
@@ -489,7 +469,6 @@ void _ISR _C1Interrupt(void) {
 /******************************************************************************/
 /* UART ISR - Lectura de datos por UART                                       */
 /* La rutina ha sido programada para activarse cada vez que se detecta un char*/
-
 /******************************************************************************/
 
 void _ISR _U1RXInterrupt(void) {
@@ -502,7 +481,7 @@ void _ISR _U1RXInterrupt(void) {
     //sprintf(linea1, "Recibido de UART");
 
     while (DataRdyUART1()) { // Hasta que haya datos
-        c = ReadUART1(); // Leemos el car�cter
+        c = ReadUART1(); // Leemos el caracter
         (*(datos)++) = c; // Lo ponemos en el string rx_uart (var. global)
     }
 
@@ -539,8 +518,7 @@ void _ISR _U1RXInterrupt(void) {
 }
 
 /******************************************************************************/
-/* Timer ISR - CÔøΩlculo intensidad                                             */
-
+/* Timer ISR - Calculo intensidad                                             */
 /******************************************************************************/
 
 void _ISR _T1Interrupt(void) {
@@ -565,7 +543,7 @@ int main(void) {
     Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 5);
     Timer1Start();
 
-    CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0); // Comentado por ahora, da problemas con la simulaciÔøΩn
+    CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
 
     UARTConfig();
 
@@ -580,17 +558,17 @@ int main(void) {
     // From 1 up to OSTASKS tcbs available
     // Priorities from 0 (highest) down to 15 (lowest)
 
-    OSCreateTask(P_ctrl, OSTCBP(1), 10);
-    OSCreateTask(AP_tx_datos, OSTCBP(2), 10);
-    OSCreateTask(AP_act_LCD, OSTCBP(3), 10);
+    OSCreateTask(P_ctrl, OSTCBP(1), PRIO_CTRL);
+    OSCreateTask(AP_tx_datos, OSTCBP(2), PRIO_TX);
+    OSCreateTask(AP_act_LCD, OSTCBP(3), PRIO_LCD);
 
     // Creamos herramientas de concurrencia
-    OSCreateMsg(MSG_RX_LCD, (OStypeMsgP) 0);
-    // Honestamente, no sÔøΩ porque OSEFCBP(1), podrÔøΩa ser otro
+    OSCreateMsg(MSG_RX_LCD, (OStypeMsgP) 0);	// Mailbox
+	
     //            OSTCBP(1)      eso mismo  val. inicial
-    OSCreateEFlag(EFLAG_P_CTRL, OSEFCBP(1), 0x00);
+    OSCreateEFlag(EFLAG_P_CTRL, OSEFCBP(1), 0x00);	// Flag
 
-    OSCreateBinSem(BINSEM_CTRL_LCD, 0);
+    OSCreateBinSem(BINSEM_CTRL_LCD, 0);	// Sem. binario
 
     // =============================================
     // Enter multitasking environment
@@ -606,42 +584,46 @@ int main(void) {
 /******************************************************************************/
 void UARTConfig() {
     U1MODE = 0; // Clear UART config - to avoid problems with bootloader
-    // Activar int. RX -->1 111 <-- Prioridad entre 0 y 7
+    // Activar RXint -->1 111 <-- Prioridad entre 0 y 7
     ConfigIntUART1(0x000F); // Enable RX Interrupt, highest priority
 
 
     // Config UART
     OpenUART1(UART_EN & // Enable UART
-            UART_DIS_LOOPBACK & // Disable loopback mode
-            UART_NO_PAR_8BIT & // 8bits / No parity
-            UART_1STOPBIT, // 1 Stop bit
+            UART_DIS_LOOPBACK &  // Disable loopback mode
+            UART_NO_PAR_8BIT &   // 8bits / No parity
+            UART_1STOPBIT, 		 // 1 Stop bit
             UART_TX_PIN_NORMAL & // Tx break bit normal
-            UART_TX_ENABLE &
-            UART_INT_RX_CHAR & // Interrupt para cada char recibido
-            UART_RX_INT_EN, // Enable Transmission and RX Interruptions
+            UART_TX_ENABLE &	 // Enable Tx
+            UART_INT_RX_CHAR & 	 // Interrupt para cada char recibido
+            UART_RX_INT_EN, 	 // Enable Transmission and RX Interruptions
             BRG); // Baudrate
 }
 
+/**
+ * Comprueba si el comando recibido por UART y acabado por enter
+ * es valido, y si es asi, envia comandos a la placa 1 mediante CAN
+ */
 int checkComando() {
     char string[30];
     memset(string, '\0', sizeof (string));
     strcpy(string, rx_uart); // Copiamos el string porque strtok es destructivo
-    const char * s = " "; // Caracter delimitador de los tokens
-    int contador = 0; // Contador de cuantos tokens se crean
+    const char * s = " "; 	 // Caracter delimitador de los tokens
+    int contador = 0; 		 // Contador de cuantos tokens se crean
 
     char *token;
-    char *args[MAX_ARGS];
+    char *args[MAX_ARGS];	   // Array para los tokens
     memset(args, '\0', sizeof (args));
     token = strtok(string, s); // Sacamos el primer token
 
-    while (token != NULL) { // Hasta que siga habiendo y hasta 5, sacamos mas
+    while (token != NULL) { // Hasta que siga habiendo o hasta 5, sacamos mas tokens
         args[contador++] = token;
         token = strtok(NULL, s);
         if (contador >= MAX_ARGS)
             break; // Si se llega al maximo de argumentos (5)
     }
 
-    if (contador == 1) args[1] = NULL;
+    if (contador == 1) args[1] = NULL;	// Para evitar fallos
 
     // DEBUG
     LCDClear(); // Limpio pantalla
@@ -696,11 +678,6 @@ int checkComando() {
                 CANsendMessage(ID, data_buffer, tamDatos);
             }
 
-            //luz1 = luz2 = luz3 = 2;
-            //luz1_man = luz2_man = luz3_man = 4;
-
-            //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-            //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
             return ID;
 
         } else if (strcmp(args[0], "turnAllOn") == 0 && args[1] != NULL) { // Se comprueba que no sea NULL el segundo argumento
@@ -717,17 +694,7 @@ int checkComando() {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-                /*
-                luz1 = luz2 = luz3 = nivel;
-                if ((nivel + 2) < 4) {
-                    luz1_man = luz2_man = luz3_man = (2 + nivel);
-                } else {
-                    luz1_man = luz2_man = luz3_man = 4;
-                }
-                */
-
-                //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-                //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
+				
                 return ID;
             }
 
@@ -743,11 +710,6 @@ int checkComando() {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
-        //luz1 = luz2 = luz3 = 0;
-        //luz1_man = luz2_man = luz3_man = 2;
-
-        //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-        //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         return ID;
 
     } else if (strcmp(args[0], "setLights") == 0) {
@@ -758,6 +720,7 @@ int checkComando() {
             // En este caso, la hab. no puede ser 0, pero el nivel de luz si
             // y no podemos saber si el 0 es por un error de conversion o porque
             // el usuario quiere poner a cero (apagar) las luces de una hab.
+			
             unsigned int num_hab = (unsigned int) atoi(args[1]);
             unsigned int val_luz = (unsigned int) atoi(args[2]);
 
@@ -798,41 +761,11 @@ int checkComando() {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
-                
-                /*
-                switch (num_hab) {
-                    case 1: //luz1_man = val_luz + 3;
-                        luz1 = val_luz;
-                        break;
-                    case 2: //luz2_man = val_luz + 3;
-                        luz2 = val_luz;
-                        break;
-                    case 3: //luz3_man = val_luz + 3;
-                        luz3 = val_luz;
-                        break;
-                }
 
-                // DEBUG
-                if (num_hab == 1) {
-                    //luz1_man = (val_luz + 3);
-                    luz1 = val_luz;
-                } else if (num_hab == 2) {
-                    //luz2_man = (val_luz + 3);
-                    luz2 = val_luz;
-                } else if (num_hab == 3) {
-                    //luz3_man = (val_luz + 3);
-                    luz3 = val_luz;
-                }
-                */
-
-                //OSClrEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-                //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
                 return ID;
             }
         }
     }
-
-    //OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
-
+	
     return 0;
 }
