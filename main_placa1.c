@@ -63,34 +63,10 @@ _FBORPOR(MCLR_EN & PBOR_OFF & PWRT_OFF);
 _FGS(CODE_PROT_OFF);
 
 /******************************************************************************/
-/* Hardware                                                                   */
-/******************************************************************************/
-
-
-/******************************************************************************/
-/* Salvo elements declarations                                                */
-/******************************************************************************/
-
-
-/******************************************************************************/
 /* Global Variable and macros declaration                                     */
 /******************************************************************************/
 
-/*
-volatile unsigned int lumenes = 0;
-volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
-volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
-volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2;
- */
-
 struct datos_luz datos;
-
-
-/******************************************************************************/
-/* Procedures declaration                                                     */
-/******************************************************************************/
-
-void initVars();
 
 /******************************************************************************/
 /* TASKS declaration and implementation                                       */
@@ -244,11 +220,13 @@ void AP_act_LCD(void) {
         char linea1 [20];
         char linea2 [20];
 
-        //sprintf(linea1, "H.1:%u 2:%u 3:%u", datos.hab1, datos.hab2, datos.hab3);
-        sprintf(linea1, "%u %u %u", datos.luz1, datos.luz2, datos.luz3);
-        //sprintf(linea2, "Lumens: %u", datos.lumenes);
-        sprintf(linea2, "%u %u %u", datos.luz1_man, datos.luz2_man, datos.luz3_man);
-
+        sprintf(linea1, "H.1:%u 2:%u 3:%u", datos.hab1, datos.hab2, datos.hab3);
+        sprintf(linea2, "Lumens: %u", datos.lumenes);
+        
+        // DEBUG
+        // sprintf(linea1, "%u %u %u", datos.luz1, datos.luz2, datos.luz3);
+        // sprintf(linea2, "%u %u %u", datos.luz1_man, datos.luz2_man, datos.luz3_man);
+        
         LCDMoveFirstLine();
         LCDPrint(linea1);
         LCDMoveSecondLine();
@@ -258,7 +236,7 @@ void AP_act_LCD(void) {
 
         // Esperamos un poco asi nos da tiempo a ver lo q sale por pantalla
         unsigned int i;
-        for (i = 0; i < 4; i++) Delay15ms();
+        for (i = 0; i < 8; i++) Delay15ms();
 
         OS_Yield();
     }
@@ -276,11 +254,6 @@ void AP_act_LEDs(void) {
     //  0      0   1
     //  1      2   3
     //  2      4   5
-
-    //OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
-    //typeMessage * pMessage;
-
-    unsigned int i = 0;
 
     while (1) {
 
@@ -337,7 +310,6 @@ void AP_act_LEDs(void) {
 /* Interrupts                                                                 */
 /******************************************************************************/
 
-
 /******************************************************************************/
 /* ADC ISR - CAD Reading                                                      */
 /******************************************************************************/
@@ -365,8 +337,6 @@ void _ISR _T1Interrupt(void) {
 /* CAN ISR - Recepcion datos								                  */
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
-
-    // static unsigned char mensaje_mbox_LEDs = 1;	// Contenido del mensaje en el Mbox
 
     unsigned int rxMsgSID;		
     unsigned char rxMsgData[8];
@@ -434,14 +404,14 @@ void _ISR _C1Interrupt(void) {
                 break;
         }
 		
-		// Mensaje por pantalla con el ID del mensaje recibido
-
+		// DEBUG - Mensaje por pantalla con el ID del mensaje recibido
+        /*
         LCDClear(); // Limpio pantalla
 
         char debug_1[20];
         char debug_2[20];
-        sprintf(debug_1, "DEBUG - Recibido");
-        sprintf(debug_2, "CAN ID 0x%04x", rxMsgSID);
+        sprintf(debug_1, "*RX comando CAN*");
+        sprintf(debug_2, "ID 0x%04x", rxMsgSID);
 
         // Escribo en pantalla
         LCDMoveFirstLine();
@@ -456,6 +426,7 @@ void _ISR _C1Interrupt(void) {
         for (i = 0; i < 300; i++) {
             Delay5ms();
         }
+        */
 
     }
 
@@ -473,7 +444,7 @@ void _ISR _C1Interrupt(void) {
 int main(void) {
 
     // ===================
-    // Init peripherals
+    // Init peripherals and variables
     // ===================
     initLEDs();
     LCDInit();

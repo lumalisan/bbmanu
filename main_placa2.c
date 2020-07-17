@@ -348,14 +348,14 @@ void AP_act_LCD(void) {
         lums2 = datos.luz2 * LUMS_STEP;
         lums3 = datos.luz3 * LUMS_STEP;
 
-        //sprintf(linea1, "EX:%u H1:%u", datos.lumenes, lums1);
-        //sprintf(linea2, "H2:%u H3:%u", lums2, lums3);
+        sprintf(linea1, "EX:%u H1:%u", datos.lumenes, lums1);
+        sprintf(linea2, "H2:%u H3:%u", lums2, lums3);
 
         // DEBUG
         //sprintf(linea1, "EX:%u H1:%u", datos.lumenes, datos.luz1_man);
         //sprintf(linea2, "H2:%u H3:%u", datos.luz2_man, datos.luz3_man);
-        sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
-        sprintf(linea2, "Man %d %d %d", (int) datos.luz1_man, (int) datos.luz2_man, (int) datos.luz3_man);
+        //sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
+        //sprintf(linea2, "Man %d %d %d", (int) datos.luz1_man, (int) datos.luz2_man, (int) datos.luz3_man);
 
 
         LCDMoveFirstLine();
@@ -365,8 +365,8 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
-        //unsigned int i;
-        //for (i = 0; i < 5; i++) Delay15ms();
+        unsigned int i;
+        for (i = 0; i < 10; i++) Delay15ms();
 
         OS_Yield();
     }
@@ -465,7 +465,7 @@ void _ISR _C1Interrupt(void) {
             datos.luz3_man = (unsigned int) rxMsgData[7];
 
             datos.lumenes = (unsigned int) rxMsgData[1] << 8; // lum_l
-            datos.lumenes += (unsigned int) rxMsgData[0];		// Se suma lum_h
+            datos.lumenes += (unsigned int) rxMsgData[0];     // Se suma lum_h
 
         }
     }
@@ -488,9 +488,13 @@ void _ISR _U1RXInterrupt(void) {
     while (DataRdyUART1()) { // Hasta que haya datos
         c = ReadUART1(); // Leemos el caracter
         (*(datos_uart)++) = c; // Lo ponemos en el string rx_uart (var. global)
+        WriteUART1(c);
     }
 
     if (c == '\r' || c == '\n') { // Si se detecta un Enter
+        
+        WriteUART1('\r');
+        WriteUART1('\n');
 
         //        LCDClear(); // Limpio pantalla
         //
@@ -576,6 +580,8 @@ int main(void) {
     OSCreateEFlag(EFLAG_P_CTRL, OSEFCBP(1), 0x00);	// Flag
 
     OSCreateBinSem(BINSEM_CTRL_LCD, 0);	// Sem. binario
+    
+    putsUART1((unsigned int *) "hola bich\n\r");
 
     // =============================================
     // Enter multitasking environment
@@ -632,37 +638,6 @@ int checkComando() {
 
     if (contador == 1) args[1] = NULL;	// Para evitar fallos
 
-    // DEBUG
-    LCDClear(); // Limpio pantalla
-
-    char debug1[20];
-    char debug2[20];
-    memset(debug2, '\0', sizeof (debug2));
-    sprintf(debug1, "toks num: %d", contador);
-
-    unsigned int x;
-    for (x = 0; x < contador; x++) {
-        strcat(debug2, args[x]);
-        strcat(debug2, " ");
-    }
-
-    // Escribo en pantalla
-    LCDMoveFirstLine();
-    LCDPrint(debug1);
-    LCDMoveSecondLine();
-    LCDPrint(debug2);
-
-    // Que quede en la pantalla durante 1 seg.
-    unsigned int i;
-    for (i = 0; i < 200; i++) {
-        Delay5ms();
-    }
-
-    IFS0bits.ADIF = 0; // Reset interrupt del LCD
-    LCDClear();
-    // FIN DEBUG
-
-
     // Variables para el envio por CAN
     unsigned int ID;
     unsigned char tamDatos;
@@ -672,10 +647,15 @@ int checkComando() {
     // - turnAllOn (x): Enciende todas las luces al nivel x (si especificado, si no al maximo)
     // - turnAllOff:    Apaga todas las luces
     // - setLights x y: Pone las luces de la hab. x al nivel y
+    // - showValues:    Muestra los valores actuales de las variables
+    // - listCommands:  Muestra todos los comandos posibles y su sintaxis
 
     if (strcmp(args[0], "turnAllOn") == 0) {
 
         if (contador == 1) { // Si no se ha especificado otro parametro
+            
+            putsUART1((unsigned int *) "Enviando comando turnAllOn (2)...");
+            
             ID = 0x0010;
             unsigned char data_buffer = 0;
             tamDatos = sizeof (data_buffer);
@@ -684,6 +664,8 @@ int checkComando() {
                 CANclearTxInt();
                 CANsendMessage(ID, data_buffer, tamDatos);
             }
+            
+            putsUART1((unsigned int *) " Hecho.\r\n\n");
 
             return ID;
 
@@ -693,6 +675,13 @@ int checkComando() {
             int nivel = atoi(args[1]);
             // El nivel puede ir de 0 hasta maximo 2
             if (nivel >= 0 && nivel <= 2) {
+                
+                putsUART1((unsigned int *) ("Enviando comando turnAllOn "));
+                char niv_c[2];
+                sprintf(niv_c, "%d", nivel);
+                putsUART1((unsigned int *) niv_c);
+                putsUART1((unsigned int *) " ...");
+                
                 unsigned char data_buffer[2];   // Solo hay que enviar un valor, pero si no se hace asi no funciona
                 data_buffer[0] = (unsigned char) atoi(args[1]);
                 tamDatos = sizeof (data_buffer);
@@ -701,13 +690,21 @@ int checkComando() {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
+                
+                putsUART1((unsigned int *) " Hecho.\r\n\n");
 				
                 return ID;
+            } else {
+                putsUART1((unsigned int *) "ERROR: Nivel no valido, el numero tiene que ser 0, 1 o 2.\r\n\n");
+                return 0;
             }
 
         }
 
     } else if (strcmp(args[0], "turnAllOff") == 0) {
+        
+        putsUART1((unsigned int *) "Enviando comando turnAllOff...");
+        
         ID = 0x0020;
         unsigned char data_buffer = 0;
         tamDatos = sizeof (data_buffer);
@@ -717,6 +714,8 @@ int checkComando() {
             CANsendMessage(ID, data_buffer, tamDatos);
         }
 
+        putsUART1((unsigned int *) " Hecho.\r\n\n");
+        
         return ID;
 
     } else if (strcmp(args[0], "setLights") == 0) {
@@ -731,32 +730,14 @@ int checkComando() {
             unsigned int num_hab = (unsigned int) atoi(args[1]);
             unsigned int val_luz = (unsigned int) atoi(args[2]);
 
-            char debug_1[20];
-            char debug_2[20];
-            sprintf(debug_1, "N_H: %u", (unsigned char) atoi(args[1]));
-            sprintf(debug_2, "V_L: %u", (unsigned char) atoi(args[2]));
-
-            // DEBUG
-            LCDClear(); // Limpio pantalla
-
-            // Escribo en pantalla
-            LCDMoveFirstLine();
-            LCDPrint(debug_1);
-            LCDMoveSecondLine();
-            LCDPrint(debug_2);
-
-            IFS0bits.ADIF = 0; // Reset interrupt del LCD
-
-            // Que quede en la pantalla durante 1 seg.
-            unsigned int i;
-            for (i = 0; i < 200; i++) {
-                Delay5ms();
-            }
-            LCDClear();
-            IFS0bits.ADIF = 0; // Reset interrupt del LCD
-
             // Si los valores son validos, enviamos los datos
             if (num_hab >= 1 && num_hab <= 3 && val_luz >= 0 && val_luz <= 2) {
+                
+                putsUART1((unsigned int *) ("Enviando comando setLights "));
+                char niv_c[4];
+                sprintf(niv_c, "%d %d", num_hab, val_luz);
+                putsUART1((unsigned int *) niv_c);
+                putsUART1((unsigned int *) " ...");
 
                 ID = 0x0030;
                 unsigned char data_buffer[2];
@@ -769,9 +750,63 @@ int checkComando() {
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
 
+                putsUART1((unsigned int *) " Hecho.\r\n\n");
+                
                 return ID;
+            } else {
+                putsUART1((unsigned int *) "ERROR: Nivel o numero de habitacion no valido.\r\n");
+                putsUART1((unsigned int *) "Habitaciones posibles: 1 2 3 | Niveles posibles: 0 1 2\r\n\n");
+                
+                return 0;
             }
         }
+    } else if (strcmp(args[0], "showValues") == 0) {
+        putsUART1((unsigned int *) "\r\nValores actuales de las variables internas:\r\n\n");
+        
+        char luces[120];
+        char lums[120];
+        char luces_man[120];
+        char habs[120];
+        
+        sprintf(luces, "  - En la habitaciones 1, 2 y 3 hay respectivamente %d, %d y %d luces encendidas.\r\n", datos.luz1, datos.luz2, datos.luz3);
+        sprintf(lums, "  - Actualmente hay %d, %d y %d lumenes en las habitaciones. \r\n    Exteriormente hay %d lumenes.\r\n", datos.luz1*LUMS_STEP, datos.luz2*LUMS_STEP, datos.luz3*LUMS_STEP, datos.lumenes);
+        sprintf(luces_man, "  - Los valores normalizados de los ajustes manuales son %d, %d y %d.\r\n", ((int) datos.luz1_man - 2), ((int) datos.luz2_man - 2), ((int) datos.luz3_man - 2));
+        sprintf(habs, "  - En las habitaciones hay respectivamente %d, %d y %d personas presentes.\r\n\n", datos.hab1, datos.hab2, datos.hab3);
+        
+        putsUART1((unsigned int *) luces);
+        putsUART1((unsigned int *) lums);
+        putsUART1((unsigned int *) luces_man);
+        putsUART1((unsigned int *) habs);
+        
+        return 0;
+        
+    
+    } else if (strcmp(args[0], "listCommands") == 0) {
+        // Muestra los comandos posibles
+        
+        putsUART1((unsigned int *) "\r\n*****************************\r\n");
+        putsUART1((unsigned int *) "***** LISTA DE COMANDOS *****\r\n");
+        putsUART1((unsigned int *) "*****************************\r\n\n");
+        
+        
+        putsUART1((unsigned int *) "- listCommands\r\n");
+        putsUART1((unsigned int *) "\tMuestra esta lista de comandos.\r\n\n");
+        
+        putsUART1((unsigned int *) "- showValues\r\n");
+        putsUART1((unsigned int *) "\tMuestra los valores de todas las luces, de los lumenes exteriores,\r\n");
+        putsUART1((unsigned int *) "y de las personas presentes en cada habitacion.\r\n\n");
+                
+        putsUART1((unsigned int *) "- turnAllOff\r\n");
+        putsUART1((unsigned int *) "\tFuerza el apagado de todas las luces.\r\n\n");
+        
+        putsUART1((unsigned int *) "- turnAllOn (X)\r\n");
+        putsUART1((unsigned int *) "\tEnciende todas las luces al nivel x especificado.\r\n");
+        putsUART1((unsigned int *) "\tSin parametros, enciende las luces al nivel maximo (2).\r\n\n");
+        
+        putsUART1((unsigned int *) "- setLights x y\r\n");
+        putsUART1((unsigned int *) "\tEnciende las luces en la habitacion x al nivel y.\r\n\n\n");
+        
+        return 0;
     }
 	
     return 0;
