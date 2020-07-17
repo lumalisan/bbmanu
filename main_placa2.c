@@ -79,14 +79,19 @@ _FGS(CODE_PROT_OFF);
 /* Global Variable and macros declaration                                     */
 /******************************************************************************/
 
+/*
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones (calculada)
 volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2; // Intensidad luz (recibida)
+*/
+
+struct datos_luz datos;
+
 volatile unsigned int lums1 = 0, lums2 = 0, lums3 = 0; // Intensidad luz artificial en lumenes
 
 char rx_uart[16];
-char * datos = rx_uart;
+char * datos_uart = rx_uart;
 
 #define LUMS_STEP   1000     // Cada incremento de lums es +- 1000
 #define MAX_ARGS    5        // Maximo argumentos para comandos UART
@@ -120,73 +125,73 @@ void P_ctrl(void) {
     while (1) {
 
 		// Guardamos los valores actuales
-        unsigned int luz1_previa = luz1;
-        unsigned int luz2_previa = luz2;
-        unsigned int luz3_previa = luz3;
+        unsigned int luz1_previa = datos.luz1;
+        unsigned int luz2_previa = datos.luz2;
+        unsigned int luz3_previa = datos.luz3;
 
-        unsigned int luz1_m_pr = luz1_man;
-        unsigned int luz2_m_pr = luz2_man;
-        unsigned int luz3_m_pr = luz3_man;
+        unsigned int luz1_m_pr = datos.luz1_man;
+        unsigned int luz2_m_pr = datos.luz2_man;
+        unsigned int luz3_m_pr = datos.luz3_man;
 
         // Determinacion automatica de la intensidad de las luces
 
-        if (lumenes <= 341) { // Segun la luz exterior
+        if (datos.lumenes <= 341) { // Segun la luz exterior
             // Luz baja (noche), si hay gente enciende
-            switch (hab1) { // Segun el n. de personas
-                case 0: luz1 = 0;
+            switch (datos.hab1) { // Segun el n. de personas
+                case 0: datos.luz1 = 0;
                     break;
-                case 1: luz1 = 1;
+                case 1: datos.luz1 = 1;
                     break;
-                default: luz1 = 2;
-                    break;
-            }
-            switch (hab2) {
-                case 0: luz2 = 0;
-                    break;
-                case 1: luz2 = 1;
-                    break;
-                default: luz2 = 2;
+                default: datos.luz1 = 2;
                     break;
             }
-            switch (hab3) {
-                case 0: luz3 = 0;
+            switch (datos.hab2) {
+                case 0: datos.luz2 = 0;
                     break;
-                case 1: luz3 = 1;
+                case 1: datos.luz2 = 1;
                     break;
-                default: luz3 = 2;
+                default: datos.luz2 = 2;
                     break;
             }
-        } else if (lumenes <= 682) {
+            switch (datos.hab3) {
+                case 0: datos.luz3 = 0;
+                    break;
+                case 1: datos.luz3 = 1;
+                    break;
+                default: datos.luz3 = 2;
+                    break;
+            }
+        } else if (datos.lumenes <= 682) {
             // Luz media (tarde), si hay mas de una persona enciende 1 luz
-            switch (hab1) {
-                case 0: luz1 = 0;
+            switch (datos.hab1) {
+                case 0: datos.luz1 = 0;
                     break;
-                case 1: luz1 = 0;
+                case 1: datos.luz1 = 0;
                     break;
-                default: luz1 = 1;
-                    break;
-            }
-            switch (hab2) {
-                case 0: luz2 = 0;
-                    break;
-                case 1: luz2 = 0;
-                    break;
-                default: luz2 = 1;
+                default: datos.luz1 = 1;
                     break;
             }
-            switch (hab3) {
-                case 0: luz3 = 0;
+            switch (datos.hab2) {
+                case 0: datos.luz2 = 0;
                     break;
-                case 1: luz3 = 0;
+                case 1: datos.luz2 = 0;
                     break;
-                default: luz3 = 1;
+                default: datos.luz2 = 1;
                     break;
             }
-        } else if (lumenes > 682) {
+            switch (datos.hab3) {
+                case 0: datos.luz3 = 0;
+                    break;
+                case 1: datos.luz3 = 0;
+                    break;
+                default: datos.luz3 = 1;
+                    break;
+            }
+        } else if (datos.lumenes > 682) {
             // Luz alta (dia), no enciende nada
-            luz1 = 0;
-            luz2 = 0;
-            luz3 = 0;
+            datos.luz1 = 0;
+            datos.luz2 = 0;
+            datos.luz3 = 0;
         }
 
         // Ahora se calcula teniendo en cuenta los comandos manuales
@@ -207,104 +212,104 @@ void P_ctrl(void) {
 		// entonces se fija el valor de luz a 2 (max.) o 0 (min.) respectivamente
 
         // Luz 1
-        switch (((int) luz1_man) - 2) {
+        switch (((int) datos.luz1_man) - 2) {
             case -2:
-                if (((int) luz1) - 2 >= 0) {
-                    luz1 = luz1 - 2;
+                if (((int) datos.luz1) - 2 >= 0) {
+                    datos.luz1 = datos.luz1 - 2;
                 } else {
-                    luz1 = 0;
+                    datos.luz1 = 0;
                 }
                 break;
             case -1:
-                if (((int) luz1) - 1 >= 0) {
-                    luz1 = luz1 - 1;
+                if (((int) datos.luz1) - 1 >= 0) {
+                    datos.luz1 = datos.luz1 - 1;
                 } else {
-                    luz1 = 0;
+                    datos.luz1 = 0;
                 }
                 break;
             case 1:
-                if (((int) luz1) + 1 <= 2) {
-                    luz1 = luz1 + 1;
+                if (((int) datos.luz1) + 1 <= 2) {
+                    datos.luz1 = datos.luz1 + 1;
                 } else {
-                    luz1 = 2;
+                    datos.luz1 = 2;
                 }
                 break;
             case 2:
-                if (((int) luz1) + 2 <= 2) {
-                    luz1 = luz1 + 2;
+                if (((int) datos.luz1) + 2 <= 2) {
+                    datos.luz1 = datos.luz1 + 2;
                 } else {
-                    luz1 = 2;
+                    datos.luz1 = 2;
                 }
                 break;
         }
         
         // Luz 2
-        switch (((int) luz2_man) - 2) {
+        switch (((int) datos.luz2_man) - 2) {
             case -2:
-                if (((int) luz2) - 2 >= 0) {
-                    luz2 = luz2 - 2;
+                if (((int) datos.luz2) - 2 >= 0) {
+                    datos.luz2 = datos.luz2 - 2;
                 } else {
-                    luz2 = 0;
+                    datos.luz2 = 0;
                 }
                 break;
             case -1:
-                if (((int) luz2) - 1 >= 0) {
-                    luz2 = luz2 - 1;
+                if (((int) datos.luz2) - 1 >= 0) {
+                    datos.luz2 = datos.luz2 - 1;
                 } else {
-                    luz2 = 0;
+                    datos.luz2 = 0;
                 }
                 break;
             case 1:
-                if (((int) luz2) + 1 <= 2) {
-                    luz2 = luz2 + 1;
+                if (((int) datos.luz2) + 1 <= 2) {
+                    datos.luz2 = datos.luz2 + 1;
                 } else {
-                    luz2 = 2;
+                    datos.luz2 = 2;
                 }
                 break;
             case 2:
-                if (((int) luz2) + 2 <= 2) {
-                    luz2 = luz2 + 2;
+                if (((int) datos.luz2) + 2 <= 2) {
+                    datos.luz2 = datos.luz2 + 2;
                 } else {
-                    luz2 = 2;
+                    datos.luz2 = 2;
                 }
                 break;
         }
         
         // Luz 3
-        switch (((int) luz3_man) - 2) {
+        switch (((int) datos.luz3_man) - 2) {
             case -2:
-                if (((int) luz3) - 2 >= 0) {
-                    luz3 = luz3 - 2;
+                if (((int) datos.luz3) - 2 >= 0) {
+                    datos.luz3 = datos.luz3 - 2;
                 } else {
-                    luz3 = 0;
+                    datos.luz3 = 0;
                 }
                 break;
             case -1:
-                if (((int) luz3) - 1 >= 0) {
-                    luz3 = luz3 - 1;
+                if (((int) datos.luz3) - 1 >= 0) {
+                    datos.luz3 = datos.luz3 - 1;
                 } else {
-                    luz3 = 0;
+                    datos.luz3 = 0;
                 }
                 break;
             case 1:
-                if (((int) luz3) + 1 <= 2) {
-                    luz3 = luz3 + 1;
+                if (((int) datos.luz3) + 1 <= 2) {
+                    datos.luz3 = datos.luz3 + 1;
                 } else {
-                    luz3 = 2;
+                    datos.luz3 = 2;
                 }
                 break;
             case 2:
-                if (((int) luz3) + 2 <= 2) {
-                    luz3 = luz3 + 2;
+                if (((int) datos.luz3) + 2 <= 2) {
+                    datos.luz3 = datos.luz3 + 2;
                 } else {
-                    luz3 = 2;
+                    datos.luz3 = 2;
                 }
                 break;
         }
 
         // Si se ha producido algun cambio, dile al CAN de enviar la info actualizada
-        if (luz1 != luz1_previa || luz2 != luz2_previa || luz3 != luz3_previa ||
-                luz1_man != luz1_m_pr || luz2_man != luz2_m_pr || luz3_man != luz3_m_pr) {
+        if (datos.luz1 != luz1_previa || datos.luz2 != luz2_previa || datos.luz3 != luz3_previa ||
+                datos.luz1_man != luz1_m_pr || datos.luz2_man != luz2_m_pr || datos.luz3_man != luz3_m_pr) {
             OSSetEFlag(EFLAG_P_CTRL, DESPIERTA_TX);
         }
 
@@ -324,7 +329,7 @@ void AP_act_LCD(void) {
     // Calcula la intensidad actual de lumenes y la muestra
     // lums1..3
 
-    OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
+    // OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
 
     while (1) {
 
@@ -339,18 +344,18 @@ void AP_act_LCD(void) {
         char linea2 [20];
 
 		// Cada luz encendida suma 1000 lumenes
-        lums1 = luz1 * LUMS_STEP;
-        lums2 = luz2 * LUMS_STEP;
-        lums3 = luz3 * LUMS_STEP;
+        lums1 = datos.luz1 * LUMS_STEP;
+        lums2 = datos.luz2 * LUMS_STEP;
+        lums3 = datos.luz3 * LUMS_STEP;
 
-        //sprintf(linea1, "EX:%u H1:%u", lumenes, lums1);
+        //sprintf(linea1, "EX:%u H1:%u", datos.lumenes, lums1);
         //sprintf(linea2, "H2:%u H3:%u", lums2, lums3);
 
         // DEBUG
-        //sprintf(linea1, "EX:%u H1:%u", lumenes, luz1_man);
-        //sprintf(linea2, "H2:%u H3:%u", luz2_man, luz3_man);
+        //sprintf(linea1, "EX:%u H1:%u", datos.lumenes, datos.luz1_man);
+        //sprintf(linea2, "H2:%u H3:%u", datos.luz2_man, datos.luz3_man);
         sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
-        sprintf(linea2, "Man %d %d %d", (int) luz1_man, (int) luz2_man, (int) luz3_man);
+        sprintf(linea2, "Man %d %d %d", (int) datos.luz1_man, (int) datos.luz2_man, (int) datos.luz3_man);
 
 
         LCDMoveFirstLine();
@@ -389,7 +394,7 @@ void AP_tx_datos(void) {
      *
      */
 
-    static unsigned char mensaje_mbox_LCD = 1;
+    // static unsigned char mensaje_mbox_LCD = 1;
 
     while (1) {
 
@@ -405,9 +410,9 @@ void AP_tx_datos(void) {
         if (CANtxInt) { // Si se puede enviar
             CANclearTxInt(); // Clear del interrupt de transmision CAN
 
-            data_buffer[0] = (unsigned char) luz1;
-            data_buffer[1] = (unsigned char) luz2;
-            data_buffer[2] = (unsigned char) luz3;
+            data_buffer[0] = (unsigned char) datos.luz1;
+            data_buffer[1] = (unsigned char) datos.luz2;
+            data_buffer[2] = (unsigned char) datos.luz3;
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
@@ -452,15 +457,15 @@ void _ISR _C1Interrupt(void) {
 
         if (rxMsgSID == 0x0001) {
 
-            hab1 = (unsigned int) rxMsgData[2];
-            hab2 = (unsigned int) rxMsgData[3];
-            hab3 = (unsigned int) rxMsgData[4];
-            luz1_man = (unsigned int) rxMsgData[5];
-            luz2_man = (unsigned int) rxMsgData[6];
-            luz3_man = (unsigned int) rxMsgData[7];
+            datos.hab1 = (unsigned int) rxMsgData[2];
+            datos.hab2 = (unsigned int) rxMsgData[3];
+            datos.hab3 = (unsigned int) rxMsgData[4];
+            datos.luz1_man = (unsigned int) rxMsgData[5];
+            datos.luz2_man = (unsigned int) rxMsgData[6];
+            datos.luz3_man = (unsigned int) rxMsgData[7];
 
-            lumenes = (unsigned int) rxMsgData[1] << 8; // lum_l
-            lumenes += (unsigned int) rxMsgData[0];		// Se suma lum_h
+            datos.lumenes = (unsigned int) rxMsgData[1] << 8; // lum_l
+            datos.lumenes += (unsigned int) rxMsgData[0];		// Se suma lum_h
 
         }
     }
@@ -482,7 +487,7 @@ void _ISR _U1RXInterrupt(void) {
 
     while (DataRdyUART1()) { // Hasta que haya datos
         c = ReadUART1(); // Leemos el caracter
-        (*(datos)++) = c; // Lo ponemos en el string rx_uart (var. global)
+        (*(datos_uart)++) = c; // Lo ponemos en el string rx_uart (var. global)
     }
 
     if (c == '\r' || c == '\n') { // Si se detecta un Enter
@@ -510,7 +515,7 @@ void _ISR _U1RXInterrupt(void) {
         //        IFS0bits.ADIF = 0; // Reset interrupt del LCD
 
         strncpy(rx_uart, "", sizeof (rx_uart)); // Reset string a vacio
-        datos = rx_uart; // Reset puntero a principio
+        datos_uart = rx_uart; // Reset puntero a principio
 
     }
 
@@ -546,6 +551,8 @@ int main(void) {
     CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
 
     UARTConfig();
+    
+    initVars();
 
 
     // =========================
@@ -768,4 +775,22 @@ int checkComando() {
     }
 	
     return 0;
+}
+
+// Inicializa las variables declaradas en variables.h y dentro del struct de datos
+void initVars() {
+    
+    datos.lumenes = 0;
+    datos.hab1 = 0;
+    datos.hab2 = 0;
+    datos.hab3 = 0;
+    datos.luz1 = 0;
+    datos.luz2 = 0;
+    datos.luz3 = 0;
+    datos.luz1_man = 2;
+    datos.luz2_man = 2;
+    datos.luz3_man = 2;
+    
+    mensaje_mbox_LCD = 1;
+    
 }

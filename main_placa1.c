@@ -76,15 +76,21 @@ _FGS(CODE_PROT_OFF);
 /* Global Variable and macros declaration                                     */
 /******************************************************************************/
 
+/*
 volatile unsigned int lumenes = 0;
 volatile unsigned int hab1 = 0, hab2 = 0, hab3 = 0; // Cant. personas en habitaciones
 volatile unsigned int luz1 = 0, luz2 = 0, luz3 = 0; // Intensidad luz en habitaciones, max 2
 volatile unsigned int luz1_man = 2, luz2_man = 2, luz3_man = 2;
+ */
+
+struct datos_luz datos;
 
 
 /******************************************************************************/
 /* Procedures declaration                                                     */
 /******************************************************************************/
+
+void initVars();
 
 /******************************************************************************/
 /* TASKS declaration and implementation                                       */
@@ -121,29 +127,29 @@ void P_muestrear_botones(void) {
         // El 4 = 2
 
         switch (key) {
-            case 0: hab1++; // Añadir persona H1
+            case 0: datos.hab1++; // Añadir persona H1
                 break;
-            case 1: hab2++; // Añadir persona H2
+            case 1: datos.hab2++; // Añadir persona H2
                 break;
-            case 2: hab3++; // Añadir persona H3
+            case 2: datos.hab3++; // Añadir persona H3
                 break;
-            case 3: if (hab1 > 0) hab1--; // Quitar persona H1
+            case 3: if (datos.hab1 > 0) datos.hab1--; // Quitar persona H1
                 break;
-            case 4: if (hab2 > 0) hab2--; // Quitar persona H2
+            case 4: if (datos.hab2 > 0) datos.hab2--; // Quitar persona H2
                 break;
-            case 5: if (hab3 > 0) hab3--; // Quitar persona H3
+            case 5: if (datos.hab3 > 0) datos.hab3--; // Quitar persona H3
                 break;
-            case 6: if (luz1_man < 4) luz1_man++; // Subir luz H1
+            case 6: if (datos.luz1_man < 4) datos.luz1_man++; // Subir luz H1
                 break;
-            case 7: if (luz2_man < 4) luz2_man++; // Subir luz H2
+            case 7: if (datos.luz2_man < 4) datos.luz2_man++; // Subir luz H2
                 break;
-            case 8: if (luz3_man < 4) luz3_man++; // Subir luz H3
+            case 8: if (datos.luz3_man < 4) datos.luz3_man++; // Subir luz H3
                 break;
-            case 9: if (luz1_man > 0) luz1_man--; // Bajar luz H1
+            case 9: if (datos.luz1_man > 0) datos.luz1_man--; // Bajar luz H1
                 break;
-            case 10: if (luz2_man > 0) luz2_man--; // Bajar luz H2
+            case 10: if (datos.luz2_man > 0) datos.luz2_man--; // Bajar luz H2
                 break;
-            case 11: if (luz3_man > 0) luz3_man--; // Bajar luz H3
+            case 11: if (datos.luz3_man > 0) datos.luz3_man--; // Bajar luz H3
                 break;
             default: modificados = 0;
                 break; // Si no se ha tocado nada
@@ -192,7 +198,7 @@ void AP_tx_datos(void) {
         unsigned char tamDatos = sizeof (data_buffer);
 
         // Dividimos los lumenes (2 bytes) en dos unsigned chars
-        unsigned char *lum_chars = (unsigned char *) &lumenes;
+        unsigned char *lum_chars = (unsigned char *) &(datos.lumenes);
         unsigned char lum_h = lum_chars[0];
         unsigned char lum_l = lum_chars[1];
 
@@ -202,12 +208,12 @@ void AP_tx_datos(void) {
 
             data_buffer[0] = lum_h;
             data_buffer[1] = lum_l;
-            data_buffer[2] = (unsigned char) hab1;
-            data_buffer[3] = (unsigned char) hab2;
-            data_buffer[4] = (unsigned char) hab3;
-            data_buffer[5] = (unsigned char) luz1_man;
-            data_buffer[6] = (unsigned char) luz2_man;
-            data_buffer[7] = (unsigned char) luz3_man;
+            data_buffer[2] = (unsigned char) datos.hab1;
+            data_buffer[3] = (unsigned char) datos.hab2;
+            data_buffer[4] = (unsigned char) datos.hab3;
+            data_buffer[5] = (unsigned char) datos.luz1_man;
+            data_buffer[6] = (unsigned char) datos.luz2_man;
+            data_buffer[7] = (unsigned char) datos.luz3_man;
 
             CANsendMessage(ID, data_buffer, tamDatos);
         }
@@ -238,10 +244,10 @@ void AP_act_LCD(void) {
         char linea1 [20];
         char linea2 [20];
 
-        //sprintf(linea1, "H.1:%u 2:%u 3:%u", hab1, hab2, hab3);
-        sprintf(linea1, "%u %u %u", luz1, luz2, luz3);
-        //sprintf(linea2, "Lumens: %u", lumenes);
-        sprintf(linea2, "%u %u %u", luz1_man, luz2_man, luz3_man);
+        //sprintf(linea1, "H.1:%u 2:%u 3:%u", datos.hab1, datos.hab2, datos.hab3);
+        sprintf(linea1, "%u %u %u", datos.luz1, datos.luz2, datos.luz3);
+        //sprintf(linea2, "Lumens: %u", datos.lumenes);
+        sprintf(linea2, "%u %u %u", datos.luz1_man, datos.luz2_man, datos.luz3_man);
 
         LCDMoveFirstLine();
         LCDPrint(linea1);
@@ -271,7 +277,7 @@ void AP_act_LEDs(void) {
     //  1      2   3
     //  2      4   5
 
-    OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
+    //OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
     //typeMessage * pMessage;
 
     unsigned int i = 0;
@@ -282,7 +288,7 @@ void AP_act_LEDs(void) {
         OS_WaitMsg(MSG_CAN, &msg_recibido, OSNO_TIMEOUT);
 
         // Habitacion 1
-        switch (luz1) {
+        switch (datos.luz1) {
             case 0: offLED(0);
                 offLED(1);
                 break;
@@ -295,7 +301,7 @@ void AP_act_LEDs(void) {
             default: break;
         }
         // Habitacion 2
-        switch (luz2) {
+        switch (datos.luz2) {
             case 0: offLED(2);
                 offLED(3);
                 break;
@@ -308,7 +314,7 @@ void AP_act_LEDs(void) {
             default: break;
         }
         // Habitacion 3
-        switch (luz3) {
+        switch (datos.luz3) {
             case 0: offLED(4);
                 offLED(5);
                 break;
@@ -338,7 +344,7 @@ void AP_act_LEDs(void) {
 
 void _ISR _ADCInterrupt(void) {
 	
-    lumenes = CADGetValue(); // Leemos el valor
+    datos.lumenes = CADGetValue(); // Leemos el valor
 
     IFS0bits.ADIF = 0; // Reset del interrupt
 
@@ -360,7 +366,7 @@ void _ISR _T1Interrupt(void) {
 /******************************************************************************/
 void _ISR _C1Interrupt(void) {
 
-    static unsigned char mensaje_mbox_LEDs = 1;	// Contenido del mensaje en el Mbox
+    // static unsigned char mensaje_mbox_LEDs = 1;	// Contenido del mensaje en el Mbox
 
     unsigned int rxMsgSID;		
     unsigned char rxMsgData[8];
@@ -388,27 +394,27 @@ void _ISR _C1Interrupt(void) {
 
         switch (rxMsgSID) {
             case 0x0002:
-                luz1 = (unsigned int) rxMsgData[0];
-                luz2 = (unsigned int) rxMsgData[1];
-                luz3 = (unsigned int) rxMsgData[2];
+                datos.luz1 = (unsigned int) rxMsgData[0];
+                datos.luz2 = (unsigned int) rxMsgData[1];
+                datos.luz3 = (unsigned int) rxMsgData[2];
                 break;
             case 0x0010:
                 // encender todo
-                luz1_man = luz2_man = luz3_man = 4;
+                datos.luz1_man = datos.luz2_man = datos.luz3_man = 4;
                 break;
             case 0x0011:
                 // encender todo a nivel x
                 nivel = (unsigned int) rxMsgData[0];
                 if (nivel > 2) {
-                    luz1_man = luz2_man = luz3_man = 4;
+                    datos.luz1_man = datos.luz2_man = datos.luz3_man = 4;
                 } else {
-                    luz1_man = luz2_man = luz3_man = (nivel + 2);
+                    datos.luz1_man = datos.luz2_man = datos.luz3_man = (nivel + 2);
                 }
                 break;
             case 0x0020:
                 // apagar todo forzadamente
-                luz1_man = luz2_man = luz3_man = 0;
-                luz1 = luz2 = luz3 = 0;
+                datos.luz1_man = datos.luz2_man = datos.luz3_man = 0;
+                datos.luz1 = datos.luz2 = datos.luz3 = 0;
                 break;
             case 0x0030:
                 // encender hab x a nivel y
@@ -417,11 +423,11 @@ void _ISR _C1Interrupt(void) {
                 
                 if (niv_luz <= 2) {
                     switch (num_hab) {
-                        case 1: luz1_man = niv_luz + 2;
+                        case 1: datos.luz1_man = niv_luz + 2;
                                 break;
-                        case 2: luz2_man = niv_luz + 2;
+                        case 2: datos.luz2_man = niv_luz + 2;
                                 break;
-                        case 3: luz3_man = niv_luz + 2;
+                        case 3: datos.luz3_man = niv_luz + 2;
                                 break;
                     }
                 }
@@ -475,6 +481,8 @@ int main(void) {
     Timer1Init(TIMER_PERIOD_FOR_250ms, TIMER_PSCALER_FOR_250ms, 4);
     CADInit(CAD_INTERACTION_BY_INTERRUPT, 5);
     CANinit(NORMAL_MODE, TRUE, TRUE, 0, 0);
+    
+    initVars();
 
     // =========================
     // Create Salvo structures
@@ -514,4 +522,22 @@ int main(void) {
         OSSched();
     }
 
+}
+
+// Inicializa las variables declaradas en variables.h y dentro del struct de datos
+void initVars() {
+    
+    datos.lumenes = 0;
+    datos.hab1 = 0;
+    datos.hab2 = 0;
+    datos.hab3 = 0;
+    datos.luz1 = 0;
+    datos.luz2 = 0;
+    datos.luz3 = 0;
+    datos.luz1_man = 2;
+    datos.luz2_man = 2;
+    datos.luz3_man = 2;
+    
+    mensaje_mbox_LEDs = 1;
+    
 }

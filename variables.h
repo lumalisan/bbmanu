@@ -1,6 +1,7 @@
 // Libreria para variables y structs comunes
 
-/*
+void initVars();
+
 struct datos_luz {
     volatile unsigned int lumenes;
     volatile unsigned int hab1, hab2, hab3;
@@ -8,7 +9,7 @@ struct datos_luz {
     volatile unsigned int luz1_man, luz2_man, luz3_man;
 };
 
-static unsigned char mensaje_mbox_LCD = 1;
+static unsigned char mensaje_mbox_LEDs;
+static unsigned char mensaje_mbox_LCD;
 OStypeMsgP msg_recibido;
 
-*/
