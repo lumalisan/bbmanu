@@ -12,7 +12,6 @@ struct datos_luz {
 };
 
 // Variables necesarias para los mailboxes
-static unsigned char mensaje_mbox_LEDs;
-static unsigned char mensaje_mbox_LCD;
+static unsigned char mensaje_mbox;
 OStypeMsgP msg_recibido;
 

@@ -433,7 +433,7 @@ void _ISR _C1Interrupt(void) {
     OSSetEFlag(EFLAG_BOTONES, DESPIERTA_CAN); // Dice al CAN de enviar datos nuevos
 
     // Envia mensaje en mailbox para que se actualicen los LEDs
-    OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox_LEDs);
+    OSSignalMsg(MSG_CAN, (OStypeMsgP) & mensaje_mbox);
 }
 
 /******************************************************************************/
@@ -509,6 +509,6 @@ void initVars() {
     datos.luz2_man = 2;
     datos.luz3_man = 2;
     
-    mensaje_mbox_LEDs = 1;
+    mensaje_mbox = 1;
     
 }

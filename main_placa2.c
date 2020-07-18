@@ -1,7 +1,3 @@
-// SI TODO ESTA COMENTADO ES PORQUE SI NO NO ME DEJA COMPILAR PORQUE
-// HAY DOS MAINS
-
-
 /******************************************************************************/
 /*                                                                            */
 /*  Description: Practica Final Sistemas Empotrados                           */
@@ -68,11 +64,6 @@ _FGS(CODE_PROT_OFF);
 // UART configuration
 #define BAUD_RATE 115200
 #define BRG       (FCY / (16L * BAUD_RATE)) - 1L
-
-
-/******************************************************************************/
-/* Salvo elements declarations                                                */
-/******************************************************************************/
 
 
 /******************************************************************************/
@@ -394,8 +385,6 @@ void AP_tx_datos(void) {
      *
      */
 
-    // static unsigned char mensaje_mbox_LCD = 1;
-
     while (1) {
 
         // Espera a que la tarea de control senyales que hay nuevos datos para enviar
@@ -418,7 +407,7 @@ void AP_tx_datos(void) {
         }
 
         // Avisa al LCD que puede actualizarse y esperar al semaforo de control
-        OSSignalMsg(MSG_RX_LCD, (OStypeMsgP) & mensaje_mbox_LCD);
+        OSSignalMsg(MSG_RX_LCD, (OStypeMsgP) & mensaje_mbox);
 
         OS_Yield();
     }
@@ -823,6 +812,6 @@ void initVars() {
     datos.luz2_man = 2;
     datos.luz3_man = 2;
     
-    mensaje_mbox_LCD = 1;
+    mensaje_mbox = 1;
     
 }
