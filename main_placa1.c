@@ -151,12 +151,15 @@ void AP_tx_datos(void) {
     // Cada char tiene tamaño de 1 byte (rango -128, 127)
     // Cada unsigned int tiene tamaño de 2 bytes (hasta 65.535, luego 4 bytes)
     // Se puede pasar de int a char y luego otra vez a int sin perder info
-    // En total hay que enviar 1+(3*1)+(3*1) = 7 bytes
+	// El unsigned int de los lumenes se va a dividir en dos unsigned chars
+	// individuales para poderlos incluir en el data_buffer
+	
+    // En total hay que enviar 2+3+3 = 8 bytes
 
     /*
      SISTEMA DE IDENTIFICADORES
      *
-     * SID = 0x0001 (1)   	 --> El mensaje es de 7 bytes y contiene todo
+     * SID = 0x0001 (1)   	 --> El mensaje es de 8 bytes y contiene todo
      * SID = 0x0002 (2)   	 --> Mensaje recibido desde la placa 2
 	 * SID = 0x0010 - 0x0030 --> Comandos recibidos desde la placa 2
      *
@@ -207,18 +210,20 @@ void AP_tx_datos(void) {
  * - El numero de personas en cada hab.
  */
 void AP_act_LCD(void) {
+	
+	unsigned int i;
 
     while (1) {
 
         // Espera a que la tarea de CAN señale que hay que actualizar
         OS_WaitBinSem(BINSEM_LCD, OSNO_TIMEOUT);
+		
+		// Max. longitud linea: 20 chars.
+        char linea1 [20];
+        char linea2 [20];
 
         // Limpiamos el LCD para que no haya caracteres no deseados
         LCDClear();
-
-        // Max. longitud linea: 20 chars.
-        char linea1 [20];
-        char linea2 [20];
 
         sprintf(linea1, "H.1:%u 2:%u 3:%u", datos.hab1, datos.hab2, datos.hab3);
         sprintf(linea2, "Lumens: %u", datos.lumenes);
@@ -235,7 +240,6 @@ void AP_act_LCD(void) {
         IFS0bits.ADIF = 0; // Reset interrupt
 
         // Esperamos un poco asi nos da tiempo a ver lo q sale por pantalla
-        unsigned int i;
         for (i = 0; i < 8; i++) Delay15ms();
 
         OS_Yield();
@@ -341,6 +345,10 @@ void _ISR _C1Interrupt(void) {
     unsigned int rxMsgSID;		
     unsigned char rxMsgData[8];
     unsigned char rxMsgDLC;
+	
+	unsigned int nivel;
+	unsigned int num_hab;
+    unsigned int niv_luz;
 
     // Clear CAN global interrupt
     CANclearGlobalInt();
@@ -356,11 +364,6 @@ void _ISR _C1Interrupt(void) {
 
         // Clear RX buffer
         CANclearRxBuffer();
-
-        // Las declaraciones van aqui porque si no no compila, gracias MPLAB
-        unsigned int nivel;
-        unsigned int num_hab;
-        unsigned int niv_luz;
 
         switch (rxMsgSID) {
             case 0x0002:

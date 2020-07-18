@@ -320,8 +320,8 @@ void AP_act_LCD(void) {
     // Calcula la intensidad actual de lumenes y la muestra
     // lums1..3
 
-    // OStypeMsgP msg_recibido;	// Variable para mensaje recibido en Mbox
-
+	unsigned int i;
+	
     while (1) {
 
         // Espera a que la tarea de CAN indique que hay que actualizar
@@ -329,10 +329,11 @@ void AP_act_LCD(void) {
 
         // Espera a que se hayan calculado los valores de luz
         OS_WaitBinSem(BINSEM_CTRL_LCD, OSNO_TIMEOUT);
+		
+		char linea1 [20];
+        char linea2 [20];
 
         LCDClear();	// Limpia la pantalla
-        char linea1 [20];
-        char linea2 [20];
 
 		// Cada luz encendida suma 1000 lumenes
         lums1 = datos.luz1 * LUMS_STEP;
@@ -348,7 +349,6 @@ void AP_act_LCD(void) {
         //sprintf(linea1, "HL %u %u %u", lums1, lums2, lums3);
         //sprintf(linea2, "Man %d %d %d", (int) datos.luz1_man, (int) datos.luz2_man, (int) datos.luz3_man);
 
-
         LCDMoveFirstLine();
         LCDPrint(linea1);
         LCDMoveSecondLine();
@@ -356,7 +356,6 @@ void AP_act_LCD(void) {
 
         IFS0bits.ADIF = 0; // Reset interrupt
 
-        unsigned int i;
         for (i = 0; i < 10; i++) Delay15ms();
 
         OS_Yield();
@@ -547,7 +546,6 @@ int main(void) {
     
     initVars();
 
-
     // =========================
     // Create Salvo structures
     // =========================
@@ -609,6 +607,10 @@ int checkComando() {
     strcpy(string, rx_uart); // Copiamos el string porque strtok es destructivo
     const char * s = " "; 	 // Caracter delimitador de los tokens
     int contador = 0; 		 // Contador de cuantos tokens se crean
+	
+	// Variables para el envio por CAN
+    unsigned int ID;
+    unsigned char tamDatos;
 
     char *token;
     char *args[MAX_ARGS];	   // Array para los tokens
@@ -623,10 +625,7 @@ int checkComando() {
     }
 
     if (contador == 1) args[1] = NULL;	// Para evitar fallos
-
-    // Variables para el envio por CAN
-    unsigned int ID;
-    unsigned char tamDatos;
+    
 
     // Procesamos el comando
     // Comandos posibles:
@@ -773,7 +772,6 @@ int checkComando() {
         putsUART1((unsigned int *) "\r\n*****************************\r\n");
         putsUART1((unsigned int *) "***** LISTA DE COMANDOS *****\r\n");
         putsUART1((unsigned int *) "*****************************\r\n\n");
-        
         
         putsUART1((unsigned int *) "- listCommands\r\n");
         putsUART1((unsigned int *) "\tMuestra esta lista de comandos.\r\n\n");
