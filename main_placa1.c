@@ -179,7 +179,7 @@ void AP_tx_datos(void) {
         unsigned char lum_l = lum_chars[1];
 
         // Envio informaciones
-        if (CANtxInt) { // Si se puede enviar
+        if (CANtxInt && CANtransmissionCompleted) { // Si se puede enviar
             CANclearTxInt(); // Clear del interrupt de transmision CAN
 
             data_buffer[0] = lum_h;

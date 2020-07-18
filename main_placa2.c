@@ -396,7 +396,7 @@ void AP_tx_datos(void) {
         unsigned char tamDatos = sizeof (data_buffer);
 
         // Evio informaciones
-        if (CANtxInt) { // Si se puede enviar
+        if (CANtxInt && CANtransmissionCompleted) { // Si se puede enviar
             CANclearTxInt(); // Clear del interrupt de transmision CAN
 
             data_buffer[0] = (unsigned char) datos.luz1;
@@ -646,7 +646,7 @@ int checkComando() {
             unsigned char data_buffer = 0;
             tamDatos = sizeof (data_buffer);
 
-            if (CANtxInt) {
+            if (CANtxInt && CANtransmissionCompleted) {
                 CANclearTxInt();
                 CANsendMessage(ID, data_buffer, tamDatos);
             }
@@ -672,7 +672,7 @@ int checkComando() {
                 data_buffer[0] = (unsigned char) atoi(args[1]);
                 tamDatos = sizeof (data_buffer);
 
-                if (CANtxInt) {
+                if (CANtxInt && CANtransmissionCompleted) {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
@@ -695,7 +695,7 @@ int checkComando() {
         unsigned char data_buffer = 0;
         tamDatos = sizeof (data_buffer);
 
-        if (CANtxInt) {
+        if (CANtxInt && CANtransmissionCompleted) {
             CANclearTxInt();
             CANsendMessage(ID, data_buffer, tamDatos);
         }
@@ -731,7 +731,7 @@ int checkComando() {
                 data_buffer[1] = (unsigned char) atoi(args[2]); // Valor luces
                 tamDatos = sizeof (data_buffer);
 
-                if (CANtxInt) {
+                if (CANtxInt && CANtransmissionCompleted) {
                     CANclearTxInt();
                     CANsendMessage(ID, data_buffer, tamDatos);
                 }
