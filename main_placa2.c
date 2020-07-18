@@ -581,8 +581,6 @@ int main(void) {
 
     OSCreateBinSem(BINSEM_CTRL_LCD, 0);	// Sem. binario
     
-    putsUART1((unsigned int *) "hola bich\n\r");
-
     // =============================================
     // Enter multitasking environment
     // =============================================
@@ -599,7 +597,6 @@ void UARTConfig() {
     U1MODE = 0; // Clear UART config - to avoid problems with bootloader
     // Activar RXint -->1 111 <-- Prioridad entre 0 y 7
     ConfigIntUART1(0x000F); // Enable RX Interrupt, highest priority
-
 
     // Config UART
     OpenUART1(UART_EN & // Enable UART
